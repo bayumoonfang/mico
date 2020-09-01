@@ -354,9 +354,9 @@ class _ChatroomhomeState extends State<Chatroomhome> {
 
                               ],
                             ),
-                            onTap: (){
-                              Navigator.push(context, EnterPage(page: DetailHistoryTransaksi(getInvNumber.toString())));
-                            },)
+                              onTap: (){
+                                Navigator.push(context, EnterPage(page: DetailHistoryTransaksi(getInvNumber.toString())));
+                              },)
 
 
 
@@ -438,7 +438,7 @@ class _ChatroomhomeState extends State<Chatroomhome> {
                                                             data[i]["h"] != '' && data[i]["d"] == '1' ?
                                                             GestureDetector(
                                                               child: Hero(
-                                                                  tag: 'imagehero',
+                                                                  tag: data[i]["h"],
                                                                   child :
                                                                   Image(
                                                                     image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -518,7 +518,7 @@ class _ChatroomhomeState extends State<Chatroomhome> {
                                                             data[i]["h"] != '' && data[i]["d"] == '2' ?
                                                             GestureDetector(
                                                               child: Hero(
-                                                                  tag: 'imagehero',
+                                                                  tag: data[i]["h"],
                                                                   child :
                                                                   Image(
                                                                     image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -557,7 +557,7 @@ class _ChatroomhomeState extends State<Chatroomhome> {
                                                             data[i]["h"] != '' && data[i]["d"] == '2' ?
                                                             GestureDetector(
                                                               child: Hero(
-                                                                  tag: 'imagehero',
+                                                                  tag: data[i]["h"],
                                                                   child :
                                                                   Image(
                                                                     image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),

@@ -50,7 +50,7 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
   ScrollController _scrollController;
   FocusNode myFocusNode;
 
-  void _getDetailInvoiced() async {
+  Future<dynamic> _getDetailInvoiced() async {
     final response = await http.post(
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_detailchatinvoiced",
         body: {"invoice": widget.MyInvoiced});
@@ -148,39 +148,6 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
               },
             ),
           ),
-          actions: [
-           /* Padding(
-                padding : const  EdgeInsets.only(right : 20.0),
-                child :
-                DropdownButtonHideUnderline(
-                    child:
-                    DropdownButton(
-                      icon: FaIcon(FontAwesomeIcons.ellipsisV,size: 19,color: Colors.white,),
-                      value: _value,
-                      items: [
-                        DropdownMenuItem(
-                          child:
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(context, EnterPage(page: DetailHistoryTransaksi(widget.MyInvoiced)));
-                              },
-                              child: Text("Invoiced Detail", style: TextStyle(color: Hexcolor("#075e55"), fontFamily: 'VarelaRound', fontSize: 16),),
-                          ),
-
-                          value: 1,
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          _value = value;
-                        });
-                      },
-                    )
-                )
-            )*/
-
-          ],
-
         ),
         body:new Container(
           color: Hexcolor("#efe6dd"),
@@ -224,9 +191,6 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
                               onTap: (){
                                 Navigator.push(context, EnterPage(page: DetailHistoryTransaksi(getInvNumber.toString())));
                               },)
-
-
-
                         )
                     )
                 ),
@@ -307,7 +271,7 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
                                                           data[i]["h"] != '' && data[i]["d"] == '1' ?
                                                           GestureDetector(
                                                             child: Hero(
-                                                                tag: 'imagehero',
+                                                                tag: data[i]["h"],
                                                                 child :
                                                                 Image(
                                                                   image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -379,7 +343,7 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
                                                                 data[i]["h"] != '' && data[i]["d"] == '2' ?
                                                                 GestureDetector(
                                                                   child: Hero(
-                                                                      tag: 'imagehero',
+                                                                      tag: data[i]["h"],
                                                                       child :
                                                                       Image(
                                                                         image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -418,7 +382,7 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
                                                               data[i]["h"] != '' && data[i]["d"] == '2' ?
                                                               GestureDetector(
                                                                 child: Hero(
-                                                                    tag: 'imagehero',
+                                                                    tag: data[i]["h"],
                                                                     child :
                                                                     Image(
                                                                       image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),

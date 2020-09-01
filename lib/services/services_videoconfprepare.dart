@@ -30,7 +30,7 @@ class _VideoConfPrepareState extends State<VideoConfPrepare> {
   String getPhone, getAcc, getRoomVideo, getNamaDokter = '';
 
   _VideoConfPrepareState({this.getPhone});
-  ClientRole _role = ClientRole.Broadcaster;
+  ClientRole _role = ClientRole.Audience;
 
 
   void showToast(String msg, {int duration, int gravity}) {

@@ -79,7 +79,8 @@ class _VideoConfState extends State<VideoConf> {
   void _addAgoraEventHandlers() {
     AgoraRtcEngine.onError = (dynamic code) {
       setState(() {
-        final info = 'onError: $code';
+        //final info = 'onError: $code';
+        final info = '';
         _infoStrings.add(info);
       });
     };
@@ -90,7 +91,8 @@ class _VideoConfState extends State<VideoConf> {
         int elapsed,
         ) {
       setState(() {
-        final info = 'onJoinChannel: $channel, uid: $uid';
+        //final info = 'onError: $code';
+        final info = '';
         _infoStrings.add(info);
       });
     };
@@ -196,7 +198,8 @@ class _VideoConfState extends State<VideoConf> {
 
   /// Toolbar layout
   Widget _toolbar() {
-    if (widget.role == ClientRole.Audience) return Container();
+    if (widget.role == ClientRole.Audience)
+      return Container();
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
@@ -295,7 +298,8 @@ class _VideoConfState extends State<VideoConf> {
   }
 
   void _onCallEnd(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+        builder: (BuildContext context) => Home()));
   }
 
   void _onToggleMute() {
@@ -308,10 +312,20 @@ class _VideoConfState extends State<VideoConf> {
   void _onSwitchCamera() {
     AgoraRtcEngine.switchCamera();
   }
+  Future<bool> _onWillPop() async {
+    Navigator.of(context).push(
+        new MaterialPageRoute(
+            builder: (BuildContext context) => Home()));
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      new WillPopScope(
+        onWillPop: _onWillPop,
+    child :
+      Scaffold(
       backgroundColor: Colors.black,
       body: Center(
         child: Stack(
@@ -322,6 +336,7 @@ class _VideoConfState extends State<VideoConf> {
           ],
         ),
       ),
-    );
+    )
+      );
   }
 }
