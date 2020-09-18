@@ -4,12 +4,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
+import 'package:mico/page_cekappointment.dart';
+import 'package:mico/page_detailimagedokter.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/pagelist_dokter.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/services/page_chatroomprepare.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 
 class Pembayaran extends StatefulWidget {
@@ -44,20 +48,21 @@ class _PembayaranState extends State<Pembayaran> {
   }
 
 _cekroomchat() async {
-  final response = await http.post(
-      "https://duakata-dev.com/miracle/api_script.php?do=act_cekroomchat",
-      body: {"idcust": getAcc});
-  Map data = jsonDecode(response.body);
-  setState(() {
-    getChatStatus = data["message"].toString();
-    //getVideoStatus = data2["message"].toString();
-  });
+    final response = await http.post(
+        "https://duakata-dev.com/miracle/api_script.php?do=act_cekroomchat",
+        body: {"idcust": getAcc});
+    Map data3 = jsonDecode(response.body);
+    setState(() {
+      getChatStatus = data3["message"].toString();
+      //getVideoStatus = data2["message"].toString();
+    });
 
-}
+  }
 
   void _cekroom() async {
     await _session();
     await _cekroomchat();
+    await _getDetail();
   }
 
   @override
@@ -68,16 +73,36 @@ _cekroomchat() async {
 
 
 
-  Future<List> getDataDetail() async {
+  Future<List> getDateJadwal() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_dokterdetail&id=" +
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_jadwalhari&id=" +
             getDokter);
     if (response.body.isNotEmpty) {
-      return json.decode(response.body);
+      data =  json.decode(response.body);
     } else {
       //Widget.of(context).showSnackBar(SnackBar(content: Text('Empty Data')));
     }
   }
+
+
+    String getPhoto, getNama, getRegional, getLokasi, getSRT;
+  _getDetail() async {
+    final response = await http.post(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_dokterdetail&id=" +
+            getDokter);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      getPhoto = data2["e"].toString();
+      getNama = data2["b"].toString();
+      getRegional = data2["g"].toString();
+      getLokasi = data2["c"].toString();
+      getSRT = data2["i"].toString();
+      //getVideoStatus = data2["message"].toString();
+    });
+
+  }
+
+
 
   Future<bool> _onWillPop() async {
     Navigator.pop(context);
@@ -125,6 +150,20 @@ void _doChat() {
   }
 
 
+  int _selectedIndex = 200;
+  int _isButtonDisabled = 1;
+  int _isGetJadwal = 0;
+  _onSelected(int index) {
+    setState(() => _selectedIndex = index);
+  }
+
+  _onButton(int index) {
+    setState(() => _isButtonDisabled = index);
+  }
+
+  _getDate(int index) {
+    setState(() => _isGetJadwal = index);
+  }
 
 
 
@@ -147,35 +186,25 @@ void _doChat() {
                   Navigator.pop(context)
                   }),
             ),
-
           ),
-          body: new FutureBuilder<List>(
-            future: getDataDetail(),
-            builder: (context, snapshot) {
-            if (snapshot.data == null) {
-                    return Center(
-                          child: Image.asset(
-                          "assets/loadingq.gif",
-                          width: 180.0,
-                          )
-                    );
-            } else {
-      return ListView.builder(
-          itemCount: snapshot.data == null ? 0 : snapshot.data.length,
-          itemBuilder: (context, i) {
-            return Padding(
+          body:
+              Padding(
               padding:
               const EdgeInsets.only(left: 10, right: 10, top: 20),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Center(
                       child:
+              GestureDetector(
+                  child: Hero(
+                  tag: getPhoto.toString(),
+                  child :
                       CachedNetworkImage(
                         imageUrl:
                         "http://duakata-dev.com/miracle/media/photo/" +
-                            snapshot.data[i]["c"],
+                            getPhoto.toString(),
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) =>
                             CircularProgressIndicator(
@@ -186,6 +215,13 @@ void _doChat() {
                               radius: 60,
                             ),
                       )
+                   ),
+                onTap: (){
+                  Navigator.of(context).push(
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) => DetailImageDokter(getPhoto.toString())));
+                },
+              )
                   ),
                   Padding(
                       padding: const EdgeInsets.only(
@@ -207,9 +243,10 @@ void _doChat() {
                                 fontFamily: 'VarelaRound',
                                 fontSize: 14),
                           ),
-                          Text(snapshot.data[i]["a"],
+                          Text(getNama.toString(),
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 14)),
                         ],
                       )),
@@ -228,9 +265,10 @@ void _doChat() {
                                 fontFamily: 'VarelaRound',
                                 fontSize: 14),
                           ),
-                          Text(snapshot.data[i]["e"],
+                          Text(getRegional.toString(),
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 14)),
                         ],
                       )),
@@ -249,89 +287,260 @@ void _doChat() {
                                 fontFamily: 'VarelaRound',
                                 fontSize: 14),
                           ),
-                          Text(snapshot.data[i]["b"],
+                          Text(getLokasi.toString(),
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14)),
+                        ],
+                      )),
+                     Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, top: 8, right: 15),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
+                        //mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Text(
+                            "Nomor SRT",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontFamily: 'VarelaRound',
+                                fontSize: 14),
+                          ),
+                          Text(getSRT.toString(),
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 14)),
                         ],
                       )),
                   Padding(
+                      padding: const EdgeInsets.only(
+                          top: 30, left: 15.0, right: 15.0),
+                      child: Divider(height: 3.0)),
+                  Padding(
                     padding: const EdgeInsets.only(left: 15, top: 40),
-                    child: Text("Harga Konsultasi",
+                    child: Text("Tanggal Konsultasi",
                         style: TextStyle(
                             fontFamily: 'VarelaRound',
                             fontSize: 16,
                             fontWeight: FontWeight.bold)),
                   ),
                   Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, top: 20, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Jenis Layanan",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text("Online Service",
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontSize: 14)),
-                        ],
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, top: 10, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "Konsultasi Chat (15 Menit)",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text("Rp. 0",
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontSize: 14)),
-                        ],
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, top: 10, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Konsultasi Video (15 Menit)",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text("Rp. 0",
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontSize: 14)),
-                        ],
-                      )),
+                    padding: const EdgeInsets.only(left: 15, top: 5,bottom: 10),
+                    child: Text("Pilih tanggal dan jam konsultasi ",
+                        style: TextStyle(
+                            fontFamily: 'VarelaRound',
+                            fontSize: 14)),
+                  ),
+                  new FutureBuilder<List>(
+                      future: getDateJadwal(),
+                      builder: (context, snapshot) {
+                        return Container(
+                            height: 115,
+                        padding: const EdgeInsets.only(right : 15),
+                        child :
+                        ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(top: 10.0, left: 10),
+                          itemCount: data == null ? 0 : data.length ,
+                          itemBuilder: (context, i) {
+                            return (data.isEmpty || data == null) ?
+                                Center (
+                                  child :
+                                   Text(
+                                      "Dokter tidak ditemukan",
+                                      style: new TextStyle(
+                                          fontFamily: 'VarelaRound', fontSize: 20),
+                                    ))
+
+                                :
+                                  Container(
+                                   width: 160,
+                                   padding: const EdgeInsets.only(right:10),
+                                   child:
+                                   data[i]['g'] == 'ONLINE' ?
+                                   Card(
+                                     elevation:0,
+                                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                                     shape: RoundedRectangleBorder(
+                                       side: new BorderSide(color:
+                                           _selectedIndex == i && _selectedIndex != 200  && _selectedIndex != null ?
+                                           Hexcolor("#075e55") : Hexcolor("#DDDDDD"), width: 1.0
+                                       ),
+                                       borderRadius: BorderRadius.circular(5.0),
+                                     ),
+                                     child:
+                                     InkWell(
+                                         splashColor: Colors.blue.withAlpha(30),
+                                         onTap: () {
+                                           _onSelected(i);
+                                           _onButton(2);
+                                           _getDate(data[i]['i']);
+
+                                         },
+                                         child :
+                                     Container(
+                                       child: Center(child:
+                                       Column(
+                                         children: [
+                                           Padding (
+                                           child :
+                                           Text(new DateFormat.EEEE().format(DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                              color: Colors.black,
+                                              fontFamily: 'VarelaRound',
+                                             fontWeight: FontWeight.bold,
+                                             fontSize: 18
+                                             ),),
+                                             padding: const EdgeInsets.only(top : 15),
+                                           ),
+                                           Padding (
+                                             child :
+                                             Text("("+data[i]['d'] + " " +new DateFormat.MMM().format(DateTime.parse(data[i]['f']))+")",
+                                                 style: new TextStyle(
+                                                 color: Colors.black,
+                                                 fontFamily: 'VarelaRound',
+                                             ),),
+                                             padding: const EdgeInsets.only(top : 5),
+                                           ),
+                                           Padding (
+                                             child :
+                                             Text(data[i]['e'],
+                                               style: new TextStyle(
+                                                   color: Colors.black,
+                                                   fontFamily: 'VarelaRound',
+                                                   fontWeight: FontWeight.bold
+                                               ),),
+                                             padding: const EdgeInsets.only(top : 5,bottom: 10),
+                                           )
+                                         ],
+                                       )
+
+                                       ),
+                                     )
+                                   ),
+                                   )
+
+                            : data[i]['g'] == 'BOOKED' ?
+                               Opacity (
+                                 opacity: 0.3,
+                                  child :
+                                   Card(
+                                     color: Colors.green,
+                                     elevation:0,
+                                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                                     shape: RoundedRectangleBorder(
+                                       side: new BorderSide(color: Colors.green, width: 1.0),
+                                       borderRadius: BorderRadius.circular(5.0),
+                                     ),
+                                     child:
+                                         Container(
+                                           child: Center(child:
+                                           Column(
+                                             children: [
+                                               Padding (
+                                                 child :
+                                                 Text(new DateFormat.EEEE().format(DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                     color: Colors.black,
+                                                     fontFamily: 'VarelaRound',
+                                                     fontWeight: FontWeight.bold,
+                                                     fontSize: 18
+                                                 ),),
+                                                 padding: const EdgeInsets.only(top : 15),
+                                               ),
+                                               Padding (
+                                                 child :
+                                                 Text("("+data[i]['d'] + " " +new DateFormat.MMM().format(DateTime.parse(data[i]['f']))+")",
+                                                   style: new TextStyle(
+                                                     color: Colors.black,
+                                                     fontFamily: 'VarelaRound',
+                                                   ),),
+                                                 padding: const EdgeInsets.only(top : 5),
+                                               ),
+                                               Padding (
+                                                 child :
+                                                 Text(data[i]['e'],
+                                                   style: new TextStyle(
+                                                       color: Colors.black,
+                                                       fontFamily: 'VarelaRound',
+                                                       fontWeight: FontWeight.bold
+                                                   ),),
+                                                 padding: const EdgeInsets.only(top : 5,bottom: 10),
+                                               )
+                                             ],
+                                           )
+
+                                           ),
+                                         ),
+                                   )
+                                       )
+                                  :
+                                   Opacity (
+                                       opacity: 0.3,
+                                       child :
+                                       Card(
+                                         color: Colors.grey,
+                                         elevation:0,
+                                         margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                                         shape: RoundedRectangleBorder(
+                                           side: new BorderSide(color: Colors.grey, width: 1.0),
+                                           borderRadius: BorderRadius.circular(5.0),
+                                         ),
+                                         child:
+                                         Container(
+                                           child: Center(child:
+                                           Column(
+                                             children: [
+                                               Padding (
+                                                 child :
+                                                 Text(new DateFormat.EEEE().format(DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                     color: Colors.black,
+                                                     fontFamily: 'VarelaRound',
+                                                     fontWeight: FontWeight.bold,
+                                                     fontSize: 18
+                                                 ),),
+                                                 padding: const EdgeInsets.only(top : 15),
+                                               ),
+                                               Padding (
+                                                 child :
+                                                 Text("("+data[i]['d'] + " " +new DateFormat.MMM().format(DateTime.parse(data[i]['f']))+")",
+                                                   style: new TextStyle(
+                                                     color: Colors.black,
+                                                     fontFamily: 'VarelaRound',
+                                                   ),),
+                                                 padding: const EdgeInsets.only(top : 5),
+                                               ),
+                                               Padding (
+                                                 child :
+                                                 Text(data[i]['e'],
+                                                   style: new TextStyle(
+                                                       color: Colors.black,
+                                                       fontFamily: 'VarelaRound',
+                                                       fontWeight: FontWeight.bold
+                                                   ),),
+                                                 padding: const EdgeInsets.only(top : 5,bottom: 10),
+                                               )
+                                             ],
+                                           )
+
+                                           ),
+                                         ),
+                                       )
+                                   )
+                                 );
+                                },
+                             )
+                        );
+                      },
+                  )
                 ],
+              )
+
               ),
-            );
-          });
-    }
-            },
-          ),
+
+
           bottomSheet: new
 
           Container (
@@ -343,75 +552,46 @@ void _doChat() {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 15.0, left: 20.0, bottom:10),
                     child:
-                    getChatStatus == '1' ?
+                    _isButtonDisabled == 1 ?
                     OutlineButton(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(2.0),
+                        borderRadius: BorderRadius.circular(5.0),
                         //side: BorderSide(color: Colors.red)
                       ),
                       child: Text(
-                        "Chat",
+                        "Buat Janji",
                         style: TextStyle(
                           fontFamily: 'VarelaRound',
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
                       ),
                     )
-                        :
-                    OutlineButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2.0),
-                          side: BorderSide(color: Colors.black)
-                        ),
-                        child: Text(
-                          "Chat",
-                          style: TextStyle(
-                            fontFamily: 'VarelaRound',
-                            fontSize: 12,
-                          ),
-                        ),
-                        onPressed: () {
-                _doAskChat();
-                        }
-                    )
+                  :
 
-                  )
-              ),
-              Expanded(
-                  child: Padding(
-                      padding: const EdgeInsets.only(right: 20.0, left: 15.0, bottom:10),
-                      child:
-                      getChatStatus == '1' ?
-                      OutlineButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2.0),
-                          //side: BorderSide(color: Colors.red)
+                    RaisedButton(
+                      color:  Hexcolor("#075e55"),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        //side: BorderSide(color: Colors.red, width: 2.0)
+                      ),
+                      child: Text(
+                        "Buat Janji",
+                        style: TextStyle(
+                          fontFamily: 'VarelaRound',
+                          fontSize: 14,
+                          color: Colors.white
                         ),
-                          child: Text(
-                            "Video",
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound', fontSize: 12),
-                          ),
-                      )
-                          :
-                      OutlineButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(2.0),
-                            side: BorderSide(color: Colors.black)
-                          ),
-                          child: Text(
-                            "Video",
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound', fontSize: 12),
-                          ),
-                          onPressed: () {
-                          /*  Navigator.of(context).push(new MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    VideoChatHome(widget.iddokter)));*/
-                              }
-                          )
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => CekAppointment(_isGetJadwal.toString(),getAcc.toString(),getDokter,getNamaDokter, getKlinik)));
+                      },
+                    ),
 
-                  )),
+
+
+                  ))
+
             ],
           )),
         ),

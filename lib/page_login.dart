@@ -29,7 +29,20 @@ class _LoginState extends State<Login> {
   }
   
   void verifikasi() async {
-    _validateForm();
+    if (_phonecontrol.text.isEmpty && _emailcontroller.text.isEmpty) {
+      showToast("Form tidak boleh kosong", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
+    if (_emailcontroller.text.isEmpty) {
+      showToast("Email tidak boleh kosong", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
+
+    if (_phonecontrol.text.isEmpty) {
+      showToast("Telpon tidak boleh kosong", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      return;
+    }
     final response = await http.post(
         "https://duakata-dev.com/miracle/api_script.php?do=act_gettoken",
         body: {"phone": _phonecontrol.text.toString(), "email": _emailcontroller.text.toString()});
@@ -92,6 +105,7 @@ class _LoginState extends State<Login> {
 
                 Padding(
                     padding: const EdgeInsets.only(top: 10.0)),
+
                             TextFormField(
                               style: TextStyle(
                                   fontFamily: 'VarelaRound', fontSize: 18),
@@ -110,6 +124,11 @@ class _LoginState extends State<Login> {
                             TextFormField(
                               style: TextStyle(
                                   fontFamily: 'VarelaRound', fontSize: 18),
+                              validator: (e) {
+                                if (e.isEmpty) {
+                                  return "Please insert email";
+                                }
+                              },
                               //validator: _validateEmail,
                               controller: _emailcontroller,
                               keyboardType: TextInputType.emailAddress,
@@ -132,12 +151,15 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                             child :
                             RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
                               color: Hexcolor("#8cc63e"),
                                 child: Text(
                                   "Selanjutnya",
                                   style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14,
+                                    fontSize: 14.5,
                                     color: Colors.white
                                   ),
                                 ),

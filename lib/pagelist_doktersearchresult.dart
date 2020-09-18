@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:mico/page_home.dart';
 import 'package:mico/page_pembayaran.dart';
 import 'package:mico/page_searchdokter.dart';
@@ -38,9 +39,7 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_doktercari&id=" +
             getKlinik +
             "&cari=" +
-            getValcari +
-            "&filter=" +
-            getFilter);
+            getValcari);
     setState((){
       data = json.decode(response.body);
     });
@@ -88,86 +87,12 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
                 child :
                 Column(
                   children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10),
-                      height: 30.0,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: OutlineButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                //side: BorderSide(color: Colors.red)
-                              ),
-                              child : Text("Semua", style: TextStyle(
-                                  fontFamily: 'VarelaRound')),
-                              onPressed: ()  async {
-                                getFilter = '';
-                                data.clear();
-                                await _datafield();
-                              },
-                            ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: OutlineButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  //side: BorderSide(color: Colors.red)
-                                ),
-                                child : Text("Online", style: TextStyle(
-                                    fontFamily: 'VarelaRound')),
-                                onPressed: ()  async {
-                                  getFilter = 'Online';
-                                  data.clear();
-                                  const TIMEOUT = const Duration(seconds: 50);
-                                  Future.delayed(TIMEOUT,() => getData());
-                                }
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: OutlineButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                //side: BorderSide(color: Colors.red)
-                              ),
-                              child : Text("Offline", style: TextStyle(
-                                  fontFamily: 'VarelaRound')),
-                              onPressed: ()  async {
-                                getFilter = 'Offline';
-                                data.clear();
-                                await _datafield();
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: OutlineButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                //side: BorderSide(color: Colors.red)
-                              ),
-                              child : Text("Reserved", style: TextStyle(
-                                  fontFamily: 'VarelaRound')),
-                              onPressed: ()  async {
-                                getFilter = 'Reserved';
-                                data.clear();
-                                await _datafield();
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Divider(
+                      padding: const EdgeInsets.only(top: 15.0),
+                     /* child: Divider(
                         height: 3,
-                      ),
+                      ),*/
                     ),
                     Expanded(
                         child :
@@ -196,7 +121,6 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
               )
           );
         } else {
-
           return data.isEmpty ?
           Center(
               child: new Column(
@@ -216,7 +140,6 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
                 ],
               ))
               :
-
           RefreshIndicator(
               onRefresh: _getData,
               child :
@@ -226,191 +149,107 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
                 itemBuilder: (context, i) {
                   return Column(
                     children: <Widget>[
-                      data[i]['g'] == 'Online' ?
                       InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                              new MaterialPageRoute(
-                                  builder: (BuildContext context) => Pembayaran(
-                                      data[i]["f"],
-                                      widget.namaklinik,
-                                      data[i]["b"])));
-                        },
-                        child: ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(
+                                new MaterialPageRoute(
+                                    builder: (BuildContext context) => Pembayaran(
+                                        data[i]["f"],
+                                        widget.namaklinik,
+                                        data[i]["b"])));
+                          },
+                          child:
+                          ListTile(
                             leading:
                             CachedNetworkImage(
-                                imageUrl:
-                                "https://duakata-dev.com/miracle/media/photo/" +
-                                    data[i]["e"],
-                                progressIndicatorBuilder: (context,
-                                    url, downloadProgress) =>
-                                    Image.asset(
-                                      "assets/loadingq.gif",
-                                      width: 85.0,
-                                    ),
-                                imageBuilder: (context, image) =>
-                                    GFIconBadge(
-                                        child: CircleAvatar(
-                                          backgroundImage: image,
-                                          radius: 26,
-                                        ),
-                                        counterChild: GFBadge(
-                                          color:
-                                          Hexcolor("#2ECC40"),
-                                          size: 18,
-                                          shape:
-                                          GFBadgeShape.circle,
-                                        )
-                                    )
-                            ),
-                            title: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    data[i]["b"],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'VarelaRound'),
-                                  ),
-                            ),
-                            subtitle: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                        padding:
-                                        const EdgeInsets.all(
-                                            2.0)),
-                                    Align(
-                                      alignment:
-                                      Alignment.bottomLeft,
-                                      child: Text(
-                                          data[i]["c"],
-                                          style: TextStyle(
-                                              fontFamily:
-                                              'VarelaRound')),
-                                    ),
-                                  ],
-                                ),
-                            trailing: Text("ONLINE",style: TextStyle(fontSize: 10, fontFamily:
-                            'VarelaRound', color: Colors.green, fontWeight: FontWeight.bold),)
-                        ),
-                      )
-                          :
-                      data[i]['g'] == 'Offline' ?
-                      Opacity(
-                          opacity : 0.6,
-                          child :
-                          InkWell(
-                            onTap: () {},
-                            child: ListTile(
-                                leading: CachedNetworkImage(
-                                    imageUrl:
-                                    "https://duakata-dev.com/miracle/media/photo/" +
-                                        data[i]["e"],
-                                    progressIndicatorBuilder: (context,
-                                        url, downloadProgress) =>
-                                        Image.asset(
-                                          "assets/loadingq.gif",
-                                          width: 85.0,
-                                        ),
-                                    imageBuilder: (context, image) =>
-                                        GFIconBadge(
-                                            child: CircleAvatar(
-                                              backgroundImage: image,
-                                              radius: 26,
-                                            ),
-                                            counterChild: GFBadge(
-                                              color:
-                                              Colors.red,
-                                              size: 18,
-                                              shape:
-                                              GFBadgeShape.circle,
-                                            )
-                                        )
-                                ),
-                                title:  Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        data[i]["b"],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'VarelaRound'),
-                                      ),
-                                ),
-                                subtitle:  Column(
-                                      children: <Widget>[
-                                        Padding(
-                                            padding:
-                                            const EdgeInsets.all(
-                                                2.0)),
-                                        Align(
-                                          alignment:
-                                          Alignment.bottomLeft,
-                                          child: Text(
-                                              data[i]["c"],
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                  'VarelaRound')),
-                                        ),
-                                      ],
-                                    ),
-                                trailing: Text("OFFLINE",style: TextStyle(fontSize: 10, fontFamily:
-                                'VarelaRound',color: Colors.red,fontWeight: FontWeight.bold),)
-                            ),
-                          ))
-                          :
-                      ListTile(
-                          leading: CachedNetworkImage(
-                              imageUrl:
-                              "https://duakata-dev.com/miracle/media/photo/" +
+                              imageUrl: "https://duakata-dev.com/miracle/media/photo/" +
                                   data[i]["e"],
-                              progressIndicatorBuilder: (context,
-                                  url, downloadProgress) =>
-                                  Image.asset(
-                                    "assets/loadingq.gif",
-                                    width: 85.0,
-                                  ),
                               imageBuilder: (context, image) =>
                                   GFIconBadge(
-                                      child: CircleAvatar(
-                                        backgroundImage: image,
-                                        radius: 26,
-                                      ),
-                                      counterChild: GFBadge(
-                                        color:
-                                        Colors.transparent,
-                                        size: 18,
-                                        shape:
-                                        GFBadgeShape.circle,
-                                      )
-                                  )
-                          ),
-                          title:  Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  data[i]["b"],
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'VarelaRound'),
-                                ),
-                          ),
-                          subtitle:  Column(
-                                children: <Widget>[
-                                  Padding(
-                                      padding:
-                                      const EdgeInsets.all(
-                                          2.0)),
-                                  Align(
-                                    alignment:
-                                    Alignment.bottomLeft,
-                                    child: Text(
-                                        data[i]["c"],
-                                        style: TextStyle(
-                                            fontFamily:
-                                            'VarelaRound')),
+                                    child: CircleAvatar(
+                                      backgroundImage: image,
+                                      radius: 26,
+                                    ),
                                   ),
-                                ],
+                              placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),
+                            title:  Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                data[i]["b"],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'VarelaRound'),
                               ),
-                          trailing: Text("RESERVED",style: TextStyle(fontSize: 10, fontFamily:
-                          'VarelaRound',color: Colors.black,fontWeight: FontWeight.bold),)
+                            ),
+                            subtitle:  Column(
+                              children: <Widget>[
+                                Padding(
+                                    padding:
+                                    const EdgeInsets.all(
+                                        2.0)
+                                ),
+                                Align(
+                                  alignment:
+                                  Alignment.bottomLeft,
+                                  child: Text(
+                                      data[i]["c"],
+                                      style: TextStyle(
+                                          fontFamily:
+                                          'VarelaRound')),
+                                ),
+                                data[i]["j"] == 100 ?
+                                Padding(
+                                    padding: const EdgeInsets.only(top:5),
+                                    child :
+                                    Row(
+                                        children: [
+                                          Text("Rp "+
+                                              NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"]),
+                                            style: new TextStyle(decoration: TextDecoration.lineThrough,fontFamily:
+                                            'VarelaRound'),),
+                                          Padding(
+                                              padding: const EdgeInsets.only(left:10),
+                                              child :
+                                              Text("FREE",
+                                                  style: new TextStyle(color: Hexcolor("#2ECC40"),fontWeight: FontWeight.bold, fontFamily:
+                                                  'VarelaRound',)))
+                                        ])
+                                )
+                                    : (data[i]["j"] != 100 && data[i]["j"] != 0 ) ?
+                                Padding(
+                                    padding: const EdgeInsets.only(top:5),
+                                    child :
+                                    Row(
+                                        children: [
+                                          Text("Rp "+
+                                              NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"]),
+                                            style: new TextStyle(decoration: TextDecoration.lineThrough, fontFamily:
+                                            'VarelaRound'),),
+                                          Padding(
+                                              padding: const EdgeInsets.only(left:10),
+                                              child :
+                                              Text( "Rp "+
+                                                  NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"] - data[i]["j"]),
+                                                style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontFamily:
+                                                'VarelaRound'),)),
+                                        ]))
+                                    :
+                                Padding(
+                                    padding: const EdgeInsets.only(top:5),
+                                    child :
+                                    Row(
+                                        children: [
+                                          Text( "Rp "+
+                                              NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"]),
+                                            style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontFamily:
+                                            'VarelaRound'),),
+                                        ]))
+
+                              ],
+                            ),
+                          )
                       ),
                       Padding(
                           padding: const EdgeInsets.only(

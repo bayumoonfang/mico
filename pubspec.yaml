@@ -49,6 +49,8 @@ dependencies:
   flutter_gifimage: ^1.0.0
   async_loader: ^0.1.2
   date_format: ^1.0.6
+  intl: ^0.16.1
+  syncfusion_flutter_calendar: ^18.2.57
 
 dev_dependencies:
   flutter_test:

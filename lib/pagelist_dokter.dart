@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:getwidget/getwidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_home.dart';
@@ -122,7 +123,7 @@ class _ListDokterState extends State<ListDokter> {
                 child :
                     Column(
                         children: <Widget>[
-                          Container(
+                         /* Container(
                             margin: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10),
                             height: 30.0,
                             child: ListView(
@@ -196,12 +197,12 @@ class _ListDokterState extends State<ListDokter> {
                                 ),
                               ],
                             ),
-                          ),
+                          ),*/
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
-                            child: Divider(
+                           /* child: Divider(
                               height: 3,
-                            ),
+                            ),*/
                           ),
                                   Expanded(
                                     child :
@@ -260,7 +261,6 @@ class _ListDokterState extends State<ListDokter> {
             itemBuilder: (context, i) {
               return Column(
                 children: <Widget>[
-                  data[i]['g'] == 'Online' ?
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(
@@ -270,39 +270,24 @@ class _ListDokterState extends State<ListDokter> {
                                   widget.namaklinik,
                                   data[i]["b"])));
                     },
-                    child: ListTile(
+                    child:
+                    ListTile(
                         leading:
-                        CachedNetworkImage(
-                            imageUrl:
-                            "https://duakata-dev.com/miracle/media/photo/" +
-                                data[i]["e"],
-                            progressIndicatorBuilder: (context,
-                                url, downloadProgress) =>
-                                Image.asset(
-                                  "assets/loadingq.gif",
-                                  width: 85.0,
-                                ),
-                            imageBuilder: (context, image) =>
-                                GFIconBadge(
-                                    child: CircleAvatar(
-                                      backgroundImage: image,
-                                      radius: 26,
-                                    ),
-                                    counterChild: GFBadge(
-                                      color:
-                                      Hexcolor("#2ECC40"),
-                                      size: 18,
-                                      shape:
-                                      GFBadgeShape.circle,
-                                    )
-                                )
-                        ),
+
+                    CircleAvatar(
+
+                          backgroundImage: CachedNetworkImageProvider("https://duakata-dev.com/miracle/media/photo/" +
+                          data[i]["e"],
+                          ),
+                      backgroundColor: Colors.white,
+                      radius: 28,
+                    ),
                         title:  Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 data[i]["b"],
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
                                     fontFamily: 'VarelaRound'),
                               ),
                         ),
@@ -311,7 +296,8 @@ class _ListDokterState extends State<ListDokter> {
                                 Padding(
                                     padding:
                                     const EdgeInsets.all(
-                                        2.0)),
+                                        2.0)
+                                ),
                                 Align(
                                   alignment:
                                   Alignment.bottomLeft,
@@ -321,134 +307,68 @@ class _ListDokterState extends State<ListDokter> {
                                           fontFamily:
                                           'VarelaRound')),
                                 ),
-                              ],
-                            ),
-                        trailing: Text("ONLINE",style: TextStyle(fontSize: 10, fontFamily:
-                        'VarelaRound', color: Colors.green, fontWeight: FontWeight.bold),)
-                    ),
-                  )
-                      :
-                  data[i]['g'] == 'Offline' ?
-                  Opacity(
-                      opacity : 0.6,
-                      child :
-                      InkWell(
-                        onTap: () {},
-                        child: ListTile(
-                            leading: CachedNetworkImage(
-                                imageUrl:
-                                "https://duakata-dev.com/miracle/media/photo/" +
-                                    data[i]["e"],
-                                progressIndicatorBuilder: (context,
-                                    url, downloadProgress) =>
-                                    Image.asset(
-                                      "assets/loadingq.gif",
-                                      width: 85.0,
-                                    ),
-                                imageBuilder: (context, image) =>
-                                    GFIconBadge(
-                                        child: CircleAvatar(
-                                          backgroundImage: image,
-                                          radius: 26,
-                                        ),
-                                        counterChild: GFBadge(
-                                          color:
-                                          Colors.red,
-                                          size: 18,
-                                          shape:
-                                          GFBadgeShape.circle,
-                                        )
-                                    )
-                            ),
-                            title: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    data[i]["b"],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'VarelaRound'),
-                                  )),
+                                data[i]["j"] == 100 ?
+                                Padding(
+                                    padding: const EdgeInsets.only(top:5),
+                                    child :
+                                Row(
+                                  children: [
+                                      Text("Rp "+
+                                          NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"]),
+                                          style: new TextStyle(decoration: TextDecoration.lineThrough,fontFamily:
+                                          'VarelaRound'),),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left:10),
+                                            child :
+                                            Text("FREE",
+                                              style: new TextStyle(color: Hexcolor("#2ECC40"),fontWeight: FontWeight.bold, fontFamily:
+                                              'VarelaRound',)))
+                                  ])
+                                )
 
-                            subtitle: Column(
-                                  children: <Widget>[
+                                    : (data[i]["j"] != 100 && data[i]["j"] != 0 ) ?
+                                Padding(
+                                    padding: const EdgeInsets.only(top:5),
+                                    child :
+                                Row(
+                                    children: [
+                                    Text("Rp "+
+                                        NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"]),
+                                        style: new TextStyle(decoration: TextDecoration.lineThrough, fontFamily:
+                                        'VarelaRound'),),
                                     Padding(
-                                        padding:
-                                        const EdgeInsets.all(
-                                            2.0)),
-                                    Align(
-                                      alignment:
-                                      Alignment.bottomLeft,
-                                      child: Text(
-                                          data[i]["c"],
-                                          style: TextStyle(
-                                              fontFamily:
-                                              'VarelaRound')),
-                                    ),
-                                  ],
+                                    padding: const EdgeInsets.only(left:10),
+                                    child :
+                                    Text( "Rp "+
+                                        NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"] - data[i]["j"]),
+                                      style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontFamily:
+                                      'VarelaRound'),)),
+                                    ]))
+                                    :
+                                Padding(
+                                    padding: const EdgeInsets.only(top:5),
+                                    child :
+                                    Row(
+                                        children: [
+                                              Text( "Rp "+
+                                                  NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(data[i]["i"]),
+                                                style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontFamily:
+                                                'VarelaRound'),),
+                                        ])
                                 ),
-                            trailing: Text("OFFLINE",style: TextStyle(fontSize: 10, fontFamily:
-                            'VarelaRound',color: Colors.red,fontWeight: FontWeight.bold),)
-                        ),
-                      ))
-                      :
-                  ListTile(
-                      leading: CachedNetworkImage(
-                          imageUrl:
-                          "https://duakata-dev.com/miracle/media/photo/" +
-                              data[i]["e"],
-                          progressIndicatorBuilder: (context,
-                              url, downloadProgress) =>
-                              Image.asset(
-                                "assets/loadingq.gif",
-                                width: 85.0,
-                              ),
-                          imageBuilder: (context, image) =>
-                              GFIconBadge(
-                                  child: CircleAvatar(
-                                    backgroundImage: image,
-                                    radius: 26,
-                                  ),
-                                  counterChild: GFBadge(
-                                    color:
-                                    Colors.transparent,
-                                    size: 18,
-                                    shape:
-                                    GFBadgeShape.circle,
-                                  )
-                              )
-                      ),
-                      title:  Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              data[i]["b"],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'VarelaRound'),
-                            ),
-                      ),
-                      subtitle:  Column(
-                            children: <Widget>[
-                              Padding(
-                                  padding:
-                                  const EdgeInsets.all(
-                                      2.0)),
-                              Align(
-                                alignment:
-                                Alignment.bottomLeft,
-                                child: Text(
-                                    data[i]["c"],
-                                    style: TextStyle(
-                                        fontFamily:
-                                        'VarelaRound')),
-                              ),
-                            ],
-                          ),
-                      trailing: Text("RESERVED",style: TextStyle(fontSize: 10, fontFamily:
-                      'VarelaRound',color: Colors.black,fontWeight: FontWeight.bold),)
+
+
+                              ]),
+                        /*trailing: Text("ONLINE",style: TextStyle(fontSize: 10, fontFamily:
+                        'VarelaRound', color: Colors.green, fontWeight: FontWeight.bold),)*/
+                    )
                   ),
+
+
+
                   Padding(
                       padding: const EdgeInsets.only(
-                          left: 95, right: 15),
+                          left: 95, right: 15,bottom: 10,top: 10),
                       child: Divider(
                         height: 3.0,
                       )),
