@@ -34,6 +34,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
       getNamaDokter,
       getKlinik = "";
   String _valGender;
+  bool _isVisible = true;
   List _myFriends = [
     "Konsultasi Chat",
     "Konsultasi Video Call",
@@ -67,6 +68,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
   String getbb = "";
   String getcc = "";
   String getTanggal = "";
+  String date2, date1 = "";
   _getDetailJadwal() async {
     final response = await http.post(
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_detailjadwal&id=" +
@@ -80,6 +82,9 @@ class _cekPembayaranState extends State<CekPembayaran> {
       getbb = data["c"].toString();
       getcc = data["f"].toString();
       getTanggal = data["h"].toString();
+      date2 = new DateFormat.MMM().format(DateTime.parse(getbb));
+      date1 = new DateFormat.EEEE().format(DateTime.parse(getDateAvaible));
+      _isVisible = false;
     });
   }
 
@@ -107,6 +112,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
   Widget build(BuildContext context) {
     return new WillPopScope(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: new AppBar(
           backgroundColor: Hexcolor("#075e55"),
           title: Text(
@@ -124,6 +130,15 @@ class _cekPembayaranState extends State<CekPembayaran> {
           ),
         ),
         body:
+                _isVisible == true ?
+                        Center(
+                            child: Image.asset(
+                              "assets/loadingq.gif",
+                              width: 180.0,
+                            )
+                        )
+
+                :
             Column (
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -232,7 +247,8 @@ class _cekPembayaranState extends State<CekPembayaran> {
                                   fontFamily: 'VarelaRound',
                                   fontSize: 14),
                             ),
-                            Text(new DateFormat.EEEE().format(DateTime.parse(getDateAvaible)),
+                            Text(date1,
+                              //Text("ssssssss",
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
                                     fontWeight: FontWeight.bold,
@@ -255,7 +271,8 @@ class _cekPembayaranState extends State<CekPembayaran> {
                               fontFamily: 'VarelaRound',
                               fontSize: 14),
                         ),
-                        Text(getTanggal+ " - "+new DateFormat.MMM().format(DateTime.parse(getbb)) + " - "+getcc.toString(),
+                        Text(getTanggal+ " - "+date2 + " - "+getcc.toString(),
+                          //Text("ssssssssdddddddd",
                             style: TextStyle(
                                 fontFamily: 'VarelaRound',
                                 fontWeight: FontWeight.bold,
@@ -290,10 +307,6 @@ class _cekPembayaranState extends State<CekPembayaran> {
       Padding(
         padding: const EdgeInsets.only(left: 25,top:20,right: 25),
         child: Divider(height: 2,)),
-
-
-
-
                 Padding(
                   padding: const EdgeInsets.only(left: 25,top:20),
                   child:
@@ -422,7 +435,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
                         ),
                         onPressed: () {
                           Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                              builder: (BuildContext context) => CekPembayaran2(widget.idJadwal.toString(),widget.idUser,widget.idDokter)));
+                              builder: (BuildContext context) => CekPembayaran2(widget.idJadwal.toString(),widget.idUser,widget.idDokter, getTotal, valLayanan)));
                         },
                       ),
                    )

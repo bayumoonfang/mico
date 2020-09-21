@@ -51,6 +51,7 @@ dependencies:
   date_format: ^1.0.6
   intl: ^0.16.1
   syncfusion_flutter_calendar: ^18.2.57
+  responsive_container: ^0.0.1
 
 dev_dependencies:
   flutter_test:

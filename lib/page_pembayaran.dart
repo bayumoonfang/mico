@@ -33,6 +33,8 @@ class Pembayaran extends StatefulWidget {
 class _PembayaranState extends State<Pembayaran> {
   String getKlinik;
   String getDokter, getNamaDokter, getAcc;
+  bool _isvisible = true ;
+
 
   _PembayaranState({this.getDokter, this.getKlinik, this.getNamaDokter});
   List data;
@@ -47,28 +49,34 @@ class _PembayaranState extends State<Pembayaran> {
     }
   }
 
-_cekroomchat() async {
+  String getPhoto, getNama, getRegional, getLokasi, getSRT;
+  _getDetail() async {
     final response = await http.post(
-        "https://duakata-dev.com/miracle/api_script.php?do=act_cekroomchat",
-        body: {"idcust": getAcc});
-    Map data3 = jsonDecode(response.body);
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_dokterdetail&id=" +
+            getDokter);
+    Map data2 = jsonDecode(response.body);
     setState(() {
-      getChatStatus = data3["message"].toString();
-      //getVideoStatus = data2["message"].toString();
+      getPhoto = data2["e"].toString();
+      getNama = data2["b"].toString();
+      getRegional = data2["g"].toString();
+      getLokasi = data2["c"].toString();
+      getSRT = data2["i"].toString();
+      _isvisible = false;
     });
 
   }
 
-  void _cekroom() async {
+
+  _sinkronall() async {
     await _session();
-    await _cekroomchat();
     await _getDetail();
   }
+
 
   @override
   void initState() {
     super.initState();
-    _cekroom();
+    _sinkronall();
   }
 
 
@@ -84,69 +92,8 @@ _cekroomchat() async {
     }
   }
 
-
-    String getPhoto, getNama, getRegional, getLokasi, getSRT;
-  _getDetail() async {
-    final response = await http.post(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_dokterdetail&id=" +
-            getDokter);
-    Map data2 = jsonDecode(response.body);
-    setState(() {
-      getPhoto = data2["e"].toString();
-      getNama = data2["b"].toString();
-      getRegional = data2["g"].toString();
-      getLokasi = data2["c"].toString();
-      getSRT = data2["i"].toString();
-      //getVideoStatus = data2["message"].toString();
-    });
-
-  }
-
-
-
   Future<bool> _onWillPop() async {
     Navigator.pop(context);
-  }
-
-
-void _doChat() {
-  Navigator.of(context).push(new MaterialPageRoute(
-      builder: (BuildContext context) => ChatRoomPrepare(
-          widget.iddokter,
-          widget.namaDokter,
-          widget.namaKlinik,
-      getAcc)));
-}
-
-  void _doAskChat() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            //title: Text(),
-            content: Text(
-                "Apakah anda yakin untuk melakukan konsultasi chat dengan dokter ini  ?",
-                style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18)),
-            actions: [
-              new FlatButton(
-                  onPressed: () {
-                    _doChat();
-                  },
-                  child:
-                  Text("Iya", style: TextStyle(fontFamily: 'VarelaRound',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18))),
-              new FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:
-                  Text("Tidak", style: TextStyle(fontFamily: 'VarelaRound',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)))
-            ],
-          );
-        });
   }
 
 
@@ -164,7 +111,6 @@ void _doChat() {
   _getDate(int index) {
     setState(() => _isGetJadwal = index);
   }
-
 
 
   Widget build(BuildContext context) {
@@ -188,6 +134,14 @@ void _doChat() {
             ),
           ),
           body:
+              _isvisible == true ?
+          Center(
+                    child: Image.asset(
+                    "assets/loadingq.gif",
+                      width: 180.0,
+                    )
+                )
+              :
               Padding(
               padding:
               const EdgeInsets.only(left: 10, right: 10, top: 20),
@@ -351,7 +305,7 @@ void _doChat() {
                                 Center (
                                   child :
                                    Text(
-                                      "Dokter tidak ditemukan",
+                                      "Jadwal tidak ditemukan",
                                       style: new TextStyle(
                                           fontFamily: 'VarelaRound', fontSize: 20),
                                     ))
