@@ -10,6 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mico/page_pembayaran3.dart';
+import 'package:mico/page_prepareroom.dart';
 
 
 class CekPembayaran extends StatefulWidget{
@@ -43,8 +44,10 @@ class _cekPembayaranState extends State<CekPembayaran> {
   String getPhoto = "";
   String valLayanan = "";
   String getaa = "";
-  String getHarga = "";
-  String getDiskon = "";
+  String getHarga, getHargaVal = "";
+  String getDiskonPersen = "";
+  String getDiskonRupiah = "";
+  String getDiskonRupiahVal = "";
   String getTotal = "";
   _getDetailDokter() async {
     final response = await http.post(
@@ -55,7 +58,10 @@ class _cekPembayaranState extends State<CekPembayaran> {
       getPhoto = data["e"].toString();
       getaa = data["c"].toString();
       getHarga = data["i"].toString();
-      getDiskon = data["j"].toString();
+      getHargaVal = NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(getHarga));
+      getDiskonPersen = data["j"].toString();
+      getDiskonRupiah = data["k"].toString();
+      getDiskonRupiahVal = NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(getDiskonRupiah));
       getTotal = data["l"].toString();
     });
   }
@@ -87,6 +93,8 @@ class _cekPembayaranState extends State<CekPembayaran> {
       _isVisible = false;
     });
   }
+
+
 
 
 
@@ -334,11 +342,12 @@ class _cekPembayaranState extends State<CekPembayaran> {
                             NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(getHarga)),
                             style: TextStyle(
                                 fontFamily: 'VarelaRound',
-                                fontWeight: FontWeight.bold,
                                 fontSize: 14)),
                       ],
                     )
                 ),
+
+                getDiskonPersen != '0' ?
 
                 Padding(
                     padding: const EdgeInsets.only(left: 25,top:10,right: 25),
@@ -348,22 +357,25 @@ class _cekPembayaranState extends State<CekPembayaran> {
                       //mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Text(
-                          "Diskon",
+                          "Diskon (" + getDiskonPersen+ "%)",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontFamily: 'VarelaRound',
+                              fontWeight: FontWeight.bold,
                               fontSize: 14),
                         ),
-                        Text("Rp "+
-                            NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(getDiskon)),
+                        Text("Rp "+ getDiskonRupiahVal,
                             style: TextStyle(
                                 fontFamily: 'VarelaRound',
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14)),
+                                fontSize: 14))
                       ],
                     )
+                )
+                :
+                Padding(
+                  padding: const EdgeInsets.only(left:0),
                 ),
-
                 Padding(
                     padding: const EdgeInsets.only(left: 25,top:10,right: 25),
                     child: Row(
@@ -434,8 +446,16 @@ class _cekPembayaranState extends State<CekPembayaran> {
                           ),
                         ),
                         onPressed: () {
+                          getDiskonPersen == '100' ?
+
+                              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                              builder: (BuildContext context) => PrepareRoom(widget.idJadwal.toString(),widget.idUser,widget.idDokter, valLayanan)))
+
+                          :
                           Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                              builder: (BuildContext context) => CekPembayaran2(widget.idJadwal.toString(),widget.idUser,widget.idDokter, getTotal, valLayanan)));
+                          builder: (BuildContext context) => CekPembayaran2(widget.idJadwal.toString(),widget.idUser,widget.idDokter, getTotal, valLayanan)));
+
+
                         },
                       ),
                    )

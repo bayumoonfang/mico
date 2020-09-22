@@ -22,6 +22,7 @@ import 'package:mico/pagelist_dokter.dart';
 import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/services/page_chatroomhome.dart';
 import 'package:mico/services/page_videoroomhome.dart';
+import 'package:mico/user/page_appointment.dart';
 import 'package:mico/user/page_notfikasi.dart';
 import 'package:mico/user/page_userprofile.dart';
 import 'package:page_transition/page_transition.dart';
@@ -79,33 +80,8 @@ class _HomeState extends State<Home> {
     });
   }
 
-  signOut() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setInt("value", null);
-      preferences.setString("phone", null);
-      preferences.setString("email", null);
-      preferences.setInt("idcustomer", null);
-      preferences.setInt("accnumber", null);
-      preferences.commit();
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(
-          builder: (BuildContext context) => LoginStart()));
-    });
-  }
 
-  String countmessage = '0';
-  void _getCountMessage() async {
-    await _session();
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&id="+getPhone);
-    Map data = jsonDecode(response.body);
-    setState(() {
-      countmessage = data["a"].toString();
-    });
-  }
-
-
-
+  /*
   List data2, data3;
   Future<List> _getCountChat() async {
     final response = await http.get(
@@ -123,31 +99,42 @@ class _HomeState extends State<Home> {
     setState((){
       data3 = json.decode(response.body);
     });
-  }
-
-
-/*
-  void _getCountVideo() async {
-    await _session();
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countvideo&id="+getPhone);
-    Map data = jsonDecode(response.body);
-    setState(() {
-      countvideo = data["countme"].toString();
-    });
   }*/
 
 
-  @override
-  void initState() {
-    super.initState();
-    //startSplashScreen();
-    _connect();
-    _getCountMessage();
-    _detailcust();
-    _getCountChat();
-    _getCountVideo();
-    //_getCountChatNotRead();
+  signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", null);
+      preferences.setString("phone", null);
+      preferences.setString("email", null);
+      preferences.setInt("idcustomer", null);
+      preferences.setInt("accnumber", null);
+      preferences.commit();
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (BuildContext context) => LoginStart()));
+    });
+  }
+
+  String countmessage = '0';
+  String countapp = "0";
+
+  _getCountMessage() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&id="+getPhone);
+    Map data = jsonDecode(response.body);
+    setState(() {
+      countmessage = data["a"].toString();
+    });
+  }
+
+  _getCountApp() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+getPhone);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      countapp = data2["a"].toString();
+    });
   }
 
 
@@ -160,10 +147,25 @@ class _HomeState extends State<Home> {
     setState(() {
       getName = showdata['b'].toString();
     });
-    //myFocusNode.requestFocus();
   }
 
 
+
+
+  void _loaddata() async {
+    await  _connect();
+    await _session();
+    await _detailcust();
+    await _getCountMessage();
+    await _getCountApp();
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _loaddata();
+  }
 
 
 
@@ -172,7 +174,6 @@ class _HomeState extends State<Home> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
-
       ),
       margin: EdgeInsets.all(5.0),
       child: ClipRRect(
@@ -231,135 +232,7 @@ class _HomeState extends State<Home> {
                   fontFamily: 'VarelaRound', fontSize: 16, color: Colors.white),
             ),
             actions: [
-          /*  Container(
-              margin: const EdgeInsets.only(right: 10),
-            height: 55,
-            width: 45,
-              child :
-              new FutureBuilder(
-              future: _getCountChat(),
-              builder: (context, snapshot) {
-              return ListView.builder(
-                  itemCount: data2 == null ? 0 : data2.length ,
-                  itemBuilder: (context, i) {
-                            return    data2[i]["a"] == 0 ?
-                            Builder(
-                              builder: (context) =>
-                                  Padding(
-                                      padding: const EdgeInsets.only(top: 2),
-                                      child :
-                                    Opacity(
-                                      opacity: 0.7,
-                                      child :
-                                      IconButton(
-                                        icon: FaIcon(FontAwesomeIcons.comments),
-                                        iconSize: 21,
-                                        color: Colors.white,
-                                        onPressed: ()
-                                        {//Navigator.push(context, EnterPage(page: Chatroomhome(getPhone)));
-                                        },
-                                      )
-                                     )
-                                  ),
-                            )
-                                :
 
-                            Builder(
-                              builder: (context) =>
-                                  Padding(
-                                      padding: const EdgeInsets.only(top: 2),
-                                      child :
-                                      IconButton(
-                                        icon: new Badge(
-                                          toAnimate: false,
-                                          badgeContent: Text(
-                                            "1",
-                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                          ),
-                                          child:
-                                          FaIcon(FontAwesomeIcons.comments),
-                                          ),
-                                        iconSize: 21,
-                                        color: Colors.white,
-                                        onPressed: ()
-                                        {
-                                          Navigator.of(context).push(
-                                              new MaterialPageRoute(
-                                                  builder: (BuildContext context) => Chatroomhome(getPhone,'2')));
-                                          //Navigator.push(context, EnterPage(page: Chatroomhome(getPhone)));
-                                        },
-                                      )
-                                  ),
-                            );
-
-                  });
-                }
-              )
-            ),
-              Container(
-                  height: 55,
-                  width: 45,
-                  margin: const EdgeInsets.only(right:15, top: 4),
-                  child :
-                  new FutureBuilder(
-                      future: _getCountVideo(),
-                      builder: (context, snapshot) {
-                        return ListView.builder(
-                            itemCount: data3 == null ? 0 : data3.length ,
-                            itemBuilder: (context, i) {
-                              return    data3[i]["a"] == 0 ?
-                              Builder(
-                                builder: (context) =>
-                                    Padding(
-                                        padding: const EdgeInsets.only(top:0),
-                                        child :
-                                            Opacity(
-                                              opacity: 0.7,
-                                              child :
-                                        IconButton(
-                                          icon: FaIcon(FontAwesomeIcons.video),
-                                          iconSize: 21,
-                                          color: Colors.white,
-                                          onPressed: ()
-                                          {
-                                            //Navigator.push(context, EnterPage(page: Chatroomhome(getPhone)));
-                                          },
-                                        )
-                                    )),
-                              )
-                                  :
-                              Builder(
-                                builder: (context) =>
-                                    Padding(
-                                        padding: const EdgeInsets.only(top:0),
-                                        child :
-                                        IconButton(
-                                          icon: new Badge(
-                                            toAnimate: false,
-                                            badgeContent: Text(
-                                              "1",
-                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                            ),
-                                            child: FaIcon(FontAwesomeIcons.video),
-                                          ),
-                                          iconSize: 21,
-                                          color: Colors.white,
-                                          onPressed: ()
-                                          {
-                                            Navigator.of(context).push(
-                                                new MaterialPageRoute(
-                                                    builder: (BuildContext context) => Chatroomhome(getPhone,'2')));
-                                            //Navigator.push(context, EnterPage(page: Chatroomhome(getPhone)));
-                                          },
-                                        )
-                                    ),
-                              );
-
-                            });
-                      }
-                  )
-              ),
-*/
             ],
           ),
           drawer: Drawer(
@@ -592,6 +465,34 @@ class _HomeState extends State<Home> {
                 ))),
 
 
+
+        BottomNavigationBarItem(
+          icon:   countapp == '0' ?
+          FaIcon(
+            FontAwesomeIcons.calendarCheck,
+            size: 22,
+          )
+              :
+          GFIconBadge(
+              child:FaIcon(
+                FontAwesomeIcons.calendarCheck,
+                size: 22,
+              ),
+              counterChild: GFBadge(
+                color: Colors.redAccent,
+                size: 16,
+                shape:
+                GFBadgeShape.circle,
+              )
+          ),
+          title: Text("Appointment",
+              style: TextStyle(
+                fontFamily: 'VarelaRound',
+              )),
+        ),
+
+
+
         BottomNavigationBarItem(
           icon: FaIcon(
             FontAwesomeIcons.fileAlt,
@@ -664,14 +565,19 @@ class _HomeState extends State<Home> {
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhone)));
+                builder: (BuildContext context) => AppointmentList(getPhone)));
         break;
       case 2:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhone)));
+                builder: (BuildContext context) => HistoryTransaksi(getPhone)));
         break;
       case 3:
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => Notifikasi(getPhone)));
+        break;
+      case 4:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => UserProfile(getPhone)));
