@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mico/page_pembayaran.dart';
-import 'package:mico/pagelist_dokter.dart';
+import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/mico_dokter.dart';
 import 'package:mico/services/page_chatroomhome.dart';
 import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';

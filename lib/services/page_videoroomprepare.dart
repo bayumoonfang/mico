@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:mico/page_pembayaran.dart';
-import 'package:mico/pagelist_dokter.dart';
+import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/mico_dokter.dart';
 import 'package:mico/services/page_chatroomhome.dart';
 import 'package:mico/services/page_videochatuser.dart';
 import 'package:toast/toast.dart';

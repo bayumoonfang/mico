@@ -52,6 +52,10 @@ dependencies:
   intl: ^0.16.1
   syncfusion_flutter_calendar: ^18.2.57
   responsive_container: ^0.0.1
+  steps_indicator: ^1.1.0
+  steps: ^1.0.1
+  im_stepper: ^0.1.2+5
+
 
 dev_dependencies:
   flutter_test:

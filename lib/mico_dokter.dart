@@ -13,8 +13,8 @@ import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_home.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/page_pembayaran.dart';
-import 'package:mico/page_searchdokter.dart';
+import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/mico_searchdokter.dart';
 import 'package:toast/toast.dart';
 
 
@@ -227,7 +227,7 @@ class _ListDokterState extends State<ListDokter> {
           return Center(
               child: Image.asset(
                 "assets/loadingq.gif",
-                width: 180.0,
+                width: 110.0,
               )
           );
         } else {

@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_cekappointment.dart';
-import 'package:mico/page_detailimagedokter.dart';
+import 'package:mico/mico_cekappointment.dart';
+import 'package:mico/mico_detailimagedokter.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/pagelist_dokter.dart';
+import 'package:mico/mico_dokter.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/services/page_chatroomprepare.dart';
@@ -138,7 +138,7 @@ class _PembayaranState extends State<Pembayaran> {
           Center(
                     child: Image.asset(
                     "assets/loadingq.gif",
-                      width: 180.0,
+                      width: 110.0,
                     )
                 )
               :

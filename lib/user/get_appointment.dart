@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/services/page_chatroomhome.dart';
 import 'package:mico/services/page_historychat.dart';
+import 'package:mico/user/mico_detailappointment.dart';
 import 'package:mico/user/page_detailhistorytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -61,7 +63,7 @@ class _GetAppointmentState extends State<GetAppointment> {
           onRefresh: _getData,
           child :
           Container(
-              color: Colors.white,
+              color: Hexcolor("#f5f5f5"),
               margin: EdgeInsets.all(10.0),
               child: new FutureBuilder<List>(
                   future: getData(),
@@ -70,7 +72,7 @@ class _GetAppointmentState extends State<GetAppointment> {
                       return Center(
                           child: Image.asset(
                             "assets/loadingq.gif",
-                            width: 150.0,
+                            width: 110.0,
                           )
                       );
                     } else {
@@ -107,42 +109,34 @@ class _GetAppointmentState extends State<GetAppointment> {
                                                         //mainAxisSize: MainAxisSize.max,
                                                         children: <Widget>[
                                                           Text(
-                                                            "Konsultasi dengan",
+                                                            "Konsultasi " + data[i]["m"] + " dengan",
                                                             textAlign: TextAlign.left,
                                                             style: TextStyle(
                                                                 fontFamily: 'VarelaRound',
                                                                 fontSize: 14),
                                                           ),
                                                          Container(
-                                                           color: Hexcolor("#DDDDDD"),
-                                                           padding: const EdgeInsets.all(2),
+                                                             decoration: BoxDecoration(
+                                                               borderRadius: BorderRadius.circular(5),
+                                                               border: Border.all(
+                                                                 color:
+                                                                 data[i]["c"] == 'DONE' ? Hexcolor("#075e55") : Colors.red,
+                                                                 //                   <--- border color
+                                                                 width: 1.0,
+                                                               ),
+                                                             ),
+                                                           padding: const EdgeInsets.all(5),
                                                            child:  Text(data[i]["c"],
                                                                style: TextStyle(
                                                                    fontFamily: 'VarelaRound',
                                                                    fontWeight: FontWeight.bold,
-                                                                   fontSize: 13)),
+                                                                   fontSize: 12)),
                                                          )
                                                         ],
                                                       )
                                                     ),
-                                    Padding(
-                                        padding: const EdgeInsets.only(top: 5,left: 13),
-                                        child : Align(
-                                            alignment: Alignment.centerLeft,
-                                            child :
-                                            Opacity(
-                                              opacity: 0.7
-                                              ,
-                                              child :
-                                            Text(data[i]["d"],
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'VarelaRound')))
-                                        )
-                                    ),
                                             Padding(
-                                              padding: const EdgeInsets.only(top: 0),
+                                              padding: const EdgeInsets.only(top: 10,bottom: 10),
                                               child: ListTile(
                                                 leading:         CircleAvatar(
                                                   backgroundImage: CachedNetworkImageProvider("https://duakata-dev.com/miracle/media/photo/" +
@@ -163,6 +157,10 @@ class _GetAppointmentState extends State<GetAppointment> {
                                                 subtitle:
                                                 Column(
                                                   children: [
+                                                    Padding (
+                                                    padding: const EdgeInsets.only(top: 2)
+                                                    ,
+                                                        child :
                                                     Align(
                                                       alignment: Alignment.centerLeft,
                                                       child: Text(
@@ -171,26 +169,35 @@ class _GetAppointmentState extends State<GetAppointment> {
                                                             fontSize: 13,
                                                             fontFamily: 'VarelaRound'),
                                                       ),
-                                                    ),
+                                                    )),
+                                                Padding (
+                                                  padding: const EdgeInsets.only(top: 2),
+                                                  child :
                                                     Align(
                                                       alignment: Alignment.centerLeft,
                                                       child: Text(
-                                                        data[i]["g"],
+                                                        data[i]["k"]+ " - "+ new DateFormat.MMM().format(DateTime.parse(data[i]["l"]))
+                                                            + " - "+ data[i]["i"] + " (" +data[i]["d"]+")",
                                                         style: TextStyle(
-                                                            fontSize: 13,
+                                                            fontSize: 14,
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight.bold,
                                                             fontFamily: 'VarelaRound'),
                                                       ),
-                                                    ),
+                                                    )),
                                                   ],
                                                 )
-
-
                                               ),
-                                            )
+                                            ),
 
                                               ]
                                           )
-                                    )
+                                    ),
+                                  onTap: () {
+                                    Navigator.of(context).push(new MaterialPageRoute(
+                                        builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
+
+                                  },
                                 );
                           }
                       );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mico/pagelist_doktersearchresult.dart';
+import 'package:mico/mico_doktersearchresult.dart';
 import 'package:toast/toast.dart';
-import 'package:mico/pagelist_dokter.dart';
+import 'package:mico/mico_dokter.dart';
 
 class DokterSearch extends StatefulWidget {
   final String namaKlinik;

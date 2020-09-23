@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mico/page_home.dart';
-import 'package:mico/page_pembayaran.dart';
-import 'package:mico/page_searchdokter.dart';
+import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/mico_searchdokter.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:getwidget/getwidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mico/pagelist_dokter.dart';
+import 'package:mico/mico_dokter.dart';
 import 'package:mico/helper/PageRoute.dart';
 
 class SearchResultDokter extends StatefulWidget {

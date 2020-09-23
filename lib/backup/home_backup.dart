@@ -8,7 +8,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_verifikasilogin.dart';
-import 'package:mico/pagelist_dokter.dart';
+import 'package:mico/mico_dokter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
