@@ -130,6 +130,8 @@ class _GetAppointmentState extends State<GetAppointment> {
                                                                style: TextStyle(
                                                                    fontFamily: 'VarelaRound',
                                                                    fontWeight: FontWeight.bold,
+                                                                   color:
+                                                                   data[i]["c"] == 'DECLINE' ? Colors.red : Colors.black,
                                                                    fontSize: 12)),
                                                          )
                                                         ],
