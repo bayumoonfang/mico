@@ -7,7 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_detailnotif.dart';
-import 'package:mico/page_home.dart';
+import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/get_chathistory.dart';
 import 'package:mico/user/get_videohistory.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mico/SplashScreen.dart';
-import 'package:mico/page_home.dart';
+import 'package:mico/mico_home.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/page_verifikasilogin.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SplashScreenPage(),
+      home: Home(),
       //home : Login()
     );
   }

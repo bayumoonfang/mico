@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mico/doctor/pagedoktor_home.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_home.dart';
+import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/utils/setting.dart';
 import 'package:permission_handler/permission_handler.dart';

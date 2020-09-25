@@ -10,7 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mico/mico_pembayaran3.dart';
-import 'package:mico/mico_prepareroom.dart';
+import 'package:mico/mico_preparekonsultasi.dart';
 
 
 class CekPembayaran extends StatefulWidget{
@@ -142,7 +142,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
                         Center(
                             child: Image.asset(
                               "assets/loadingq.gif",
-                              width: 180.0,
+                              width: 110.0,
                             )
                         )
 

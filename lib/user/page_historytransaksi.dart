@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_home.dart';
+import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/get_chathistory.dart';
 import 'package:mico/user/get_videohistory.dart';

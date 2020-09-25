@@ -10,7 +10,7 @@ import 'package:mico/helper/session_user.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:mico/page_home.dart';
+import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/page_historytransaksi.dart';
 import 'package:mico/user/page_notfikasi.dart';

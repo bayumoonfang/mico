@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mico/doctor/pagedoktor_home.dart';
 import 'dart:async';
 
-import 'package:mico/page_home.dart';
+import 'package:mico/mico_home.dart';
 
 
 class SplashScreenPage extends StatefulWidget {
