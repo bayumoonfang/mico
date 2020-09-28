@@ -12,7 +12,7 @@ import 'package:mico/user/page_detailhistorytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:mico/user/page_historytransaksi.dart';
+import 'package:mico/user/mico_historytransaksi.dart';
 
 
 class ChatHistory extends StatefulWidget {
@@ -68,7 +68,7 @@ class ChatHistory extends StatefulWidget {
                   return Center(
                       child: Image.asset(
                         "assets/loadingq.gif",
-                        width: 150.0,
+                        width: 100.0,
                       )
                   );
                 } else {

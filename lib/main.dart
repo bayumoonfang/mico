@@ -6,7 +6,7 @@ import 'package:mico/page_login.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/services/page_chatroomprepare.dart';
 import 'package:mico/services/page_videoroomprepare.dart';
-import 'package:mico/user/page_historytransaksi.dart';
+import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/utils/page_tespertama.dart';
 
 import 'doctor/pagedoktor_home.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Home(),
+      home: SplashScreenPage(),
       //home : Login()
     );
   }

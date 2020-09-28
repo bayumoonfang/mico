@@ -377,7 +377,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                     ),
                                   },
                                   {
-                                    'background': (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
+                                    'background': (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE' || data[i]["c"] != 'DECLINE') ?
                                     Colors.green : Hexcolor("#DDDDDD") ,
                                     'label': '',
                                     'content':
@@ -413,7 +413,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                     fontFamily: 'VarelaRound')
                                             ),
 
-
+                                            data[i]["c"] != 'DECLINE' ?
                                             RaisedButton(
                                               color:  Hexcolor("#075e55"),
                                               shape: RoundedRectangleBorder(
@@ -431,6 +431,19 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                     builder: (BuildContext context) => DetailTagihan(data[i]["b"])));
                                               },)
 
+                                                :
+
+                                            OutlineButton(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                              ),
+                                              child: Text(
+                                                "Detail Tagihan",
+                                                style: TextStyle(
+                                                    fontFamily: 'VarelaRound',
+                                                    color: Colors.black
+                                                ),
+                                              ))
                                           ],
                                         )
                                     ),

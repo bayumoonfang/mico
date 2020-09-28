@@ -11,7 +11,7 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/get_chathistory.dart';
 import 'package:mico/user/get_videohistory.dart';
-import 'package:mico/user/page_historytransaksi.dart';
+import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';

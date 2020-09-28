@@ -133,6 +133,14 @@ Future<List> getDataChat3() async {
         });
   }
 
+
+  void _dodeletepesanimage(String valID) {
+    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_deletechatimageuser";
+    http.post(url,
+        body: {
+          "idmessage": valID
+        });
+  }
   //=================================================================================================
 
   _doDeleteMessage(String IDMessage) {
@@ -162,11 +170,49 @@ Future<List> getDataChat3() async {
                   child:
                   Text("Tidak", style: TextStyle(fontFamily: 'VarelaRound',
                       fontWeight: FontWeight.bold,
+                      fontSize: 14)))
+            ],
+          );
+        });
+  }
+
+
+
+
+  _doDeleteMessageImage(String IDMessage) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //title: Text(),
+            content: Text(
+                "Apakah anda yakin untuk menghapus pesan ini  ?",
+                style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14)),
+            actions: [
+              new FlatButton(
+                  onPressed: () {
+                    _dodeletepesanimage(IDMessage);
+                    Navigator.pop(context);
+                    myFocusNode.dispose();
+                  },
+                  child:
+                  Text("Iya", style: TextStyle(fontFamily: 'VarelaRound',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18))),
+              new FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:
+                  Text("Tidak", style: TextStyle(fontFamily: 'VarelaRound',
+                      fontWeight: FontWeight.bold,
                       fontSize: 18)))
             ],
           );
         });
   }
+
+
 
 
   void _removeread() async {
@@ -263,7 +309,7 @@ void initState() {
                                         Padding(
                                             padding :  const EdgeInsets.only(left: 5),
                                             child :
-                                            Text(getInvNumber.toString(),
+                                            Text(getInvNumber == null ? '...' : getInvNumber,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Hexcolor("#516067"),
@@ -429,8 +475,6 @@ void initState() {
                                                                 ),
                                                                 child :
                                                                 data[i]["e"] != 'Message has been deleted..' ?
-                                                                InkWell(
-                                                                  child :
                                                                   Padding(
                                                                       padding: const EdgeInsets.all(10.0),
                                                                       child:
@@ -445,65 +489,37 @@ void initState() {
                                                                               width: 160,
                                                                             )),
                                                                         onTap: (){
-                                                                         /* Navigator.of(context).push(
+                                                                          Navigator.of(context).push(
                                                                               new MaterialPageRoute(
-                                                                                  builder: (BuildContext context) => DetailScreen(data[i]["h"].toString())));*/
+                                                                                  builder: (BuildContext context) => DetailScreen(data[i]["h"].toString())));
+                                                                        },
+                                                                        onLongPress: (){
+                                                                          _doDeleteMessageImage(data[i]["i"].toString());
                                                                         },
                                                                       )
                                                                           :
-                                                                      data[i]["e"] == 'Message has been deleted..' ?
-                                                                      Text(data[i]["e"],
-                                                                          style: TextStyle(
-                                                                              fontSize: 14,
-                                                                              fontFamily: 'VarelaRound',
-                                                                              fontStyle: FontStyle.italic
-                                                                          ))
-                                                                          :
-                                                                      Text(data[i]["e"],
-                                                                          style: TextStyle(
-                                                                            fontSize: 14,
-                                                                            fontFamily: 'VarelaRound',
-                                                                          ))
-                                                                  ),
-                                                                  onLongPress: () {
-                                                                    _doDeleteMessage(data[i]["i"].toString());
-                                                                  },
-                                                                )
+                                                                          GestureDetector(
+                                                                            child :
+                                                                              Text(data[i]["e"],
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 14,
+                                                                                    fontFamily: 'VarelaRound',
+                                                                                  )),
+                                                                            onLongPress: (){
+                                                                              _doDeleteMessage(data[i]["i"].toString());
+                                                                            },
+                                                                          )
+                                                                  )
                                                                     :
-                                                                Padding(
-                                                                    padding: const EdgeInsets.all(10.0),
-                                                                    child:
-                                                                    data[i]["h"] != '' && data[i]["d"] == '2' ?
-                                                                    GestureDetector(
-                                                                      child: Hero(
-                                                                          tag: data[i]["h"],
-                                                                          child :
-                                                                          Image(
-                                                                            image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
-                                                                            height: 160,
-                                                                            width: 160,
-                                                                          )),
-                                                                      onTap: (){
-                                                                        /*Navigator.of(context).push(
-                                                                            new MaterialPageRoute(
-                                                                                builder: (BuildContext context) => DetailScreen(data[i]["h"].toString())));*/
-                                                                      },
-                                                                    )
-                                                                        :
-                                                                    data[i]["e"] == 'Message has been deleted..' ?
-                                                                    Text(data[i]["e"],
-                                                                        style: TextStyle(
-                                                                            fontSize: 14,
-                                                                            fontFamily: 'VarelaRound',
-                                                                            fontStyle: FontStyle.italic
-                                                                        ))
-                                                                        :
-                                                                    Text(data[i]["e"],
-                                                                        style: TextStyle(
-                                                                          fontSize: 14,
-                                                                          fontFamily: 'VarelaRound',
-                                                                        ))
-                                                                ),
+                                                                    Padding (
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child :
+                                                                Text(data[i]["e"],
+                                                                    style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        fontFamily: 'VarelaRound',
+                                                                        fontStyle: FontStyle.italic
+                                                                    )))
                                                               ),
                                                             ],
                                                           ))),

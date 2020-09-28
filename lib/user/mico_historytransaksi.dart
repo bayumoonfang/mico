@@ -7,6 +7,7 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/get_chathistory.dart';
 import 'package:mico/user/get_videohistory.dart';
+import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/page_notfikasi.dart';
 import 'package:mico/user/page_userprofile.dart';
 import 'package:http/http.dart' as http;
@@ -29,12 +30,24 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
   String getAcc, getPhoneState;
   _HistoryTransaksiState({this.getPhoneState});
 
+String countapp = '...';
+  _getCountApp() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+widget.getPhone);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      countapp = data2["a"].toString();
+    });
+  }
+
+
 
   @override
   void initState() {
     super.initState();
     controller = TabController(vsync: this, length: 2);
     _getCountMessage();//LENGTH = TOTAL TAB YANG AKAN DIBUAT
+    _getCountApp();
   }
 
   @override
@@ -110,6 +123,32 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
                   fontFamily: 'VarelaRound',
                 ))),
 
+
+        BottomNavigationBarItem(
+          icon:   countapp == '0' ?
+          FaIcon(
+            FontAwesomeIcons.calendarCheck,
+            size: 22,
+          )
+              :
+          GFIconBadge(
+              child:FaIcon(
+                FontAwesomeIcons.calendarCheck,
+                size: 22,
+              ),
+              counterChild: GFBadge(
+                color: Colors.redAccent,
+                size: 16,
+                shape:
+                GFBadgeShape.circle,
+              )
+          ),
+          title: Text("Appointment",
+              style: TextStyle(
+                fontFamily: 'VarelaRound',
+              )),
+        ),
+
         BottomNavigationBarItem(
           icon: FaIcon(
             FontAwesomeIcons.fileAlt,
@@ -172,21 +211,27 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => Home()));
-            break;
+
+        break;
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+                builder: (BuildContext context) => AppointmentList(widget.getPhone)));
         break;
       case 2:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => HistoryTransaksi(widget.getPhone)));
         break;
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => UserProfile(getPhoneState)));
+                builder: (BuildContext context) => Notifikasi(widget.getPhone)));
+        break;
+      case 4:
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => UserProfile(widget.getPhone)));
         break;
 
     }

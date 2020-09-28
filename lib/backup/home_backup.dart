@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:toast/toast.dart';
-import 'package:mico/user/page_historytransaksi.dart';
+import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeFix extends StatefulWidget {
