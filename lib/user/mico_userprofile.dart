@@ -4,6 +4,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getwidget/components/badge/gf_badge.dart';
+import 'package:getwidget/components/badge/gf_icon_badge.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/helper/session_user.dart';
@@ -12,8 +15,10 @@ import 'dart:convert';
 
 import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
+import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
-import 'package:mico/user/page_notfikasi.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
+import 'package:mico/user/mico_notfikasi.dart';
 
 
 class UserProfile extends StatefulWidget {
@@ -63,7 +68,30 @@ class _UserProfileState extends State<UserProfile> {
   void initState() {
     super.initState();
     _getAccountDetail();
+    _getCountApp();
+    _getCountMessage();
   }
+  String countmessage = '0';
+  String countapp = "0";
+
+  _getCountMessage() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&id="+getPhoneState);
+    Map data = jsonDecode(response.body);
+    setState(() {
+      countmessage = data["a"].toString();
+    });
+  }
+
+  _getCountApp() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+getPhoneState);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      countapp = data2["a"].toString();
+    });
+  }
+
 
 
         @override
@@ -175,6 +203,33 @@ class _UserProfileState extends State<UserProfile> {
                   fontFamily: 'VarelaRound',
                 ))),
 
+
+
+        BottomNavigationBarItem(
+          icon:   countapp == '0' ?
+          FaIcon(
+            FontAwesomeIcons.calendarCheck,
+            size: 22,
+          )
+              :
+          GFIconBadge(
+              child:FaIcon(
+                FontAwesomeIcons.calendarCheck,
+                size: 22,
+              ),
+              counterChild: GFBadge(
+                color: Colors.redAccent,
+                size: 16,
+                shape:
+                GFBadgeShape.circle,
+              )
+          ),
+          title: Text("Appointment",
+              style: TextStyle(
+                fontFamily: 'VarelaRound',
+              )),
+        ),
+
         BottomNavigationBarItem(
           icon: FaIcon(
             FontAwesomeIcons.fileAlt,
@@ -210,7 +265,7 @@ class _UserProfileState extends State<UserProfile> {
 
       ],
       onTap: _onTap,
-      currentIndex: 3,
+      currentIndex: 4,
       selectedItemColor: Hexcolor("#628b2c"),
     );
   }
@@ -226,14 +281,19 @@ class _UserProfileState extends State<UserProfile> {
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+                builder: (BuildContext context) => AppointmentList(getPhoneState)));
         break;
       case 2:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
         break;
       case 3:
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+        break;
+      case 4:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => UserProfile(getPhoneState)));

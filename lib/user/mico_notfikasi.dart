@@ -11,12 +11,14 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/get_chathistory.dart';
 import 'package:mico/user/get_videohistory.dart';
-import 'package:mico/user/mico_historytransaksi.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:http/http.dart' as http;
+import 'package:mico/user/mico_appointment.dart';
+import 'package:mico/user/mico_historytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:mico/user/page_userprofile.dart';
+import 'package:mico/user/mico_userprofile.dart';
 
 
 
@@ -49,7 +51,7 @@ class _NotifikasiState extends State<Notifikasi> {
   @override
   void initState() {
     super.initState();
-    //startSplashScreen();
+    _getCountApp();
     _getCountMessage();
   }
 
@@ -65,13 +67,23 @@ class _NotifikasiState extends State<Notifikasi> {
   }
 
   String countmessage = '0';
-  void _getCountMessage() async {
+  String countapp = "0";
+
+  _getCountMessage() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&"
-            "id="+getPhoneState);
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&id="+getPhoneState);
     Map data = jsonDecode(response.body);
     setState(() {
       countmessage = data["a"].toString();
+    });
+  }
+
+  _getCountApp() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+getPhoneState);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      countapp = data2["a"].toString();
     });
   }
 
@@ -243,6 +255,36 @@ class _NotifikasiState extends State<Notifikasi> {
                   fontFamily: 'VarelaRound',
                 ))),
 
+
+
+        BottomNavigationBarItem(
+          icon:   countapp == '0' ?
+          FaIcon(
+            FontAwesomeIcons.calendarCheck,
+            size: 22,
+          )
+              :
+          GFIconBadge(
+              child:FaIcon(
+                FontAwesomeIcons.calendarCheck,
+                size: 22,
+              ),
+              counterChild: GFBadge(
+                color: Colors.redAccent,
+                size: 16,
+                shape:
+                GFBadgeShape.circle,
+              )
+          ),
+          title: Text("Appointment",
+              style: TextStyle(
+                fontFamily: 'VarelaRound',
+              )),
+        ),
+
+
+
+
         BottomNavigationBarItem(
           icon: FaIcon(
             FontAwesomeIcons.fileAlt,
@@ -293,7 +335,7 @@ class _NotifikasiState extends State<Notifikasi> {
 
       ],
       onTap: _onTap,
-      currentIndex: 2,
+      currentIndex: 3,
       selectedItemColor: Hexcolor("#628b2c"),
     );
   }
@@ -309,14 +351,19 @@ class _NotifikasiState extends State<Notifikasi> {
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+                builder: (BuildContext context) => AppointmentList(getPhoneState)));
         break;
       case 2:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
         break;
       case 3:
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+        break;
+      case 4:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => UserProfile(getPhoneState)));

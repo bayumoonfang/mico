@@ -5,12 +5,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/user/get_appointment.dart';
 import 'package:mico/user/get_chathistory.dart';
-import 'package:mico/user/get_transaksi.dart';
 import 'package:mico/user/get_videohistory.dart';
 import 'package:mico/user/mico_appointment.dart';
-import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/user/mico_notfikasi.dart';
 import 'package:mico/user/mico_userprofile.dart';
 import 'package:http/http.dart' as http;
@@ -18,23 +15,40 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:getwidget/getwidget.dart';
 
-
-class HistoryTransaksi extends StatefulWidget {
+/*
+class HistoryTransaksiBackup extends StatefulWidget {
   final String getPhone;
-  const HistoryTransaksi(this.getPhone);
+  const HistoryTransaksiBackup(this.getPhone);
   @override
-  _HistoryTransaksiState createState() => new _HistoryTransaksiState(getPhoneState: this.getPhone);
+  _HistoryTransaksiBackupState createState() => new _HistoryTransaksiBackupState(getPhoneState: this.getPhone);
 
 }
 
 
-class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerProviderStateMixin {
+class _HistoryTransaksiBackupState extends State<HistoryTransaksiBackup> with SingleTickerProviderStateMixin {
   TabController controller;
   String getAcc, getPhoneState;
-  _HistoryTransaksiState({this.getPhoneState});
+  _HistoryTransaksiBackupState({this.getPhoneState});
+
+String countapp = '...';
+  _getCountApp() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+widget.getPhone);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      countapp = data2["a"].toString();
+    });
+  }
 
 
 
+  @override
+  void initState() {
+    super.initState();
+    controller = TabController(vsync: this, length: 2);
+    _getCountMessage();//LENGTH = TOTAL TAB YANG AKAN DIBUAT
+    _getCountApp();
+  }
 
   @override
   void dispose() {
@@ -46,9 +60,7 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
 
   }
   String countmessage = '0';
-  String countapp = "0";
-
-  _getCountMessage() async {
+  void _getCountMessage() async {
     final response = await http.get(
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&id="+getPhoneState);
     Map data = jsonDecode(response.body);
@@ -57,48 +69,36 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
     });
   }
 
-  _getCountApp() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+getPhoneState);
-    Map data2 = jsonDecode(response.body);
-    setState(() {
-      countapp = data2["a"].toString();
-    });
-  }
-
-  void _loaddata() async {
-    await _getCountMessage();
-    await _getCountApp();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TabController(vsync: this, length: 1);
-    _loaddata();//LENGTH = TOTAL TAB YANG AKAN DIBUAT
-  }
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: _onWillPop,
         child:  Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Hexcolor("#075e55"),
-            leading: Icon(Icons.clear,color: Hexcolor("#075e55"),),
-            title: new Text("History Transaksi",style: TextStyle(color : Colors.white,fontFamily: 'VarelaRound',fontSize: 18),),
-            elevation: 0.0,
-            centerTitle: true,
-          ),
+              appBar: AppBar(
+                backgroundColor: Hexcolor("#075e55"),
+                leading: Icon(Icons.clear,color: Hexcolor("#075e55"),),
+                title: new Text("History Transaksi",style: TextStyle(color : Colors.white,fontFamily: 'VarelaRound',fontSize: 18),),
+                elevation: 0.0,
+                centerTitle: true,
+                bottom: TabBar(
+                  controller: controller,
+                unselectedLabelColor: Hexcolor("#c0c0c0"),
+                labelColor: Colors.white,
+                indicatorWeight: 2,
+                indicatorColor: Colors.white,
+                  tabs: <Tab>[
+                        Tab(text: "Chat"),
+                        Tab(text: "Video",)                     
+                  ],
+                ),
+              ),
           body:
           TabBarView(
             controller: controller,
             children: <Widget>[
-              GetTransaksi(getPhoneState),
+              ChatHistory(getPhoneState),
+              VideoHistory(getPhoneState)
             ],
           ),
           bottomNavigationBar: _bottomNavigationBar(),
@@ -122,7 +122,6 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
                 style: TextStyle(
                   fontFamily: 'VarelaRound',
                 ))),
-
 
 
         BottomNavigationBarItem(
@@ -149,9 +148,6 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
                 fontFamily: 'VarelaRound',
               )),
         ),
-
-
-
 
         BottomNavigationBarItem(
           icon: FaIcon(
@@ -203,7 +199,7 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
 
       ],
       onTap: _onTap,
-      currentIndex: 2,
+      currentIndex: 1,
       selectedItemColor: Hexcolor("#628b2c"),
     );
   }
@@ -215,26 +211,27 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => Home()));
+
         break;
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => AppointmentList(getPhoneState)));
+                builder: (BuildContext context) => AppointmentList(widget.getPhone)));
         break;
       case 2:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+                builder: (BuildContext context) => HistoryTransaksiBackup(widget.getPhone)));
         break;
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => Notifikasi(widget.getPhone)));
         break;
       case 4:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => UserProfile(getPhoneState)));
+                builder: (BuildContext context) => UserProfile(widget.getPhone)));
         break;
 
     }
@@ -242,5 +239,5 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
       _currentTabIndex = tabIndex;
     });
   }
-
-}
+*/
+//}

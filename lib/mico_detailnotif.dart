@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:getwidget/getwidget.dart';
-import 'package:mico/user/page_notfikasi.dart';
+import 'package:mico/user/mico_notfikasi.dart';
 
 
 class DetailNotif extends StatefulWidget {
@@ -156,7 +156,7 @@ class _DetailNotifState extends State<DetailNotif> {
                       return Center(
                           child: Image.asset(
                             "assets/loadingq.gif",
-                            width: 180.0,
+                            width: 100.0,
                           )
                       );
                     } else {
