@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/services/mico_chatroom.dart';
+import 'package:mico/services/mico_chatroomhistory.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 import 'package:mico/user/mico_prepareroom.dart';
 import 'package:photo_view/photo_view.dart';
@@ -256,9 +257,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                 },
                                 steps: [
                                   {
-                                    'background':
-                                    data[i]["c"] == 'ON REVIEW' ?
-                                    Hexcolor("#DDDDDD") : Colors.green,
+                                    'background': Colors.green,
                                     'label': '',
                                     'content':
                                     Padding(
@@ -377,7 +376,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                     ),
                                   },
                                   {
-                                    'background': (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE' || data[i]["c"] != 'DECLINE') ?
+                                    'background': (data[i]["c"] == 'ACCEPT') ?
                                     Colors.green : Hexcolor("#DDDDDD") ,
                                     'label': '',
                                     'content':
@@ -413,7 +412,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                     fontFamily: 'VarelaRound')
                                             ),
 
-                                            data[i]["c"] != 'DECLINE' ?
+                                            (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
                                             RaisedButton(
                                               color:  Hexcolor("#075e55"),
                                               shape: RoundedRectangleBorder(
@@ -548,12 +547,33 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                     builder: (BuildContext context) => Chatroom(data[i]["b"],'2')));
 
                                               },)
-                                                :
+                                                :   data[i]["c"] == 'DONE' ?
                                             RaisedButton(
+                                              color:  Hexcolor("#075e55"),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                              ),
+                                              child: Text(
+                                                "History Konsultasi",
+                                                style: TextStyle(
+                                                    fontFamily: 'VarelaRound',
+                                                    color: Colors.white
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).push(new MaterialPageRoute(
+                                                    builder: (BuildContext context) => Chatroomhistory(data[i]["b"],'2')));
+                                              },)
+                                            :
+                                            OutlineButton(
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(5.0),
                                                 ),
-                                                child: Text("Mulai Konsultasi"))
+                                                child: Text("Mulai Konsultasi",
+                                                  style: TextStyle(
+                                                      fontFamily: 'VarelaRound',
+                                                      color: Colors.black
+                                                  ),))
                                           ],
                                         )
                                     ),

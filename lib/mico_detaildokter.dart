@@ -15,6 +15,7 @@ import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/services/page_chatroomprepare.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import 'dart:async';
 
 class Pembayaran extends StatefulWidget {
   final String iddokter;
@@ -82,14 +83,14 @@ class _PembayaranState extends State<Pembayaran> {
 
 
   Future<List> getDateJadwal() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_jadwalhari&id=" +
-            getDokter);
-    if (response.body.isNotEmpty) {
-      data =  json.decode(response.body);
-    } else {
-      //Widget.of(context).showSnackBar(SnackBar(content: Text('Empty Data')));
-    }
+    http.Response response = await http.get(
+        Uri.encodeFull("https://duakata-dev.com/miracle/api_script.php?do=getdata_jadwalhari&id=" +
+            getDokter),
+        headers: {"Accept":"application/json"}
+    );
+    setState((){
+      data = json.decode(response.body);
+    });
   }
 
   Future<bool> _onWillPop() async {
@@ -301,194 +302,206 @@ class _PembayaranState extends State<Pembayaran> {
                           padding: const EdgeInsets.only(top: 10.0, left: 10),
                           itemCount: data == null ? 0 : data.length ,
                           itemBuilder: (context, i) {
-                            return (data.isEmpty || data == null) ?
-                                Center (
-                                  child :
-                                   Text(
-                                      "Jadwal tidak ditemukan",
-                                      style: new TextStyle(
-                                          fontFamily: 'VarelaRound', fontSize: 20),
-                                    ))
+                                          return data.isEmpty ?
+                                                Container(
+                                                    width: 160,
+                                                    height: 200,
+                                                    padding: const EdgeInsets.only(right: 10),
+                                                    child:
+                                                    Text(
+                                                      "Jadwal tidak ditemukan",
+                                                      style: new TextStyle(
+                                                          fontFamily: 'VarelaRound', fontSize: 20),
+                                                    ))
+                                           :
+                                                Container(
+                                                    width: 160,
+                                                    padding: const EdgeInsets.only(right: 10),
+                                                    child:
+                                                    data[i]['g'] == 'ONLINE' ?
+                                                    Card(
+                                                      elevation: 0,
+                                                      margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                                                      shape: RoundedRectangleBorder(
+                                                        side: new BorderSide(color:
+                                                        _selectedIndex == i && _selectedIndex != 200 &&
+                                                            _selectedIndex != null ?
+                                                        Hexcolor("#075e55") : Hexcolor("#DDDDDD"), width: 1.0
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(5.0),
+                                                      ),
+                                                      child:
+                                                      InkWell(
+                                                          splashColor: Colors.blue.withAlpha(30),
+                                                          onTap: () {
+                                                            _onSelected(i);
+                                                            _onButton(2);
+                                                            _getDate(data[i]['i']);
+                                                          },
+                                                          child:
+                                                          Container(
+                                                            child: Center(child:
+                                                            Column(
+                                                              children: [
+                                                                Padding(
+                                                                  child:
+                                                                  Text(new DateFormat.EEEE().format(
+                                                                      DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'VarelaRound',
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: 18
+                                                                  ),),
+                                                                  padding: const EdgeInsets.only(top: 15),
+                                                                ),
+                                                                Padding(
+                                                                  child:
+                                                                  Text("(" + data[i]['d'] + " " +
+                                                                      new DateFormat.MMM().format(
+                                                                          DateTime.parse(data[i]['f'])) + ")",
+                                                                    style: new TextStyle(
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'VarelaRound',
+                                                                    ),),
+                                                                  padding: const EdgeInsets.only(top: 5),
+                                                                ),
+                                                                Padding(
+                                                                  child:
+                                                                  Text(data[i]['e'],
+                                                                    style: new TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontFamily: 'VarelaRound',
+                                                                        fontWeight: FontWeight.bold
+                                                                    ),),
+                                                                  padding: const EdgeInsets.only(top: 5, bottom: 10),
+                                                                )
+                                                              ],
+                                                            )
 
-                                :
-                                  Container(
-                                   width: 160,
-                                   padding: const EdgeInsets.only(right:10),
-                                   child:
-                                   data[i]['g'] == 'ONLINE' ?
-                                   Card(
-                                     elevation:0,
-                                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
-                                     shape: RoundedRectangleBorder(
-                                       side: new BorderSide(color:
-                                           _selectedIndex == i && _selectedIndex != 200  && _selectedIndex != null ?
-                                           Hexcolor("#075e55") : Hexcolor("#DDDDDD"), width: 1.0
-                                       ),
-                                       borderRadius: BorderRadius.circular(5.0),
-                                     ),
-                                     child:
-                                     InkWell(
-                                         splashColor: Colors.blue.withAlpha(30),
-                                         onTap: () {
-                                           _onSelected(i);
-                                           _onButton(2);
-                                           _getDate(data[i]['i']);
+                                                            ),
+                                                          )
+                                                      ),
+                                                    )
 
-                                         },
-                                         child :
-                                     Container(
-                                       child: Center(child:
-                                       Column(
-                                         children: [
-                                           Padding (
-                                           child :
-                                           Text(new DateFormat.EEEE().format(DateTime.parse(data[i]['f'])), style: new TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'VarelaRound',
-                                             fontWeight: FontWeight.bold,
-                                             fontSize: 18
-                                             ),),
-                                             padding: const EdgeInsets.only(top : 15),
-                                           ),
-                                           Padding (
-                                             child :
-                                             Text("("+data[i]['d'] + " " +new DateFormat.MMM().format(DateTime.parse(data[i]['f']))+")",
-                                                 style: new TextStyle(
-                                                 color: Colors.black,
-                                                 fontFamily: 'VarelaRound',
-                                             ),),
-                                             padding: const EdgeInsets.only(top : 5),
-                                           ),
-                                           Padding (
-                                             child :
-                                             Text(data[i]['e'],
-                                               style: new TextStyle(
-                                                   color: Colors.black,
-                                                   fontFamily: 'VarelaRound',
-                                                   fontWeight: FontWeight.bold
-                                               ),),
-                                             padding: const EdgeInsets.only(top : 5,bottom: 10),
-                                           )
-                                         ],
-                                       )
+                                                        : data[i]['g'] == 'BOOKED' ?
+                                                    Opacity(
+                                                        opacity: 0.3,
+                                                        child:
+                                                        Card(
+                                                          color: Colors.green,
+                                                          elevation: 0,
+                                                          margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                                                          shape: RoundedRectangleBorder(
+                                                            side: new BorderSide(color: Colors.green, width: 1.0),
+                                                            borderRadius: BorderRadius.circular(5.0),
+                                                          ),
+                                                          child:
+                                                          Container(
+                                                            child: Center(child:
+                                                            Column(
+                                                              children: [
+                                                                Padding(
+                                                                  child:
+                                                                  Text(new DateFormat.EEEE().format(
+                                                                      DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'VarelaRound',
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: 18
+                                                                  ),),
+                                                                  padding: const EdgeInsets.only(top: 15),
+                                                                ),
+                                                                Padding(
+                                                                  child:
+                                                                  Text("(" + data[i]['d'] + " " +
+                                                                      new DateFormat.MMM().format(
+                                                                          DateTime.parse(data[i]['f'])) + ")",
+                                                                    style: new TextStyle(
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'VarelaRound',
+                                                                    ),),
+                                                                  padding: const EdgeInsets.only(top: 5),
+                                                                ),
+                                                                Padding(
+                                                                  child:
+                                                                  Text(data[i]['e'],
+                                                                    style: new TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontFamily: 'VarelaRound',
+                                                                        fontWeight: FontWeight.bold
+                                                                    ),),
+                                                                  padding: const EdgeInsets.only(top: 5, bottom: 10),
+                                                                )
+                                                              ],
+                                                            )
 
-                                       ),
-                                     )
-                                   ),
-                                   )
+                                                            ),
+                                                          ),
+                                                        )
+                                                    )
+                                                        :
+                                                    Opacity(
+                                                        opacity: 0.3,
+                                                        child:
+                                                        Card(
+                                                          color: Colors.grey,
+                                                          elevation: 0,
+                                                          margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+                                                          shape: RoundedRectangleBorder(
+                                                            side: new BorderSide(color: Colors.grey, width: 1.0),
+                                                            borderRadius: BorderRadius.circular(5.0),
+                                                          ),
+                                                          child:
+                                                          Container(
+                                                            child: Center(child:
+                                                            Column(
+                                                              children: [
+                                                                Padding(
+                                                                  child:
+                                                                  Text(new DateFormat.EEEE().format(
+                                                                      DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'VarelaRound',
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: 18
+                                                                  ),),
+                                                                  padding: const EdgeInsets.only(top: 15),
+                                                                ),
+                                                                Padding(
+                                                                  child:
+                                                                  Text("(" + data[i]['d'] + " " +
+                                                                      new DateFormat.MMM().format(
+                                                                          DateTime.parse(data[i]['f'])) + ")",
+                                                                    style: new TextStyle(
+                                                                      color: Colors.black,
+                                                                      fontFamily: 'VarelaRound',
+                                                                    ),),
+                                                                  padding: const EdgeInsets.only(top: 5),
+                                                                ),
+                                                                Padding(
+                                                                  child:
+                                                                  Text(data[i]['e'],
+                                                                    style: new TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontFamily: 'VarelaRound',
+                                                                        fontWeight: FontWeight.bold
+                                                                    ),),
+                                                                  padding: const EdgeInsets.only(top: 5, bottom: 10),
+                                                                )
+                                                              ],
+                                                            )
 
-                            : data[i]['g'] == 'BOOKED' ?
-                               Opacity (
-                                 opacity: 0.3,
-                                  child :
-                                   Card(
-                                     color: Colors.green,
-                                     elevation:0,
-                                     margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
-                                     shape: RoundedRectangleBorder(
-                                       side: new BorderSide(color: Colors.green, width: 1.0),
-                                       borderRadius: BorderRadius.circular(5.0),
-                                     ),
-                                     child:
-                                         Container(
-                                           child: Center(child:
-                                           Column(
-                                             children: [
-                                               Padding (
-                                                 child :
-                                                 Text(new DateFormat.EEEE().format(DateTime.parse(data[i]['f'])), style: new TextStyle(
-                                                     color: Colors.black,
-                                                     fontFamily: 'VarelaRound',
-                                                     fontWeight: FontWeight.bold,
-                                                     fontSize: 18
-                                                 ),),
-                                                 padding: const EdgeInsets.only(top : 15),
-                                               ),
-                                               Padding (
-                                                 child :
-                                                 Text("("+data[i]['d'] + " " +new DateFormat.MMM().format(DateTime.parse(data[i]['f']))+")",
-                                                   style: new TextStyle(
-                                                     color: Colors.black,
-                                                     fontFamily: 'VarelaRound',
-                                                   ),),
-                                                 padding: const EdgeInsets.only(top : 5),
-                                               ),
-                                               Padding (
-                                                 child :
-                                                 Text(data[i]['e'],
-                                                   style: new TextStyle(
-                                                       color: Colors.black,
-                                                       fontFamily: 'VarelaRound',
-                                                       fontWeight: FontWeight.bold
-                                                   ),),
-                                                 padding: const EdgeInsets.only(top : 5,bottom: 10),
-                                               )
-                                             ],
-                                           )
+                                                            ),
+                                                          ),
+                                                        )
+                                                    )
+                                                );
 
-                                           ),
-                                         ),
-                                   )
-                                       )
-                                  :
-                                   Opacity (
-                                       opacity: 0.3,
-                                       child :
-                                       Card(
-                                         color: Colors.grey,
-                                         elevation:0,
-                                         margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
-                                         shape: RoundedRectangleBorder(
-                                           side: new BorderSide(color: Colors.grey, width: 1.0),
-                                           borderRadius: BorderRadius.circular(5.0),
-                                         ),
-                                         child:
-                                         Container(
-                                           child: Center(child:
-                                           Column(
-                                             children: [
-                                               Padding (
-                                                 child :
-                                                 Text(new DateFormat.EEEE().format(DateTime.parse(data[i]['f'])), style: new TextStyle(
-                                                     color: Colors.black,
-                                                     fontFamily: 'VarelaRound',
-                                                     fontWeight: FontWeight.bold,
-                                                     fontSize: 18
-                                                 ),),
-                                                 padding: const EdgeInsets.only(top : 15),
-                                               ),
-                                               Padding (
-                                                 child :
-                                                 Text("("+data[i]['d'] + " " +new DateFormat.MMM().format(DateTime.parse(data[i]['f']))+")",
-                                                   style: new TextStyle(
-                                                     color: Colors.black,
-                                                     fontFamily: 'VarelaRound',
-                                                   ),),
-                                                 padding: const EdgeInsets.only(top : 5),
-                                               ),
-                                               Padding (
-                                                 child :
-                                                 Text(data[i]['e'],
-                                                   style: new TextStyle(
-                                                       color: Colors.black,
-                                                       fontFamily: 'VarelaRound',
-                                                       fontWeight: FontWeight.bold
-                                                   ),),
-                                                 padding: const EdgeInsets.only(top : 5,bottom: 10),
-                                               )
-                                             ],
-                                           )
-
-                                           ),
-                                         ),
-                                       )
-                                   )
-                                 );
-                                },
-                             )
-                        );
-                      },
-                  )
+                                            },
+                                         )
+                                    );
+                                  },
+                          )
                 ],
               )
 

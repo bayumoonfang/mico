@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
   }
 
   String countmessage = '0';
-  String countapp = "0";
+  String countapp, countapp2 = "0";
 
   _getCountMessage() async {
     final response = await http.get(
@@ -125,6 +125,16 @@ class _HomeState extends State<Home> {
     Map data2 = jsonDecode(response.body);
     setState(() {
       countapp = data2["a"].toString();
+    });
+  }
+
+
+  _getCountApp2() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp2&id="+getPhone);
+    Map data2 = jsonDecode(response.body);
+    setState(() {
+      countapp2 = data2["a"].toString();
     });
   }
 
@@ -150,6 +160,7 @@ class _HomeState extends State<Home> {
     await _detailcust();
     await _getCountMessage();
     await _getCountApp();
+    await _getCountApp2();
 
   }
 
@@ -316,7 +327,7 @@ class _HomeState extends State<Home> {
                             }).toList(),
                           ),
 
-              countapp != '0' ?
+              countapp2 != '0' ?
 
             Padding(
               padding: const EdgeInsets.only(top : 20, left: 20.0, right: 25),
