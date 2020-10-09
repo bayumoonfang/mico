@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/services/mico_chatroomhistory.dart';
+import 'package:mico/services/page_videoroomhome.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 import 'package:mico/user/mico_prepareroom.dart';
 import 'package:photo_view/photo_view.dart';
@@ -376,7 +377,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                     ),
                                   },
                                   {
-                                    'background': (data[i]["c"] == 'ACCEPT') ?
+                                    'background':   (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
                                     Colors.green : Hexcolor("#DDDDDD") ,
                                     'label': '',
                                     'content':
@@ -539,12 +540,12 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 ),
                                               ),
                                               onPressed: () {
-                                                (data[i]["n"] == '' || data[i]["n"] == null) ?
-                                                Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => PrepareRoomCreate(data[i]["b"])))
+                                                data[i]["m"] == 'CHAT' ?
+                                                Navigator.of(context).push(new MaterialPageRoute(
+                                                    builder: (BuildContext context) => Chatroomhistory(data[i]["b"],'2')))
                                                     :
                                                 Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => Chatroom(data[i]["b"],'2')));
+                                                    builder: (BuildContext context) => VideoChatHome(data[i]["b"],data[i]["n"])));
 
                                               },)
                                                 :   data[i]["c"] == 'DONE' ?
@@ -561,8 +562,11 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 ),
                                               ),
                                               onPressed: () {
+
+
                                                 Navigator.of(context).push(new MaterialPageRoute(
                                                     builder: (BuildContext context) => Chatroomhistory(data[i]["b"],'2')));
+
                                               },)
                                             :
                                             OutlineButton(

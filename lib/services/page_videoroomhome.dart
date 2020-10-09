@@ -16,14 +16,14 @@ import 'package:toast/toast.dart';
 
 
 class VideoChatHome extends StatefulWidget {
-  final String getIDUser;
+  final String getApp, getRoom;
   final ClientRole role = ClientRole.Audience;
 
 
-  const VideoChatHome(this.getIDUser);
+  const VideoChatHome(this.getApp, this.getRoom);
 
   @override
-  _VideoChatHomeState createState() => _VideoChatHomeState(getID: this.getIDUser);
+  _VideoChatHomeState createState() => _VideoChatHomeState();
 }
 
 class _VideoChatHomeState extends State<VideoChatHome> {
@@ -44,7 +44,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
 
   void _getVideoDetail() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_videodetailuser&id="+widget.getIDUser);
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_videodetailuser&id="+widget.getApp);
     Map data = jsonDecode(response.body);
     setState(() {
       getRoomVideo = data["roomvideo"].toString();
@@ -117,7 +117,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     configuration.dimensions = Size(1920, 1080);
     await AgoraRtcEngine.setVideoEncoderConfiguration(configuration);
-    await AgoraRtcEngine.joinChannel(null, getRoomVideo, null, 0);
+    await AgoraRtcEngine.joinChannel(null, widget.getRoom, null, 0);
   }
 
   /// Create agora sdk instance and initialize
@@ -426,7 +426,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
               new FlatButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (BuildContext context) => HomeDoktor()));
+                        builder: (BuildContext context) => Home()));
                   },
                   child:
                   Text("Iya", style: TextStyle(fontFamily: 'VarelaRound')))

@@ -1,19 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:mico/helper/session_user.dart';
-import 'package:mico/mico_home.dart';
-import 'package:mico/page_login.dart';
-import 'package:mico/user/get_chathistory.dart';
-import 'package:mico/user/get_videohistory.dart';
-import 'package:mico/user/mico_appointment.dart';
-import 'package:mico/user/mico_notfikasi.dart';
-import 'package:mico/user/mico_userprofile.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
-import 'package:getwidget/getwidget.dart';
+
 
 /*
 class HistoryTransaksiBackup extends StatefulWidget {

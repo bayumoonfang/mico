@@ -256,7 +256,7 @@ void initState() {
    _getChatDetail();
    _scrollController = ScrollController();
   _scrollController.addListener(_scrollListener);
-
+  _removeread();
 
 }
 

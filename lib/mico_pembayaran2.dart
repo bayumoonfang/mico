@@ -88,7 +88,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
       getbb = data["c"].toString();
       getcc = data["f"].toString();
       getTanggal = data["h"].toString();
-      date2 = new DateFormat.MMM().format(DateTime.parse(getbb));
+      date2 = new DateFormat.MMMM().format(DateTime.parse(getbb));
       date1 = new DateFormat.EEEE().format(DateTime.parse(getDateAvaible));
       _isVisible = false;
     });

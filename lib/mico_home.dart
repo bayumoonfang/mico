@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
 
   String appKode,
   namaDokters,
-  jenisKonsuls = '';
+  jenisKonsuls, roomKonsul = '';
   _cekAppointment() async {
     final response = await http.get(
         "https://duakata-dev.com/miracle/api_script.php?do=cekappointment&id="+getPhone.toString());
@@ -104,6 +104,7 @@ class _HomeState extends State<Home> {
       appKode = data4["a"].toString();
       namaDokters = data4["b"].toString();
       jenisKonsuls = data4["c"].toString();
+      roomKonsul = data4["d"].toString();
     });
   }
 
@@ -386,7 +387,7 @@ class _HomeState extends State<Home> {
                                             builder: (BuildContext context) => Chatroom(appKode, '1')))
                                             :
                                         Navigator.of(context).push(new MaterialPageRoute(
-                                            builder: (BuildContext context) => Home()));
+                                            builder: (BuildContext context) => VideoChatHome(appKode, roomKonsul)));
                                 },
 
                         );
