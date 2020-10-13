@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/mico_home.dart';
+import 'package:mico/services/mico_cekroom.dart';
 import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/services/mico_chatroomhistory.dart';
-import 'package:mico/services/page_videoroomhome.dart';
+import 'package:mico/services/mico_videoroomhome.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 import 'package:mico/user/mico_prepareroom.dart';
 import 'package:photo_view/photo_view.dart';
@@ -540,12 +541,8 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 ),
                                               ),
                                               onPressed: () {
-                                                data[i]["m"] == 'CHAT' ?
                                                 Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => Chatroomhistory(data[i]["b"],'2')))
-                                                    :
-                                                Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => VideoChatHome(data[i]["b"],data[i]["n"])));
+                                                    builder: (BuildContext context) => CekRoomKonsultasi(data[i]["b"], "2")));
 
                                               },)
                                                 :   data[i]["c"] == 'DONE' ?

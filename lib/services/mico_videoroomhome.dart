@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:mico/doctor/pagedoktor_home.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
@@ -12,15 +12,17 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:responsive_container/responsive_container.dart';
 import 'package:toast/toast.dart';
+import 'package:time/time.dart';
 
 
 class VideoChatHome extends StatefulWidget {
-  final String getApp, getRoom;
+  final String getApp, getID;
   final ClientRole role = ClientRole.Audience;
 
 
-  const VideoChatHome(this.getApp, this.getRoom);
+  const VideoChatHome(this.getApp, this.getID);
 
   @override
   _VideoChatHomeState createState() => _VideoChatHomeState();
@@ -29,28 +31,54 @@ class VideoChatHome extends StatefulWidget {
 class _VideoChatHomeState extends State<VideoChatHome> {
   static final _users = <int>[];
   final _infoStrings = <String>[];
+  Timer _timer;
+  DateTime _currentTime;
+  DateTime _afterTime, _timeIntv;
+  int _remainingdetik,
+      _remainingmenit,
+      _detik,
+      _menit;
+
   bool muted = false;
-  String getRoomVideo,
-  getPhoneNumber= '';
+  String getPhoneNumber= '...';
 
-  String getID = '';
 
-  _VideoChatHomeState({this.getID});
 
 
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 
+  String tahun, bulan, hari, jam, menit, getRoom = "0";
   void _getVideoDetail() async {
     final response = await http.get(
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_videodetailuser&id="+widget.getApp);
     Map data = jsonDecode(response.body);
     setState(() {
-      getRoomVideo = data["roomvideo"].toString();
+      tahun = data["a"].toString();
+      bulan = data["b"].toString();
+      hari = data["c"].toString();
+      jam = data["d"].toString();
+      menit = data["e"].toString();
+      jam = data["d"].toString();
+      getRoom = data["f"].toString();
+      _currentTime = DateTime.now();
+      _timeIntv = DateTime(int.parse(tahun), int.parse(bulan), int.parse(hari), int.parse(jam), int.parse(menit), 00);
+      _afterTime = _timeIntv + 16.minutes;
+      _remainingmenit = _currentTime.difference(_afterTime).inMinutes;
+      _menit = _remainingmenit;
     });
   }
 
+
+  _endKonsultasi () async  {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=act_selesaichatdokter&id="+widget.getApp);
+    Map data = jsonDecode(response.body);
+    Navigator.of(context).pushReplacement(
+        new MaterialPageRoute(
+            builder: (BuildContext context) => Home()));
+  }
 
   _connect() async {
     Checkconnection().check().then((internet){
@@ -77,6 +105,61 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     );
   }
 
+  int _detik2 = 60;
+  void startTimerDetik() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) => setState(
+            () {
+          if (_detik2 == 0) {
+            _detik2 = 60;
+          } else {
+            _detik2 = _detik2 - 1;
+          }
+        },
+      ),
+    );
+  }
+
+  void startTimerMenit() {
+    const oneMin = const Duration(minutes: 1);
+    _timer = new Timer.periodic(
+      oneMin,
+          (Timer timer) => setState(
+            () {
+          _menit = _menit + 1;
+          if (_menit == -5) {
+            Toast.show("Waktu konsultasi tinggal 5 menit", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+          } else if (_menit == -2) {
+            Toast.show("Waktu konsultasi tinggal 2 menit", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+          } else if (_menit == 0) {
+            _endKonsultasi();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _countdown() {
+    return Text(_menit.toString() + " : " +_detik2.toString(), style: TextStyle(color: Colors.white,fontSize: 27,
+      fontFamily: 'VarelaRound',),);
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _connect();
+    _session();
+    _handleCameraAndMic();
+    _getVideoDetail();
+    initialize();
+    startTimerDetik();
+    startTimerMenit();
+  }
+
+
   @override
   void dispose() {
     // clear users
@@ -88,17 +171,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _connect();
-    _session();
-    _handleCameraAndMic();
-    _getVideoDetail();
-    // initialize agora sdk
-    initialize();
-    startTimer();
-  }
+
 
   Future<void> initialize() async {
     if (APP_ID.isEmpty) {
@@ -117,7 +190,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     configuration.dimensions = Size(1920, 1080);
     await AgoraRtcEngine.setVideoEncoderConfiguration(configuration);
-    await AgoraRtcEngine.joinChannel(null, widget.getRoom, null, 0);
+    await AgoraRtcEngine.joinChannel(null, getRoom, null, 0);
   }
 
   /// Create agora sdk instance and initialize
@@ -298,18 +371,6 @@ class _VideoChatHomeState extends State<VideoChatHome> {
               padding: const EdgeInsets.all(12.0),
             ),
             RawMaterialButton(
-              onPressed: () => _onCallEnd(context),
-              child: Icon(
-                Icons.call_end,
-                color: Colors.white,
-                size: 35.0,
-              ),
-              shape: CircleBorder(),
-              elevation: 2.0,
-              fillColor: Colors.redAccent,
-              padding: const EdgeInsets.all(15.0),
-            ),
-            RawMaterialButton(
               onPressed: _onSwitchCamera,
               child: Icon(
                 Icons.switch_camera,
@@ -327,61 +388,36 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     }
   }
 
+
   /// Info panel to show logs
   Widget _panel() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      alignment: Alignment.bottomCenter,
-      child: FractionallySizedBox(
-        heightFactor: 0.5,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 48),
-          child: ListView.builder(
-            reverse: true,
-            itemCount: _infoStrings.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (_infoStrings.isEmpty) {
-                return null;
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3,
-                  horizontal: 10,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+    return
+      Align(
+          alignment: Alignment.topRight,
+          child :      Padding(
+            padding: const EdgeInsets.only(top: 20,right: 20),
+            child:  Container(
+                padding: const EdgeInsets.only(top: 30,right: 10),
+                alignment: Alignment.topRight,
+                child:
+                Column(
                   children: [
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 2,
-                          horizontal: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.yellowAccent,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          _infoStrings[index],
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                      ),
-                    )
+                    _countdown(),
+                    Text("Waktu konsultasi tersisa", style: new TextStyle(color: Colors.white,fontSize: 13,
+                      fontFamily: 'VarelaRound',),)
                   ],
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+                )
+            ),
+          )
+
+      );
   }
 
-  void _onCallEnd(BuildContext context) {
+  /*void _onCallEnd(BuildContext context) {
     //Navigator.pop(context);
     Navigator.of(context)
         .push(new MaterialPageRoute(builder: (BuildContext context) => Home()));
-  }
+  }*/
 
   void _onToggleMute() {
     setState(() {
@@ -394,24 +430,6 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     AgoraRtcEngine.switchCamera();
   }
 
-  Timer _timer;
-  int _start = 900;
-
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-          (Timer timer) => setState(
-            () {
-          if (_start < 1) {
-            timer.cancel();
-          } else {
-            _start = _start - 1;
-          }
-        },
-      ),
-    );
-  }
 
   void showAlert() {
     showDialog(
@@ -425,8 +443,13 @@ class _VideoChatHomeState extends State<VideoChatHome> {
             actions: [
               new FlatButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (BuildContext context) => Home()));
+                    if (widget.getID == '1') {
+                      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                          builder: (BuildContext context) => Home()));
+                    } else {
+                      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                          builder: (BuildContext context) => Home()));
+                    }
                   },
                   child:
                   Text("Iya", style: TextStyle(fontFamily: 'VarelaRound')))
@@ -459,7 +482,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
                                 fontSize: 23,
                                 color: Colors.blueAccent)))),*/
                 _viewRows(),
-                //_panel(),
+                _panel(),
                 _toolbar(),
               ],
             ),

@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:mico/services/page_chatroomhome.dart';
 import 'package:mico/services/page_historychat.dart';
 import 'package:mico/services/page_videochatuser.dart';
-import 'package:mico/services/page_videoroomhome.dart';
+import 'package:mico/services/mico_videoroomhome.dart';
 import 'package:mico/services/page_videoroomprepare.dart';
 import 'package:mico/services/services_videoconfprepare.dart';
 import 'dart:async';

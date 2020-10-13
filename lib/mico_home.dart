@@ -13,16 +13,18 @@ import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
+import 'package:mico/mico_detailimagehome.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_tes.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/mico_dokter.dart';
+import 'package:mico/services/mico_cekroom.dart';
 import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/services/page_chatroomhome.dart';
-import 'package:mico/services/page_videoroomhome.dart';
+import 'package:mico/services/mico_videoroomhome.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/user/mico_notfikasi.dart';
@@ -199,7 +201,9 @@ class _HomeState extends State<Home> {
           child: Stack(
             children: <Widget>[
               InkWell(
-                  onTap: (){},
+                  onTap: (){
+
+                  },
                     child :
                    // Image.network(item, fit: BoxFit.cover,width: 1000,)
           CachedNetworkImage(
@@ -295,7 +299,73 @@ class _HomeState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
               ),
-                          CarouselSlider(
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20.0),
+              height: 130.0,
+              child:
+              ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  Padding (
+                    padding: const EdgeInsets.only(left: 15,right: 5),
+                      child : InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/a.jpg")));
+                        },
+                        child : ClipRRect(
+                          child: Image.network("https://duakata-dev.com/miracle/media/promo/a.jpg", width: 280,fit: BoxFit.fitWidth,),
+                          borderRadius: BorderRadius.circular(8.0),
+                        )
+                      )
+                    ),
+
+                  Padding (
+                      padding: const EdgeInsets.only(left: 15,right: 5),
+                      child : InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/b.jpg")));
+                          },
+                          child : ClipRRect(
+                            child: Image.network("https://duakata-dev.com/miracle/media/promo/b.jpg", width: 280,fit: BoxFit.fitWidth,),
+                            borderRadius: BorderRadius.circular(8.0),
+                          )
+                      )
+                  ),
+
+
+                  Padding (
+                      padding: const EdgeInsets.only(left: 15,right: 5),
+                      child : InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/c.jpg")));
+                          },
+                          child : ClipRRect(
+                            child: Image.network("https://duakata-dev.com/miracle/media/promo/c.jpg", width: 280,fit: BoxFit.fitWidth,),
+                            borderRadius: BorderRadius.circular(8.0),
+                          )
+                      )
+                  ),
+
+
+                  Padding (
+                      padding: const EdgeInsets.only(left: 15,right: 15),
+                      child : InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/d.jpg")));
+                          },
+                          child : ClipRRect(
+                            child: Image.network("https://duakata-dev.com/miracle/media/promo/d.jpg", width: 280,fit: BoxFit.fitWidth,),
+                            borderRadius: BorderRadius.circular(8.0),
+                          )
+                      )
+                  ),
+                ],
+              )),
+                          /*CarouselSlider(
                             items: imageSliders,
                             options: CarouselOptions(
                                 autoPlay: false,
@@ -326,7 +396,7 @@ class _HomeState extends State<Home> {
                                 ),
                               );
                             }).toList(),
-                          ),
+                          ),*/
 
               countapp2 != '0' ?
 
@@ -351,8 +421,9 @@ class _HomeState extends State<Home> {
                                 animationDuration: Duration(milliseconds: 300),
                                 animationType: BadgeAnimationType.slide,
                                 badgeContent: Text(
-                                  data[i]["a"].toString(),
-                                  style: TextStyle(color: Colors.white,fontSize: 16),
+                                  jenisKonsuls == 'CHAT' ?
+                                  data[i]["a"].toString() : "1",
+                                  style: TextStyle(color: Colors.white,fontSize: 15),
                                 ),
                                 child :
                                 Card(
@@ -382,12 +453,9 @@ class _HomeState extends State<Home> {
                                     )
                                 )),
                                 onTap: (){
-                                        jenisKonsuls.toString() == "CHAT" ?
-                                        Navigator.of(context).push(new MaterialPageRoute(
-                                            builder: (BuildContext context) => Chatroom(appKode, '1')))
-                                            :
-                                        Navigator.of(context).push(new MaterialPageRoute(
-                                            builder: (BuildContext context) => VideoChatHome(appKode, roomKonsul)));
+                                  Navigator.of(context).push(new MaterialPageRoute(
+                                      builder: (BuildContext context) => CekRoomKonsultasi(appKode, "1")));
+
                                 },
 
                         );
@@ -419,7 +487,7 @@ class _HomeState extends State<Home> {
                                           Center(
                                             child :
                                           Wrap(
-                                            spacing: 50,
+                                            spacing: 55,
                                             children: <Widget>[
                                               Padding(
                                                   padding : const EdgeInsets.only(top:40, ),
