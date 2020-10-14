@@ -21,10 +21,6 @@ import 'package:mico/page_tes.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/mico_dokter.dart';
 import 'package:mico/services/mico_cekroom.dart';
-import 'package:mico/services/mico_chatroom.dart';
-import 'package:mico/services/page_chatroom.dart';
-import 'package:mico/services/page_chatroomhome.dart';
-import 'package:mico/services/mico_videoroomhome.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/user/mico_notfikasi.dart';
@@ -35,7 +31,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:toast/toast.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 final List<String> imgList = [
   'https://duakata-dev.com/miracle/media/promo/b.jpg',
@@ -190,40 +185,44 @@ class _HomeState extends State<Home> {
   }
 
   final List<Widget> imageSliders = imgList.map((item) => Container(
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      margin: EdgeInsets.all(5.0),
-      child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          child: Stack(
-            children: <Widget>[
-              InkWell(
-                  onTap: (){
-
-                  },
-                    child :
-                   // Image.network(item, fit: BoxFit.cover,width: 1000,)
-          CachedNetworkImage(
-                imageUrl: item,
-                    progressIndicatorBuilder: (context,
-                        url, downloadProgress) =>
-                    Center(
-                      child :
-                        Image.asset(
-                          "assets/loadingq.gif",
-                          width: 85.0,
-                        )),
-                    imageBuilder: (context, image) =>
-                        Image.network(item, fit: BoxFit.cover,width: 1000,)
+    child: new Builder(
+        builder: (BuildContext context) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
                 ),
-              ),
-            ],
-          )
-      ),
-    ),
+                margin: EdgeInsets.all(5.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    child: Stack(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => Home()));
+                          },
+                          child :
+                          // Image.network(item, fit: BoxFit.cover,width: 1000,)
+                          CachedNetworkImage(
+                              imageUrl: item,
+                              progressIndicatorBuilder: (context,
+                                  url, downloadProgress) =>
+                                  Center(
+                                      child :
+                                      Image.asset(
+                                        "assets/loadingq.gif",
+                                        width: 85.0,
+                                      )),
+                              imageBuilder: (context, image) =>
+                                  Image.network(item, fit: BoxFit.cover,width: 1000,)
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+              );
+        }
+    )
   )).toList();
 
 
@@ -297,75 +296,42 @@ class _HomeState extends State<Home> {
           Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 10),
-              ),
-            Container(
+                padding: const EdgeInsets.only(top: 10,left: 18,right: 15),
+       child :
+            ResponsiveContainer(
+              widthPercent: 100,
+              heightPercent: 18,
               margin: EdgeInsets.symmetric(vertical: 20.0),
-              height: 130.0,
               child:
               ListView(
                 scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  Padding (
-                    padding: const EdgeInsets.only(left: 15,right: 5),
-                      child : InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/a.jpg")));
-                        },
-                        child : ClipRRect(
-                          child: Image.network("https://duakata-dev.com/miracle/media/promo/a.jpg", width: 280,fit: BoxFit.fitWidth,),
-                          borderRadius: BorderRadius.circular(8.0),
-                        )
-                      )
-                    ),
-
-                  Padding (
-                      padding: const EdgeInsets.only(left: 15,right: 5),
-                      child : InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(new MaterialPageRoute(
-                                builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/b.jpg")));
-                          },
-                          child : ClipRRect(
-                            child: Image.network("https://duakata-dev.com/miracle/media/promo/b.jpg", width: 280,fit: BoxFit.fitWidth,),
-                            borderRadius: BorderRadius.circular(8.0),
+                children:
+                  List.generate(imgList.length, (index) {
+                      return
+                        Center(
+                      child :
+                        Padding (
+                          padding: const EdgeInsets.only(left: 0,right: 15),
+                          child : InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(new MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        DetailScreenHome(imgList[index])));
+                              },
+                              child : ClipRRect(
+                                child: ResponsiveContainer(
+                                  widthPercent: 90,
+                                  heightPercent: 100,
+                                  child: Image.network(imgList[index], fit: BoxFit.fitWidth,),
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              )
                           )
-                      )
-                  ),
-
-
-                  Padding (
-                      padding: const EdgeInsets.only(left: 15,right: 5),
-                      child : InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(new MaterialPageRoute(
-                                builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/c.jpg")));
-                          },
-                          child : ClipRRect(
-                            child: Image.network("https://duakata-dev.com/miracle/media/promo/c.jpg", width: 280,fit: BoxFit.fitWidth,),
-                            borderRadius: BorderRadius.circular(8.0),
-                          )
-                      )
-                  ),
-
-
-                  Padding (
-                      padding: const EdgeInsets.only(left: 15,right: 15),
-                      child : InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(new MaterialPageRoute(
-                                builder: (BuildContext context) => DetailScreenHome("https://duakata-dev.com/miracle/media/promo/d.jpg")));
-                          },
-                          child : ClipRRect(
-                            child: Image.network("https://duakata-dev.com/miracle/media/promo/d.jpg", width: 280,fit: BoxFit.fitWidth,),
-                            borderRadius: BorderRadius.circular(8.0),
-                          )
-                      )
-                  ),
-                ],
-              )),
-                          /*CarouselSlider(
+                      ));
+                  }),
+              )
+            )),
+                         /* CarouselSlider(
                             items: imageSliders,
                             options: CarouselOptions(
                                 autoPlay: false,
@@ -401,7 +367,7 @@ class _HomeState extends State<Home> {
               countapp2 != '0' ?
 
             Padding(
-              padding: const EdgeInsets.only(top : 20, left: 20.0, right: 25),
+              padding: const EdgeInsets.only(top : 20,left: 18,right: 15),
               child:
             ResponsiveContainer (
               heightPercent: 10,

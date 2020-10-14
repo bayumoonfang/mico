@@ -9,6 +9,7 @@ import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/services/mico_videoroomhome.dart';
+import 'package:mico/services/page_chatroomhome.dart';
 import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -70,31 +71,57 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
   }
 
   _cekroom() async {
-    if (formattedDate == fulldate) {
-      if (int.parse(formattedJam) == int.parse(jam) || int.parse(formattedJam) > int.parse(jam)) {
-        if (int.parse(formattedMenit) == int.parse(menit) || int.parse(formattedMenit) > int.parse(menit)) {
-          setState(() {
-            if (typekonsul == 'VIDEO') {
-              Navigator.of(context)
-                  .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => VideoChatHome(widget.appKode, widget.appID)));
-            } else {
-              Navigator.of(context)
-                  .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => Chatroom(widget.appKode, "1")));
-            }
 
-          });
+    if (typekonsul == 'VIDEO') {
+      if (formattedDate == fulldate) {
+        if (int.parse(formattedJam) == int.parse(jam) ||
+            int.parse(formattedJam) > int.parse(jam)) {
+          if (int.parse(formattedMenit) == int.parse(menit) ||
+              int.parse(formattedMenit) > int.parse(menit)) {
+            setState(() {
+                Navigator.of(context)
+                    .pushReplacement(new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        VideoChatHome(widget.appKode, widget.appID)));
+            });
+          } else {
+            setMessage = 2;
+          }
         } else {
-          setMessage = 2;
+          setState(() {
+            setMessage = 2;
+          });
         }
-      } else{
+      } else {
         setState(() {
           setMessage = 2;
         });
       }
-    } else {
-      setState(() {
-        setMessage = 2;
-      });
+    }else if (typekonsul == 'CHAT') {
+      if (formattedDate == fulldate) {
+        if (int.parse(formattedJam) == int.parse(jam) ||
+            int.parse(formattedJam) > int.parse(jam)) {
+          if (int.parse(formattedMenit) == int.parse(menit) ||
+              int.parse(formattedMenit) > int.parse(menit)) {
+            setState(() {
+              Navigator.of(context)
+                  .pushReplacement(new MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      Chatroom(widget.appKode, widget.appID)));
+            });
+          } else {
+            setMessage = 2;
+          }
+        } else {
+          setState(() {
+            setMessage = 2;
+          });
+        }
+      } else {
+        setState(() {
+          setMessage = 2;
+        });
+      }
     }
 
   }
@@ -220,7 +247,50 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
                   ],
                 )
 
-                    :
+                    : setMessage == 3 ?
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Mohon Maaf",
+                      style: TextStyle(fontFamily: 'VarelaRound', fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:20),
+                      child:
+                      Padding (
+                          padding: const EdgeInsets.only(left: 25,right: 25,top: 5),
+                          child :
+                          Text(
+                            "Jadwal appointment anda sudah berakhir.",
+                            style: TextStyle(fontFamily: 'VarelaRound', fontSize: 16),textAlign: TextAlign.center,
+                          )
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:10),
+                      child:   RaisedButton(
+                        color:  Hexcolor("#075e55"),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          //side: BorderSide(color: Colors.red, width: 2.0)
+                        ),
+                        child: Text(
+                          "Kembali",
+                          style: TextStyle(
+                              fontFamily: 'VarelaRound',
+                              fontSize: 14,
+                              color: Colors.white
+                          ),
+                        ),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                  ],
+                )
+                :
                 Text("")
             )));
   }

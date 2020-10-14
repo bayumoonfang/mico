@@ -19,7 +19,7 @@ import 'package:time/time.dart';
 
 class VideoChatHome extends StatefulWidget {
   final String getApp, getID;
-  final ClientRole role = ClientRole.Audience;
+  final ClientRole role = ClientRole.Broadcaster;
 
 
   const VideoChatHome(this.getApp, this.getID);
@@ -188,7 +188,8 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     _addAgoraEventHandlers();
     await AgoraRtcEngine.enableWebSdkInteroperability(true);
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
-    configuration.dimensions = Size(1920, 1080);
+    //configuration.dimensions = Size(1920, 1080);
+    configuration.dimensions = Size(800,900);
     await AgoraRtcEngine.setVideoEncoderConfiguration(configuration);
     await AgoraRtcEngine.joinChannel(null, getRoom, null, 0);
   }
@@ -296,8 +297,8 @@ class _VideoChatHomeState extends State<VideoChatHome> {
         return Container(
             child: Column(
               children: <Widget>[
-                _expandedVideoRow([views[0]]),
                 _expandedVideoRow([views[1]]),
+                _expandedVideoRow([views[0]]),
               ],
             ));
       case 3:
@@ -350,8 +351,8 @@ class _VideoChatHomeState extends State<VideoChatHome> {
         ),
       );
     } else {
-      // if (widget.role == ClientRole.Audience || viewnya.length == 0)
-      //return Container();
+      if (widget.role == ClientRole.Audience || viewnya.length == 0)
+      return Container();
       return Container(
         alignment: Alignment.bottomCenter,
         padding: const EdgeInsets.symmetric(vertical: 48),
@@ -446,9 +447,15 @@ class _VideoChatHomeState extends State<VideoChatHome> {
                     if (widget.getID == '1') {
                       Navigator.of(context).pushReplacement(new MaterialPageRoute(
                           builder: (BuildContext context) => Home()));
+                      //_users.clear();
+                      // destroy sdk
+                      AgoraRtcEngine.leaveChannel();
                     } else {
                       Navigator.of(context).pushReplacement(new MaterialPageRoute(
                           builder: (BuildContext context) => Home()));
+                      //_users.clear();
+                      // destroy sdk
+                      AgoraRtcEngine.leaveChannel();
                     }
                   },
                   child:
