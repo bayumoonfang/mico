@@ -38,6 +38,14 @@ final List<String> imgList = [
   'https://duakata-dev.com/miracle/media/promo/c.jpg',
   'https://duakata-dev.com/miracle/media/promo/d.jpg',
 ];
+
+final List<String> ListKota = [
+  'Surabaya',
+  'Malang',
+  'Denpasar',
+  'Balikpapan',
+];
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => new _HomeState();
@@ -263,7 +271,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 UserAccountsDrawerHeader(
                   decoration: BoxDecoration(
-                    color: Hexcolor("#628b2c"),
+                    color: Hexcolor("#075e55"),
                   ),
                   accountName: new Text(getName.toString(),
                       style: TextStyle(fontSize: 18)),
@@ -455,6 +463,10 @@ class _HomeState extends State<Home> {
                                           Wrap(
                                             spacing: 55,
                                             children: <Widget>[
+
+
+
+
                                               Padding(
                                                   padding : const EdgeInsets.only(top:40, ),
                                                   child :

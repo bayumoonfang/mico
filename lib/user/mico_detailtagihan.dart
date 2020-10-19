@@ -172,7 +172,7 @@ class _DetailTagihanState extends State<DetailTagihan> {
                                       padding: const EdgeInsets.only(top: 15,left: 15),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text("Appoint Kode", style: TextStyle(fontFamily: 'VarelaRound',fontSize: 11)),
+                                        child: Text("Appointment Kode", style: TextStyle(fontFamily: 'VarelaRound',fontSize: 11)),
                                       ),
                                     ),
                               Padding(
@@ -280,6 +280,99 @@ class _DetailTagihanState extends State<DetailTagihan> {
                                   )
                               ),
 
+
+
+                              Padding(
+                                  padding: const EdgeInsets.only(left: 15,top:40,right: 25),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    //mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Text(
+                                        "Detail Dokter",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'VarelaRound',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14),
+                                      ),
+
+                                    ],
+                                  )
+                              ),
+
+                              Padding(
+                                  padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    //mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Text(
+                                        "Nama Dokter",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'VarelaRound',
+                                            fontSize: 14),
+                                      ),
+                                      Text(data[i]["e"],
+                                          style: TextStyle(
+                                              fontFamily: 'VarelaRound',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14)),
+                                    ],
+                                  )
+                              ),
+
+
+                              Padding(
+                                  padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    //mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Text(
+                                        "Cabang",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'VarelaRound',
+                                            fontSize: 14),
+                                      ),
+                                      Text(data[i]["f"],
+                                          style: TextStyle(
+                                              fontFamily: 'VarelaRound',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14)),
+                                    ],
+                                  )
+                              ),
+
+
+
+                              Padding(
+                                  padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    //mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Text(
+                                        "Regional",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'VarelaRound',
+                                            fontSize: 14),
+                                      ),
+                                      Text(data[i]["g"],
+                                          style: TextStyle(
+                                              fontFamily: 'VarelaRound',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14)),
+                                    ],
+                                  )
+                              ),
 
                             ],
                     );
