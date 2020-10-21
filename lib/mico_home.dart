@@ -17,7 +17,6 @@ import 'package:mico/mico_detailimagehome.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
-import 'package:mico/page_tes.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/mico_dokter.dart';
 import 'package:mico/services/mico_cekroom.dart';
@@ -247,20 +246,37 @@ class _HomeState extends State<Home> {
         child : Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(
-            backgroundColor: Hexcolor("#075e55"),
+            //backgroundColor: Hexcolor("#075e55"),
+            backgroundColor: Colors.white,
+            elevation: 0,
             leading: Builder(
               builder: (context) => IconButton(
                 icon: new Icon(Icons.menu),
-                color: Colors.white,
+                color: Colors.black,
                 onPressed: () => Scaffold.of(context).openDrawer(),
               ),
             ),
             title: new Text(
               "Miracle Aesthetic Clinic",
               style: new TextStyle(
-                  fontFamily: 'VarelaRound', fontSize: 16, color: Colors.white),
+                  fontFamily: 'VarelaRound', fontSize: 16, color: Colors.black),
             ),
             actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: new Icon(Icons.search),
+                  color: Colors.black,
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+              Builder(
+                builder: (context) => IconButton(
+                  icon: new Icon(Icons.favorite_border_outlined),
+                  color: Colors.black,
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+
 
             ],
           ),
@@ -304,7 +320,7 @@ class _HomeState extends State<Home> {
           Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 10,left: 18,right: 15),
+                padding: const EdgeInsets.only(top: 1,left: 18,right: 15),
        child :
             ResponsiveContainer(
               widthPercent: 100,
@@ -372,7 +388,7 @@ class _HomeState extends State<Home> {
                             }).toList(),
                           ),*/
 
-              countapp2 != '0' ?
+              countapp2 == '1' ?
 
             Padding(
               padding: const EdgeInsets.only(top : 20,left: 18,right: 15),
@@ -409,19 +425,19 @@ class _HomeState extends State<Home> {
                                     child : ListTile(
                                       title: Text(namaDokters == null ? '...' : namaDokters.toString(),
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontFamily: 'VarelaRound',
                                               fontWeight: FontWeight.bold
                                           )),
                                       subtitle: Text("Konsultasi "+jenisKonsuls.toString(),
                                           style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontFamily: 'VarelaRound',
                                               fontWeight: FontWeight.bold,
                                           )),
                                       trailing: Text("On Going",
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             fontFamily: 'VarelaRound',
                                           )),
                                     )
@@ -446,7 +462,7 @@ class _HomeState extends State<Home> {
                                   padding: const EdgeInsets.only(top : 30.0, left: 25.0),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text("Mulai Konsultasi Chatting atau Video Call ? ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18,
+                                    child: Text("Miracle hadir dengan warna beda ? ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18,
                                     fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
                                   )
                                 ),
@@ -455,16 +471,14 @@ class _HomeState extends State<Home> {
                                     padding: const EdgeInsets.only(top : 2.0, left: 25.0),
                                     child: Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text("Silahkan pilih regional anda", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,),textAlign: TextAlign.left,),
+                                      child: Text("Pilih layanan sesuai kebutuhanmu ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,),textAlign: TextAlign.left,),
                                     )
                                 ),
                                           Center(
                                             child :
                                           Wrap(
-                                            spacing: 55,
+                                            spacing: 40,
                                             children: <Widget>[
-
-
 
 
                                               Padding(
@@ -477,17 +491,17 @@ class _HomeState extends State<Home> {
                                                           Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
                                                         },
                                                         child : Container(
-                                                                  child: CircleAvatar(
-                                                                    backgroundColor: Colors.white,
-                                                                    backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                                    radius: 30,
-                                                                  ),
+                                                          child: CircleAvatar(
+                                                            backgroundColor: Colors.white,
+                                                            backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                            radius: 25,
+                                                          ),
                                                         ),
                                                       ),
                                                       Padding(
-                                                        padding: const EdgeInsets.only(top : 10),
-                                                        child : Text("Surabaya", style: TextStyle(fontFamily: 'VarelaRound',
-                                                            fontSize: 15),)
+                                                          padding: const EdgeInsets.only(top : 10),
+                                                          child : Text("Konsultasi", style: TextStyle(fontFamily: 'VarelaRound',
+                                                              fontSize: 13),)
                                                       )
                                                     ],
                                                   )
@@ -500,25 +514,49 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Malang")));
+                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
                                                             backgroundColor: Colors.white,
                                                             backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                            radius: 30,
+                                                            radius: 25,
                                                           ),
                                                         ),
                                                       ),
                                                       Padding(
                                                           padding: const EdgeInsets.only(top : 10),
-                                                          child : Text("Malang", style: TextStyle(fontFamily: 'VarelaRound',
-                                                              fontSize: 15),)
+                                                          child : Text("Resep", style: TextStyle(fontFamily: 'VarelaRound',
+                                                              fontSize: 13),)
                                                       )
                                                     ],
                                                   )
                                               ),
-
+                                              Padding(
+                                                  padding : const EdgeInsets.only(top:40, ),
+                                                  child :
+                                                  Column(
+                                                    children: <Widget>[
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                                        },
+                                                        child : Container(
+                                                          child: CircleAvatar(
+                                                            backgroundColor: Colors.white,
+                                                            backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                            radius: 25,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                          padding: const EdgeInsets.only(top : 10),
+                                                          child : Text("Live Event", style: TextStyle(fontFamily: 'VarelaRound',
+                                                              fontSize: 13),)
+                                                      )
+                                                    ],
+                                                  )
+                                              ),
 
                                               Padding(
                                                   padding : const EdgeInsets.only(top:40, ),
@@ -527,55 +565,98 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Denpasar")));
+                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
                                                             backgroundColor: Colors.white,
                                                             backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                            radius: 30,
+                                                            radius: 25,
                                                           ),
                                                         ),
                                                       ),
                                                       Padding(
                                                           padding: const EdgeInsets.only(top : 10),
-                                                          child : Text("Denpasar", style: TextStyle(fontFamily: 'VarelaRound',
-                                                              fontSize: 15),)
+                                                          child : Text("Promo", style: TextStyle(fontFamily: 'VarelaRound',
+                                                              fontSize: 13),)
                                                       )
                                                     ],
                                                   )
                                               ),
 
-
-                                              Padding(
-                                                  padding : const EdgeInsets.only(top:40, ),
-                                                  child :
-                                                  Column(
-                                                    children: <Widget>[
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Balikpapan")));
-                                                        },
-                                                        child : Container(
-                                                          child: CircleAvatar(
-                                                            backgroundColor: Colors.white,
-                                                            backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                            radius: 30,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                          padding: const EdgeInsets.only(top : 10),
-                                                          child : Text("Balikpapan", style: TextStyle(fontFamily: 'VarelaRound',
-                                                              fontSize: 15),)
-                                                      )
-                                                    ],
-                                                  )
-                                              ),
 
                                             ],
                                           )
-                                          )
+                                          ),
+              Padding(
+                  padding: const EdgeInsets.only(top : 80.0, left: 25.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Connect With Us ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18,
+                        fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
+                  )
+              ),
+
+              Padding(
+                  padding: const EdgeInsets.only(top : 2.0, left: 25.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Temukan informasi terbaru lain ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,),textAlign: TextAlign.left,),
+                  )
+              ),
+Padding(
+  padding: const EdgeInsets.only(top : 10),
+  child: Column(
+    children: [
+  Padding(
+    padding: const EdgeInsets.only(top: 5,left: 21,right: 15),
+    child: Container(
+      width: double.infinity,
+      height: 100,
+      child : Image(image: AssetImage("assets/web2.png"),fit: BoxFit.fitWidth,)
+    ),
+  ),
+   Padding(
+     padding: const EdgeInsets.only(left: 19,top :10),
+     child:    Align(
+       alignment: Alignment.centerLeft,
+       child: Opacity(
+         opacity: 0.7,
+         child: Text("Website Miracle",
+             style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,fontWeight: FontWeight.bold)
+         ),
+       )
+     ),
+   ),
+
+
+      Padding(
+        padding: const EdgeInsets.only(top: 25,left: 21,right: 15),
+        child: Container(
+            width: double.infinity,
+            height: 100,
+            child : Image(image: AssetImage("assets/web3.png"),fit: BoxFit.fitWidth,)
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 19,top :10,bottom: 25),
+        child:    Align(
+            alignment: Alignment.centerLeft,
+            child: Opacity(
+              opacity: 0.7,
+              child: Text("Social Media Miracle",
+                  style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,fontWeight: FontWeight.bold)
+              ),
+            )
+        ),
+      )
+
+
+
+    ],
+  ),
+)
+              
                                   ],
                                 )),
 

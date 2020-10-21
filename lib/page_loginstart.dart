@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:mico/doctor/pagedoctor_login.dart';
+
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
 

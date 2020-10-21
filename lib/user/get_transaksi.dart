@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -9,14 +10,13 @@ import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
-import 'package:mico/services/page_chatroomhome.dart';
-import 'package:mico/services/page_historychat.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_historychat.dart';
 import 'package:mico/user/mico_detailappointment.dart';
-import 'package:mico/user/page_detailhistorytransaksi.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 
 
 class GetTransaksi extends StatefulWidget {
@@ -99,7 +99,7 @@ class _GetTransaksiState extends State<GetTransaksi> {
                               InkWell(
                                 child :
                                 Padding (
-                                    padding: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.only(bottom: 10,left: 5,right: 5),
                                 child : Card(
                                     child :
                                     Column(
@@ -117,9 +117,9 @@ class _GetTransaksiState extends State<GetTransaksi> {
                                                         Center(
                                                           child : Padding(
                                                             padding : const EdgeInsets.all(10),
-                                                            child : Text(data[i]["c"],
+                                                            child : Text(data[i]["c"] == 'DECLINE' ? "Dibatalkan" : "Selesai",
                                                               style: TextStyle(
-                                                                  fontSize: 12,
+                                                                  fontSize: 14,
                                                                   color : Hexcolor("#756b6a"),
                                                                   fontFamily: 'VarelaRound'),)
                                                           )
@@ -130,8 +130,150 @@ class _GetTransaksiState extends State<GetTransaksi> {
                                               )
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 10,bottom: 10),
+                                            padding: const EdgeInsets.only(top: 10,bottom: 5,left: 15),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(data[i]["k"]+ " - "+ new DateFormat.MMM().format(DateTime.parse(data[i]["l"]))
+                                                  + " - "+ data[i]["i"] + " (" +data[i]["d"]+")",
+                                                  style: TextStyle(
+                                                  fontSize: 12,
+                                                  color : Hexcolor("#756b6a"),
+                                                fontFamily: 'VarelaRound'),
+                                              ),
+                                            ),
                                           ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 5,left: 15),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Opacity(
+                                                opacity: 0.7,
+                                                child: Text(data[i]["b"],
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color : Colors.black,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'VarelaRound'),
+                                                ),
+                                              )
+                                            ),
+                                          ),
+                                    Padding(
+                                        padding: const EdgeInsets.only(bottom: 5,top: 10 ),
+                                        child: Divider(
+                                          height: 5,
+                                          thickness: 2.0,
+                                        )
+                                    ),
+                                          Padding (
+                                            padding: const EdgeInsets.only(top: 10),
+                                            child: ListTile(
+                                              leading: CircleAvatar(
+                                                backgroundColor: Colors.white,
+                                                backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                radius: 30,
+                                              ),
+                                              title: Column(
+                                                children: [
+                                                  Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text("Konsultasi "+data[i]["m"],
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color : Colors.black,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontFamily: 'VarelaRound')),
+                                                  ),
+                                                  Padding (
+                                                    padding: const EdgeInsets.only(top:5),
+                                                    child : Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Opacity(
+                                                        opacity: 0.5,
+                                                        child: Text(data[i]["f"],
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                color : Colors.black,
+                                                                fontWeight: FontWeight.bold,
+                                                                fontFamily: 'VarelaRound')),
+                                                      )
+                                                    )
+                                                  ),
+
+                                                  Padding (
+                                                      padding: const EdgeInsets.only(top:15),
+                                                      child : Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Opacity(
+                                                            opacity: 0.5,
+                                                            child: Text("Kode Transaksi",
+                                                                style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color : Colors.black,
+                                                                    fontFamily: 'VarelaRound')),
+                                                          )
+                                                      )
+                                                  ),
+
+                                                  Padding (
+                                                      padding: const EdgeInsets.only(top:2,bottom: 5),
+                                                      child : Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Opacity(
+                                                            opacity: 0.5,
+                                                            child: Text(data[i]["n"] == null ? "-" : data[i]["n"] ,
+                                                                style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    color : Colors.black,
+                                                                    fontFamily: 'VarelaRound')),
+                                                          )
+                                                      )
+                                                  )
+
+
+                                                ],
+                                              )
+                                          ),),
+
+                                          Padding(
+                                              padding: const EdgeInsets.only(bottom: 5,top: 10 ),
+                                              child: Divider(
+                                                height: 5,
+                                                thickness: 2.0,
+                                              )
+                                          ),
+                                          Padding (
+                                              padding: const EdgeInsets.only(top:2,left: 93),
+                                              child : Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Opacity(
+                                                    opacity: 0.5,
+                                                    child: Text("Total Pembayaran" ,
+                                                        style: TextStyle(
+                                                            fontSize: 13,
+                                                            color : Colors.black,
+                                                            fontFamily: 'VarelaRound')),
+                                                  )
+                                              )
+                                          ),
+
+                                          Padding (
+                                              padding: const EdgeInsets.only(top:5,bottom: 15, left: 93),
+                                              child : Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Text(
+                                                        data[i]["o"] == null ? "-" : data[i]["o"] == 0 ? "Gratis" :
+                                                        "Rp. " +NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(data[i]["o"].toString())) ,
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color : data[i]["o"] == 0 ? Colors.green : Colors.red,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontFamily: 'VarelaRound')),
+
+                                              )
+                                          )
+
+
 
                                         ]
                                     )

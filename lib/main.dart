@@ -4,12 +4,11 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/page_verifikasilogin.dart';
-import 'package:mico/services/page_chatroomprepare.dart';
-import 'package:mico/services/page_videoroomprepare.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomprepare.dart';
+
 import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:mico/utils/page_tespertama.dart';
 
-import 'doctor/pagedoktor_home.dart';
 //import 'package:miracle/chatroom.dart';
 //import 'package:miracle/services/chatroom_fix.dart';
 //import 'package:miracle/home.dart';

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:mico/doctor/pagedoktor_home.dart';
+
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
@@ -419,8 +419,7 @@ class _VideoChatBackupUserState extends State<VideoChatBackupUser> {
             actions: [
               new FlatButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (BuildContext context) => HomeDoktor()));
+
                   },
                   child:
                   Text("Iya", style: TextStyle(fontFamily: 'VarelaRound')))

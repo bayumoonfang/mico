@@ -2,14 +2,12 @@ import 'dart:io';
 
 import 'package:badges/badges.dart';
 import 'package:date_format/date_format.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:mico/doctor/pagedoktor_home.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/helper/session_user.dart';
@@ -20,31 +18,29 @@ import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/services/mico_detailimagechat.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart';
 import 'package:toast/toast.dart';
 import 'package:photo_view/photo_view.dart';
 
 
-class ChatroomDoctor extends StatefulWidget {
-  final String MyID;
-  const ChatroomDoctor(this.MyID);
+class ChathistoryArchived extends StatefulWidget {
+  final String MyInvoiced;
+  const ChathistoryArchived(this.MyInvoiced);
 
   @override
-  _ChatroomDoctorState createState() => new _ChatroomDoctorState(
-      getIDDokter: this.MyID);
+  _ChathistoryArchivedState createState() => new _ChathistoryArchivedState(
+      getInvoiced: this.MyInvoiced);
 }
 
-class _ChatroomDoctorState extends State<ChatroomDoctor> {
+class _ChathistoryArchivedState extends State<ChathistoryArchived> {
   List data, data2;
 
-  String getPhoneState, getBasedLogin;
+  String getInvoiced,getInvNumber;
   String getNamaDokter = '';
-  String getIDDokter, getRoomChat, getRoomStatus = '';
-  File galleryFile;
-  String Base64;
   String _isLoading = '0';
   bool _isVisible = false;
 
-  _ChatroomDoctorState({this.getIDDokter});
+  _ChathistoryArchivedState({this.getInvoiced});
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
@@ -54,40 +50,28 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
   ScrollController _scrollController;
   FocusNode myFocusNode;
 
+  Future<dynamic> _getDetailInvoiced() async {
+    final response = await http.post(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_detailchatinvoiced",
+        body: {"invoice": widget.MyInvoiced});
+    Map data = jsonDecode(response.body);
+    setState(() {
+       getNamaDokter = data["a"].toString();
+       getInvNumber = data["b"].toString();
+    });
+  }
+
 
   Future<List> getDataChat2() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_chatdoctor&"
-            "iddokter="+widget.MyID);
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_chathistory&"
+            "idclient="+widget.MyInvoiced);
     setState((){
       data = json.decode(response.body);
 
     });
   }
 
-
-  Future<List> getDataChat3() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countchatdoctorfixed&"
-            "idclient="+widget.MyID);
-    setState((){
-      data2 = json.decode(response.body);
-
-
-    });
-  }
-
-
-  void _getChatDetail() async {
-    await _session();
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_chatdetaildokter&id="+widget.MyID);
-    Map dataq = jsonDecode(response.body);
-    setState(() {
-      getNamaDokter = dataq["nama"].toString();
-      getRoomChat = dataq["room"].toString();
-    });
-  }
 
 
   _connect() async {
@@ -116,7 +100,7 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
     _scrollController.addListener(_scrollListener);
     _connect();
     _session();
-    _getChatDetail();
+    _getDetailInvoiced();
   }
 
   _scrollListener() {
@@ -125,7 +109,6 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
       setState(() {
         //bottom
         _isVisible = false;
-        _removeread();
       });
     }
     else if (_scrollController.offset == _scrollController.position.minScrollExtent ) {
@@ -139,157 +122,10 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
   }
 
 
-  void _removeread() async {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_removeread2";
-    http.post(url,
-        body: {
-          "iddokter":widget.MyID,
-          "room":getRoomChat
-        });
-  }
-
-
-  void _endChat() async {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_endchat";
-    http.post(url,
-        body: {
-          "iddokter":widget.MyID
-        });
-    Navigator.of(context).pushReplacement(
-        new MaterialPageRoute(
-            builder: (BuildContext context) => HomeDoktor()));
-  }
-
-
-
-  void _addchat() async {
-    if(_textController.text.isEmpty) {
-      //showToast("Koneksi terputus..", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      return;
-    } else {
-      final response = await http.post(
-          "https://duakata-dev.com/miracle/api_script.php?do=addata_chatdokter",
-          body: { "messagetext": _textController.text,
-            "iddokter":widget.MyID,
-            "room":getRoomChat});
-      Map dataq = jsonDecode(response.body);
-      setState(() {
-        _textController.clear();
-        myFocusNode.requestFocus();
-        _isLoading = '0';
-        //_howloading();
-      });
-    }
-  }
 
   Future<bool> _onWillPop() async {
-    Navigator.of(context).pushReplacement(
-        new MaterialPageRoute(
-            builder: (BuildContext context) => HomeDoktor()));
-    //Navigator.push(context, ExitPage(page: Home()));
+    Navigator.pop(context);
   }
-
-
-  void _dodeletepesan(String valID) {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_deletechatuser";
-    http.post(url,
-        body: {
-          "idmessage": valID
-        });
-    print(valID);
-  }
-
-
-
-  void _doDeleteMessage(String IDMessage) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            //title: Text(),
-            content: Text(
-                "Apakah anda yakin untuk menghapus pesan ini  ?",
-                style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18)),
-            actions: [
-              new FlatButton(
-                  onPressed: () {
-                    _dodeletepesan(IDMessage);
-                    Navigator.pop(context);
-                    myFocusNode.dispose();
-                  },
-                  child:
-                  Text("Iya", style: TextStyle(fontFamily: 'VarelaRound',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18))),
-              new FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:
-                  Text("Tidak", style: TextStyle(fontFamily: 'VarelaRound',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)))
-            ],
-          );
-        });
-  }
-
-
-  void _doAskEnd() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            //title: Text(),
-            content: Text(
-                "Apakah anda yakin untuk mengakhiri obrolan ini  ?",
-                style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18)),
-            actions: [
-              new FlatButton(
-                  onPressed: () {
-                    _endChat();
-                  },
-                  child:
-                  Text("Iya", style: TextStyle(fontFamily: 'VarelaRound',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18))),
-              new FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:
-                  Text("Tidak", style: TextStyle(fontFamily: 'VarelaRound',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18)))
-            ],
-          );
-        });
-  }
-
-
-
-
-
-  imageSelectorGallery() async {
-    galleryFile = await ImagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    String fileName = galleryFile.path.split('/').last;
-    Base64 = base64Encode((galleryFile.readAsBytesSync()));
-    http.post("https://duakata-dev.com/miracle/api_script.php?do=addata_chatimagedokter", body: {
-      "image": Base64,
-      "name": fileName,
-      "iddokter":widget.MyID,
-      "room":getRoomChat
-    });
-    print("You selected gallery image : " + Base64);
-    setState(() {
-      _scrollController
-          .jumpTo(_scrollController.position.maxScrollExtent);
-      //FocusScope.of(context).requestFocus(myFocusNode);
-    });
-  }
-
 
   int _value = 1;
   @override
@@ -300,7 +136,7 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
       Scaffold(
         appBar: new AppBar(
           backgroundColor: Hexcolor("#075e55"),
-          title: new Text(getNamaDokter,
+          title: new Text(getNamaDokter.toString(),
               style: TextStyle(
                   color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16)),
           leading: Builder(
@@ -308,51 +144,62 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
               icon: new Icon(Icons.arrow_back),
               color: Colors.white,
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => HomeDoktor()));
-                //Navigator.push(context, ExitPage(page: Home()));
+                Navigator.pop(context);
               },
             ),
           ),
-          actions: [
-            Padding(
-                padding : const  EdgeInsets.only(right : 20.0),
-                child :
-                DropdownButtonHideUnderline(
-                    child:
-                    DropdownButton(
-                      icon: FaIcon(FontAwesomeIcons.ellipsisV,size: 19,color: Colors.white,),
-                      value: _value,
-                      items: [
-                        DropdownMenuItem(
-                          child:
-                          GestureDetector(
-                            onTap: () {
-                              _doAskEnd();
-                              //Navigator.push(context, EnterPage(page: DetailHistoryTransaksi(widget.MyInvoiced)));
-                            },
-                            child: Text("End Conversation", style: TextStyle(color: Hexcolor("#075e55"), fontFamily: 'VarelaRound', fontSize: 16),),
-                          ),
-
-                          value: 1,
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          _value = value;
-                        });
-                      },
-                    )
-                )
-            )
-          ],
-
         ),
         body:new Container(
           color: Hexcolor("#efe6dd"),
           child: Column(
             children: [
+
+              Padding(
+                padding : const EdgeInsets.only(bottom: 5),
+                child: Center(
+                    child: Container(
+                        width: double.infinity,
+                        color : Hexcolor("#ffffff"),
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 10  ,right: 10,top: 15,bottom: 15),
+                            child:
+                            GestureDetector(
+                              child :
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                      padding :  const EdgeInsets.only(left: 5),
+                                      child :
+                                      Text(getInvNumber.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Hexcolor("#516067"),
+                                            fontFamily: 'VarelaRound'),textAlign: TextAlign.left,)),
+                                  Padding(
+                                      padding :  const EdgeInsets.only(right: 10),
+                                      child :
+                                      Text("Detail",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Hexcolor("#516067"),
+                                            fontFamily: 'VarelaRound',fontWeight: FontWeight.bold), textAlign: TextAlign.right,)),
+
+                                ],
+                              ),
+                              onTap: (){
+                                Navigator.push(context, EnterPage(page: DetailHistoryTransaksi(getInvNumber.toString())));
+                              },)
+                        )
+                    )
+                ),
+              ),
+
+
+
+
+
               Padding(
                 padding : const EdgeInsets.only(top:10,bottom: 5),
                 child: Center(
@@ -395,7 +242,7 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
                                 itemCount:
                                 data == null ? 0 : data.length,
                                 itemBuilder: (context, i) {
-                                  if (data[i]["d"] == '2') {
+                                  if (data[i]["d"] == '1') {
                                     return Column(children: [
                                       Padding(
                                         padding: const EdgeInsets.only(top:5),
@@ -421,10 +268,10 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
                                                       Padding(
                                                           padding: const EdgeInsets.all(10.0),
                                                           child:
-                                                          data[i]["h"] != '' && data[i]["d"] == '2' ?
+                                                          data[i]["h"] != '' && data[i]["d"] == '1' ?
                                                           GestureDetector(
                                                             child: Hero(
-                                                                tag: 'imagehero',
+                                                                tag: data[i]["h"],
                                                                 child :
                                                                 Image(
                                                                   image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -437,14 +284,6 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
                                                                       builder: (BuildContext context) => DetailScreen(data[i]["h"].toString())));
                                                             },
                                                           )
-                                                              :
-                                                          data[i]["e"] == 'Message has been deleted..' ?
-                                                          Text(data[i]["e"],
-                                                              style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontFamily: 'VarelaRound',
-                                                                  fontStyle: FontStyle.italic
-                                                              ))
                                                               :
                                                           Text(data[i]["e"],
                                                               style: TextStyle(
@@ -504,7 +343,7 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
                                                                 data[i]["h"] != '' && data[i]["d"] == '2' ?
                                                                 GestureDetector(
                                                                   child: Hero(
-                                                                      tag: 'imagehero',
+                                                                      tag: data[i]["h"],
                                                                       child :
                                                                       Image(
                                                                         image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -533,17 +372,17 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
                                                                     ))
                                                             ),
                                                             onLongPress: () {
-                                                              _doDeleteMessage(data[i]["i"].toString());
+
                                                             },
                                                           )
                                                               :
                                                           Padding(
                                                               padding: const EdgeInsets.all(10.0),
                                                               child:
-                                                              data[i]["h"] != '' && data[i]["d"] == '1' ?
+                                                              data[i]["h"] != '' && data[i]["d"] == '2' ?
                                                               GestureDetector(
                                                                 child: Hero(
-                                                                    tag: 'imagehero',
+                                                                    tag: data[i]["h"],
                                                                     child :
                                                                     Image(
                                                                       image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
@@ -598,75 +437,6 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
                   )
               ),
 
-              Visibility(
-                visible: _isVisible,
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child : Container(
-                      height: 55,
-                      width: 60,
-                      child : new FutureBuilder(
-                        future: getDataChat3(),
-                        builder: (context, snapshot) {
-                          return ListView.builder(
-                            itemCount: data2 == null ? 0 : data2.length ,
-                            itemBuilder: (context, i) {
-                              return   Padding(
-                                padding: const EdgeInsets.only(right: 15, bottom: 15),
-                                child:
-                                Container(
-                                    child :
-                                    SizedBox(
-                                      width: 40.0,
-                                      height: 40.0,
-                                      child:
-
-                                      data2[i]["a"] != 0 ?
-                                      Badge(
-                                        badgeContent: Text(data2[i]["a"].toString(), style: TextStyle(color: Colors.white),),
-                                        animationType: null,
-                                        toAnimate: false,
-                                        child: FloatingActionButton(
-                                          elevation: 1,
-                                          backgroundColor: Hexcolor("#f8f7f5"),
-                                          child:  Center(
-                                            child: FaIcon(FontAwesomeIcons.angleDoubleDown, size: 18,color: Hexcolor("#727270"),),
-                                          ),onPressed: (){
-                                          _removeread();
-                                          _scrollController
-                                              .jumpTo(_scrollController.position.maxScrollExtent);
-                                        },
-                                        ),
-                                      )
-                                          :
-                                      FloatingActionButton(
-                                        elevation: 1,
-                                        backgroundColor: Hexcolor("#f8f7f5"),
-                                        child:  Center(
-                                          child: FaIcon(FontAwesomeIcons.angleDoubleDown, size: 18,color: Hexcolor("#727270"),),
-                                        ),onPressed: (){
-                                        _scrollController
-                                            .jumpTo(_scrollController.position.maxScrollExtent);
-                                      },
-                                      ),
-                                    )
-                                )
-                                ,
-                              );
-                            },
-                          );
-                        },
-                      )
-                  ),
-                ),
-              ),
-
-
-
-              _buildTextComposer()
             ],
           ),
         ),
@@ -675,96 +445,6 @@ class _ChatroomDoctorState extends State<ChatroomDoctor> {
     );
   }
 
-
-
-  Widget _buildTextComposer() {
-    return new
-    Column(
-      children: <Widget>[
-        // _howloading(),
-        Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              /*borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),*/
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            //margin: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: new Row(
-              children: <Widget>[
-
-                Flexible(
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 15,bottom: 5,top:5),
-                      child: TextField(
-                        onTap: () {
-                          _scrollController
-                              .jumpTo(_scrollController.position.maxScrollExtent);
-                        },
-                        minLines: 1,
-                        maxLines: 5,
-                        controller: _textController,
-                        focusNode: myFocusNode,
-                        //onSubmitted: _handleSubmitted,
-                        // onChanged: _handleChanged,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'VarelaRound',
-                        ),
-                        decoration: new InputDecoration.collapsed(
-                          hintText: 'Tulis Pesan..',
-                        ),
-                      )),
-                ),
-                new Container(
-                    margin: new EdgeInsets.symmetric(horizontal: 4.0),
-                    child:
-                    Row (
-                        children: <Widget>[
-                          Opacity(
-                              opacity: 0.8,
-                              child :
-                              new IconButton(
-                                  icon: new FaIcon(FontAwesomeIcons.image),
-                                  onPressed:
-                                  imageSelectorGallery
-                                // _roomchat();
-                              )),
-                          Opacity(
-                              opacity: 0.8,
-                              child :
-                              new IconButton(
-                                  icon: new Icon(Icons.send),
-                                  onPressed: () {
-                                    _isLoading = '1';
-                                    _addchat();
-                                    /*_scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
-                              duration: Duration(seconds: 1),
-                              curve: Curves.fastOutSlowIn,
-                            );*/
-                                    _scrollController
-                                        .jumpTo(_scrollController.position.maxScrollExtent);
-                                    // _roomchat();
-                                  })),
-                        ])
-                ),
-              ],
-            ))
-      ],
-    );
-  }
 
 }
 

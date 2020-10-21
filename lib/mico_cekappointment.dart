@@ -8,7 +8,7 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/mico_detaildokter.dart';
 import 'package:mico/mico_pembayaran2.dart';
 import 'package:mico/mico_dokter.dart';
-import 'package:mico/services/page_chatroomhome.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
 import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:mico/helper/session_user.dart';
@@ -17,7 +17,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:mico/services/page_chatroom.dart';
+import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroom.dart';
 
 class CekAppointment extends StatefulWidget {
   final String idJadwal, idUser, idDokter, idNamaDokter, idKlinik;
