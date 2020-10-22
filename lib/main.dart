@@ -4,9 +4,6 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/page_verifikasilogin.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomprepare.dart';
-
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:mico/utils/page_tespertama.dart';
 
 //import 'package:miracle/chatroom.dart';
@@ -28,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SplashScreenPage(),
+      home: Home(),
       //home : Login()
     );
   }

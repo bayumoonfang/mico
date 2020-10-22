@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/mico_dokter.dart';
 import 'package:mico/mico_home.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -53,6 +55,7 @@ _getAddress() async {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   Position _currentPostiion;
   String a,b,c,d,e,f,g,h,i,j = "...";
+  String aa = "...";
 
   Future<void> _handleCameraAndMic() async {
     await PermissionHandler().requestPermissions(
@@ -77,33 +80,35 @@ _getAddress() async {
       List<Placemark> p = await geolocator.placemarkFromCoordinates(_currentPostiion.latitude, _currentPostiion.longitude);
       Placemark place = p[0];
       setState(() {
-        a = place.name.toString(); //EMBUH
-        b = place.locality.toString(); // Kecamatan
-        c = place.position.toString(); // Koordinate
-        d = place.administrativeArea.toString(); // Propinsi
-        e = place.subAdministrativeArea.toString(); // Kota / KABUPATEM
-        f = place.country.toString(); // Negara
-        g = place.thoroughfare.toString(); // Jalan alamat
-        h = place.subThoroughfare.toString(); // Nomor Alamat
-        i = place.subLocality.toString(); // JALAN (FORMAT LAIN)
+        a = place.name; //EMBUH
+        b = place.locality; // Kecamatan
+        //c = place.position; // Koordinate
+        d = place.administrativeArea; // Propinsi
+        e = place.subAdministrativeArea; // Kota / KABUPATEM
+        f = place.country; // Negara
+        g = place.thoroughfare; // Jalan alamat
+        h = place.subThoroughfare; // Nomor Alamat
+        i = place.subLocality; // JALAN (FORMAT LAIN)
+        aa = e.toString() + " , "+b.toString()+" , "+d.toString()+ " , "+f.toString();
       });
     }catch(e) {
       print(e);
     }
   }
 
-
+  _getalllocation () async {
+    await _getCurrentLocation();
+    await  _getAddress();
+  }
 
   @override
   void initState() {
     super.initState();
-   _getCurrentLocation();
-    _getAddress();
+    _getalllocation();
   }
 
   Future<bool> _onWillPop() async {
-    Navigator.of(context).push(new MaterialPageRoute(
-        builder: (BuildContext context) => Home()));
+    Navigator.pushReplacement(context, ExitPage(page: Home()));
   }
 
   @override
@@ -112,42 +117,182 @@ _getAddress() async {
         onWillPop: _onWillPop,
         child:  Scaffold(
           appBar: new AppBar(
+            backgroundColor: Colors.white,
             leading: Builder(
               builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
-                  color: Colors.white,
-                  onPressed: () => Navigator.pop(context)
+                  color: Colors.black,
+                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: Home()))
               ),
             ),
             title: Column(
               children: [
             Align(
               alignment: Alignment.centerLeft,
-              child:     Text(
-                "Current Location",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'VarelaRound',
-                    fontSize: 12),
-              ),
-            ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child:     Text(
-                    e.toString() + " , "+b.toString()+" , "+d.toString()+ " , "+f.toString(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'VarelaRound',
-                        fontSize: 15),
-                  ),
+              child:     Opacity(
+                opacity: 0.6,
+                child: Text(
+                  "Current Location",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'VarelaRound',
+                      fontSize: 12),
                 ),
+              )
+            ),
+               Padding(
+                 padding: const EdgeInsets.only(top:2),
+                 child:  Align(
+                   alignment: Alignment.centerLeft,
+                   child: Text(aa.toString(),
+                     style: TextStyle(
+                         color: Colors.black,
+                         fontFamily: 'VarelaRound',
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15),
+                   ),
+                 ),
+               )
               ],
             ),
           ),
         body: Container(
+          color: Colors.white,
           child :Column(
             children: [
+              Padding(
+                  padding: const EdgeInsets.only(top : 30.0, left: 25.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Pilih Regional Kamu ? ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 16,
+                        fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
+                  )
+              ),
 
+              Padding(
+                  padding: const EdgeInsets.only(top : 2.0, left: 25.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Kami temukan dokter terbaik di dekat kamu ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 12,),textAlign: TextAlign.left,),
+                  )
+              ),
+              Center(
+                  child :
+                  Wrap(
+                    spacing: 65,
+                    children: <Widget>[
+
+
+                      Padding(
+                          padding : const EdgeInsets.only(top:40, ),
+                          child :
+                          Column(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                },
+                                child : Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: AssetImage("assets/mira-ico.png"),
+                                    radius: 30,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(top : 10),
+                                  child : Text("Surabaya", style: TextStyle(fontFamily: 'VarelaRound',
+                                      fontSize: 14),)
+                              )
+                            ],
+                          )
+                      ),
+
+
+                      Padding(
+                          padding : const EdgeInsets.only(top:40, ),
+                          child :
+                          Column(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Malang")));
+                                },
+                                child : Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: AssetImage("assets/mira-ico.png"),
+                                    radius: 30,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(top : 10),
+                                  child : Text("Malang", style: TextStyle(fontFamily: 'VarelaRound',
+                                      fontSize: 14),)
+                              )
+                            ],
+                          )
+                      ),
+                      Padding(
+                          padding : const EdgeInsets.only(top:40, ),
+                          child :
+                          Column(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Balikpapan")));
+                                },
+                                child : Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: AssetImage("assets/mira-ico.png"),
+                                    radius: 30,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(top : 10),
+                                  child : Text("Balikpapan", style: TextStyle(fontFamily: 'VarelaRound',
+                                      fontSize: 14),)
+                              )
+                            ],
+                          )
+                      ),
+
+
+                      Padding(
+                          padding : const EdgeInsets.only(top:40, ),
+                          child :
+                          Column(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Denpasar")));
+                                },
+                                child : Container(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: AssetImage("assets/mira-ico.png"),
+                                    radius: 30,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(top : 10),
+                                  child : Text("Denpasar", style: TextStyle(fontFamily: 'VarelaRound',
+                                      fontSize: 14),)
+                              )
+                            ],
+                          )
+                      ),
+
+
+
+                    ],
+                  )
+              ),
           ],
         )
         ),

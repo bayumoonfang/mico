@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
+import 'package:mico/mico_regional.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/mico_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
@@ -55,7 +56,18 @@ class _ListDokterState extends State<ListDokter> {
     super.initState();
    _session();
    getData();
+    _focus.addListener(_onFocusChange);
   }
+  FocusNode _focus = new FocusNode();
+
+  TextEditingController _controller = new TextEditingController();
+
+
+
+  void _onFocusChange(){
+    debugPrint("Focus: "+_focus.hasFocus.toString());
+  }
+
 
 
   Future<List> getData() async {
@@ -78,7 +90,7 @@ class _ListDokterState extends State<ListDokter> {
 
 
   Future<bool> _onWillPop() async {
-    Navigator.pushReplacement(context, ExitPage(page: Home()));
+    Navigator.pushReplacement(context, ExitPage(page: Regional()));
   }
 
 
@@ -89,26 +101,49 @@ class _ListDokterState extends State<ListDokter> {
         child: new Scaffold(
           backgroundColor: Colors.white,
             appBar: new AppBar(
-              backgroundColor: HexColor("#075e55"),
-              title: Text(
-                'Regional ' + widget.namaklinik,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'VarelaRound',
-                    fontSize: 16),
+              backgroundColor: Colors.white,
+              title: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child:     Opacity(
+                        opacity: 0.6,
+                        child: Text(
+                          "Regional",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'VarelaRound',
+                              fontSize: 12),
+                        ),
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:2),
+                    child:  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(widget.namaklinik,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'VarelaRound',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                    ),
+                  )
+                ],
               ),
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
-                  color: Colors.white,
-                  onPressed: () => Navigator.push(context, ExitPage(page: Home())),
+                  color: Colors.black,
+                  onPressed: () => Navigator.push(context, ExitPage(page: Regional())),
                 ),
               ),
               actions: <Widget>[
                 Builder(
                   builder: (context) => IconButton(
                     icon: this.custIcon,
-                    color: Colors.white,
+                    color: Colors.black,
                     onPressed: () {
                       Navigator.push(context, EnterPage(page: DokterSearch(widget.namaklinik)));
                     }
@@ -123,6 +158,34 @@ class _ListDokterState extends State<ListDokter> {
                 child :
                     Column(
                         children: <Widget>[
+                   /* Container(
+                    margin: const EdgeInsets.only(left: 10,right: 15,top: 10),
+                    height: 45.0,
+                         child:  TextField(
+                           focusNode: _focus,
+                                 decoration: InputDecoration(
+                                     floatingLabelBehavior: FloatingLabelBehavior.never,
+                                     contentPadding: const EdgeInsets.only(top : 5,left: 10),
+                                     prefixIcon: Icon(Icons.search,size: 16,),
+                                     prefixStyle: TextStyle(fontSize: 12),
+                                     filled: true,
+                                     fillColor: HexColor("#f9f7f7"),
+                                     enabledBorder: OutlineInputBorder(
+                                         borderSide: BorderSide(
+                                             color: Colors.white,
+                                             width: 1.0
+                                         ),
+                                         borderRadius: BorderRadius.all(
+                                             Radius.circular(5.0)
+                                         )
+                                     ),
+                                     hintText: "Cari Dokter...",
+                                     hintStyle: TextStyle(
+                                         fontFamily: 'VarelaRound',
+                                         fontSize: 14)
+                                 ),
+                               )
+                    ),*/
                          /* Container(
                             margin: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10),
                             height: 30.0,
@@ -359,8 +422,16 @@ class _ListDokterState extends State<ListDokter> {
 
 
                               ]),
-                        /*trailing: Text("ONLINE",style: TextStyle(fontSize: 10, fontFamily:
-                        'VarelaRound', color: Colors.green, fontWeight: FontWeight.bold),)*/
+                        trailing:     Builder(
+                          builder: (context) => IconButton(
+                              icon: new Icon(Icons.favorite_border_outlined),
+                              color: Colors.black,
+                              onPressed: () {
+                                Navigator.push(context, EnterPage(page: DokterSearch(widget.namaklinik)));
+                              }
+                            //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => DokterSearch())),
+                          ),
+                        )
                     )
                   ),
 
