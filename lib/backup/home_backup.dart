@@ -16,7 +16,7 @@ import 'dart:async';
 import 'package:toast/toast.dart';
 import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+/*
 class HomeFix extends StatefulWidget {
   @override
   _HomeFixState createState() => new _HomeFixState();
@@ -397,5 +397,5 @@ class _HomeFixState extends State<HomeFix> {
                     ))));
     }
   }
-}
+}*/
 

@@ -166,7 +166,7 @@ class _CekAppointmentState extends State<CekAppointment> {
                   Padding(
                     padding: const EdgeInsets.only(top:10),
                     child:   RaisedButton(
-                      color:  Hexcolor("#075e55"),
+                      color:  HexColor("#075e55"),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         //side: BorderSide(color: Colors.red, width: 2.0)

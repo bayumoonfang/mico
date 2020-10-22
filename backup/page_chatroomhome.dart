@@ -24,7 +24,7 @@ import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart
 import 'package:toast/toast.dart';
 import 'package:photo_view/photo_view.dart';
 
-
+/*
 class Chatroomhome extends StatefulWidget {
   final String MyPhone,Pageid;
   const Chatroomhome(this.MyPhone, this.Pageid);
@@ -786,7 +786,7 @@ Visibility(
     },);
   }
 
-  }
+  }*/
 
 
 

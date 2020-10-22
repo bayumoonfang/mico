@@ -1,23 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_detailnotif.dart';
 import 'package:mico/mico_home.dart';
-import 'package:mico/page_login.dart';
-import 'package:mico/user/get_chathistory.dart';
-import 'package:mico/user/get_videohistory.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:mico/user/mico_userprofile.dart';
 
 
@@ -96,8 +89,8 @@ class _NotifikasiState extends State<Notifikasi> {
             child: new Scaffold(
                 backgroundColor: Colors.white,
                 appBar: new AppBar(
-                  backgroundColor: Hexcolor("#075e55"),
-                  leading: Icon(Icons.clear,color: Hexcolor("#075e55"),),
+                  backgroundColor: HexColor("#075e55"),
+                  leading: Icon(Icons.clear,color: HexColor("#075e55"),),
                   title: new Text("Message",style: TextStyle(color : Colors.white,
                       fontFamily: 'VarelaRound',fontSize: 17,
                       fontWeight: FontWeight.bold),),
@@ -336,7 +329,7 @@ class _NotifikasiState extends State<Notifikasi> {
       ],
       onTap: _onTap,
       currentIndex: 3,
-      selectedItemColor: Hexcolor("#628b2c"),
+      selectedItemColor: HexColor("#628b2c"),
     );
   }
 

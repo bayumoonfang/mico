@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,12 +9,10 @@ import 'package:http/http.dart' as http;
 import 'package:mico/helper/session_user.dart';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 import 'package:mico/user/mico_notfikasi.dart';
 
 
@@ -266,7 +261,7 @@ class _UserProfileState extends State<UserProfile> {
       ],
       onTap: _onTap,
       currentIndex: 4,
-      selectedItemColor: Hexcolor("#628b2c"),
+      selectedItemColor: HexColor("#628b2c"),
     );
   }
 

@@ -7,15 +7,10 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/services/mico_cekroom.dart';
-import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/services/mico_chatroomhistory.dart';
-import 'package:mico/services/mico_videoroomhome.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
-import 'package:mico/user/mico_prepareroom.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:steps/steps.dart';
-import 'package:steps_indicator/steps_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 
@@ -129,7 +124,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Hexcolor("#075e55"),
+        backgroundColor: HexColor("#075e55"),
         title: Text(
           "Detail Appointment",
           style: TextStyle(
@@ -239,7 +234,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                             Padding(
                               padding: const EdgeInsets.only(top: 1),
                               child: Container(
-                                color: Hexcolor("#DDDDDD"),
+                                color: HexColor("#DDDDDD"),
                                 width: double.infinity,
                                 height: 10,
                               ),
@@ -254,7 +249,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                 direction: Axis.vertical,
                                 size: 10.0,
                                 path: {
-                                  'color': Hexcolor("#DDDDDD"),
+                                  'color': HexColor("#DDDDDD"),
                                   'width': 1.0
                                 },
                                 steps: [
@@ -278,7 +273,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Waiting Approval',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -288,7 +283,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 'Status appointment anda sekarang adalah masih menunggu approval dari dokter',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),
@@ -318,7 +313,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Appointment Rejected',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -328,7 +323,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 'Mohon maaf appointment anda telah dibatalkan',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),
@@ -340,7 +335,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
 
                                   {
                                     'background': (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
-                                    Colors.green : Hexcolor("#DDDDDD") ,
+                                    Colors.green : HexColor("#DDDDDD") ,
                                     'label': '',
                                     'content':
                                     Padding(
@@ -359,7 +354,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Appointment Approved',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -369,7 +364,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 'Status appointment anda sekarang adalah sudah mendapat approval dari dokter',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),
@@ -379,7 +374,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                   },
                                   {
                                     'background':   (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
-                                    Colors.green : Hexcolor("#DDDDDD") ,
+                                    Colors.green : HexColor("#DDDDDD") ,
                                     'label': '',
                                     'content':
                                     Padding(
@@ -398,7 +393,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Menunggu Pembayaran',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -409,14 +404,14 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                     'silahkan melakukan pembayaran ke rekening sesuai tagihan yang kami kirimkan. Jika sudah melakukan pembayaran silahkan melakukan konfirmasi dibawah ini',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),
 
                                             (data[i]["c"] == 'ACCEPT' || data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
                                             RaisedButton(
-                                              color:  Hexcolor("#075e55"),
+                                              color:  HexColor("#075e55"),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(5.0),
                                               ),
@@ -453,7 +448,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
 
                                   {
                                     'background': (data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
-                                    Colors.green : Hexcolor("#DDDDDD"),
+                                    Colors.green : HexColor("#DDDDDD"),
                                     'label': '',
                                     'content':
                                     Padding(
@@ -472,7 +467,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Pembayaran Terverifikasi',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -482,7 +477,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 'Terima Kasih telah melakukan pembayaran, anda dapat langsung melakukan konsultasi dengan dokter',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),
@@ -494,7 +489,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
 
                                   {
                                     'background': (data[i]["c"] == 'PAID' || data[i]["c"] == 'DONE') ?
-                                    Colors.green : Hexcolor("#DDDDDD"),
+                                    Colors.green : HexColor("#DDDDDD"),
                                     'label': '',
                                     'content':
                                     Padding(
@@ -513,7 +508,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Konsultasi Berjalan',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -523,13 +518,13 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 'Anda bisa masuk ke room konsultasi dengan klik button yang ada dibawah ini .',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),
                                             data[i]["c"] == 'PAID' ?
                                             RaisedButton(
-                                              color:  Hexcolor("#075e55"),
+                                              color:  HexColor("#075e55"),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(5.0),
                                               ),
@@ -547,7 +542,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                               },)
                                                 :   data[i]["c"] == 'DONE' ?
                                             RaisedButton(
-                                              color:  Hexcolor("#075e55"),
+                                              color:  HexColor("#075e55"),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(5.0),
                                               ),
@@ -582,7 +577,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
 
                                   {
                                     'background': data[i]["c"] != 'DONE' ?
-                                    Hexcolor("#DDDDDD") : Colors.green,
+                                    HexColor("#DDDDDD") : Colors.green,
                                     'label': '',
                                     'content':
                                     Padding(
@@ -601,7 +596,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   'Selesai',
                                                   style: TextStyle(
                                                       fontSize: 16,
-                                                      color: Hexcolor(
+                                                      color: HexColor(
                                                           "#516067"),
                                                       fontWeight: FontWeight
                                                           .bold,
@@ -611,7 +606,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 'Terima Kasih telah menggunakan layanan konsultasi online Miracle.',
                                                 style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Hexcolor(
+                                                    color: HexColor(
                                                         "#516067"),
                                                     fontFamily: 'VarelaRound')
                                             ),

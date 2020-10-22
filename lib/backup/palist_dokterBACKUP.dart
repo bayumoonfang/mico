@@ -16,7 +16,7 @@ import 'package:mico/mico_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'package:toast/toast.dart';
 
-
+/*
 
 class ListDokter extends StatefulWidget {
   final String namaklinik;
@@ -467,4 +467,4 @@ class _ListDokterState extends State<ListDokter> {
 
 
 
-}
+}*/

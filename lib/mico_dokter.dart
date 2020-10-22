@@ -89,7 +89,7 @@ class _ListDokterState extends State<ListDokter> {
         child: new Scaffold(
           backgroundColor: Colors.white,
             appBar: new AppBar(
-              backgroundColor: Hexcolor("#075e55"),
+              backgroundColor: HexColor("#075e55"),
               title: Text(
                 'Regional ' + widget.namaklinik,
                 style: TextStyle(
@@ -321,7 +321,7 @@ class _ListDokterState extends State<ListDokter> {
                                             padding: const EdgeInsets.only(left:10),
                                             child :
                                             Text("FREE",
-                                              style: new TextStyle(color: Hexcolor("#2ECC40"),fontWeight: FontWeight.bold, fontFamily:
+                                              style: new TextStyle(color: HexColor("#2ECC40"),fontWeight: FontWeight.bold, fontFamily:
                                               'VarelaRound',)))
                                   ])
                                 )

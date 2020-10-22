@@ -102,7 +102,7 @@ class _DetailNotifState extends State<DetailNotif> {
         child:
         Scaffold(
             appBar: new AppBar(
-              backgroundColor: Hexcolor("#075e55"),
+              backgroundColor: HexColor("#075e55"),
               title: Text(
                 "Detail Message",
                 style: TextStyle(

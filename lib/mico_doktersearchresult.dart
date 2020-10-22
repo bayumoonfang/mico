@@ -65,7 +65,7 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
         child: new Scaffold(
             backgroundColor: Colors.white,
             appBar: new AppBar(
-              backgroundColor: Hexcolor("#075e55"),
+              backgroundColor: HexColor("#075e55"),
               title: Text(
                getValcari.toString(),
                 style: TextStyle(
@@ -213,7 +213,7 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
                                               padding: const EdgeInsets.only(left:10),
                                               child :
                                               Text("FREE",
-                                                  style: new TextStyle(color: Hexcolor("#2ECC40"),fontWeight: FontWeight.bold, fontFamily:
+                                                  style: new TextStyle(color: HexColor("#2ECC40"),fontWeight: FontWeight.bold, fontFamily:
                                                   'VarelaRound',)))
                                         ])
                                 )

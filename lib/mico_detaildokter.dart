@@ -9,12 +9,7 @@ import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_cekappointment.dart';
 import 'package:mico/mico_detailimagedokter.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/mico_dokter.dart';
 import 'package:http/http.dart' as http;
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroom.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomprepare.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import 'dart:async';
 
 class Pembayaran extends StatefulWidget {
@@ -119,7 +114,7 @@ class _PembayaranState extends State<Pembayaran> {
         child: new Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(
-            backgroundColor: Hexcolor("#075e55"),
+            backgroundColor: HexColor("#075e55"),
             title: Text(
               "Detail Dokter",
               style: TextStyle(
@@ -326,7 +321,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                         side: new BorderSide(color:
                                                         _selectedIndex == i && _selectedIndex != 200 &&
                                                             _selectedIndex != null ?
-                                                        Hexcolor("#075e55") : Hexcolor("#DDDDDD"), width: 1.0
+                                                        HexColor("#075e55") : HexColor("#DDDDDD"), width: 1.0
                                                         ),
                                                         borderRadius: BorderRadius.circular(5.0),
                                                       ),
@@ -536,7 +531,7 @@ class _PembayaranState extends State<Pembayaran> {
                   :
 
                     RaisedButton(
-                      color:  Hexcolor("#075e55"),
+                      color:  HexColor("#075e55"),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         //side: BorderSide(color: Colors.red, width: 2.0)

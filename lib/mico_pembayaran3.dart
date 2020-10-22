@@ -88,7 +88,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: new AppBar(
-          backgroundColor: Hexcolor("#075e55"),
+          backgroundColor: HexColor("#075e55"),
           title: Text(
             "Pembayaran",
             style: TextStyle(
@@ -123,7 +123,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                                   offset: Offset(0.0, 0.10)
                               )
                             ],
-                            color: Hexcolor("#ffffff"),
+                            color: HexColor("#ffffff"),
                         ),
                         //color : Hexcolor("#ffffff"),
                         child: Padding(
@@ -138,13 +138,13 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
-                                            color: Hexcolor("#516067"),
+                                            color: HexColor("#516067"),
                                             fontFamily: 'VarelaRound'),textAlign: TextAlign.left,),
 
                                       Text("Rp. "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(widget.idTotal)),
                                         style: TextStyle(
                                             fontSize: 16,
-                                            color: Hexcolor("#516067"),
+                                            color: HexColor("#516067"),
                                             fontFamily: 'VarelaRound',fontWeight: FontWeight.bold), textAlign: TextAlign.right,),
 
                                 ],
@@ -163,7 +163,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                 Text("Bank Pembayaran",
                   style: TextStyle(
                       fontSize: 14,
-                      color: Hexcolor("#516067"),
+                      color: HexColor("#516067"),
                       fontFamily: 'VarelaRound'))
                 ),
               ),
@@ -207,7 +207,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                           :
 
                       RaisedButton(
-                        color:  Hexcolor("#075e55"),
+                        color:  HexColor("#075e55"),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           //side: BorderSide(color: Colors.red, width: 2.0)
@@ -263,7 +263,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                                  Card (
                                      shape: RoundedRectangleBorder(
                                        borderRadius: BorderRadius.circular(15.0),
-                                       side: new BorderSide(color: Hexcolor("#075e55"), width: 2.0),
+                                       side: new BorderSide(color: HexColor("#075e55"), width: 2.0),
                                      ),
                                      child :
                                      ListTile(

@@ -1,9 +1,4 @@
-
-
-
-
 import 'dart:io';
-
 import 'package:badges/badges.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
@@ -267,7 +262,7 @@ void initState() {
         child :
         Scaffold(
           appBar: new AppBar(
-            backgroundColor: Hexcolor("#075e55"),
+            backgroundColor: HexColor("#075e55"),
             title: new Text(getNamaDokter,
                 style: TextStyle(
                     color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16)),
@@ -288,7 +283,7 @@ void initState() {
           ),
 
           body: new Container(
-              color: Hexcolor("#efe6dd"),
+              color: HexColor("#efe6dd"),
               child: Column(
                   children: [
                     Padding(
@@ -296,7 +291,7 @@ void initState() {
                       child: Center(
                           child: Container(
                               width: double.infinity,
-                              color : Hexcolor("#ffffff"),
+                              color : HexColor("#ffffff"),
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 10  ,right: 10,top: 15,bottom: 15),
                                   child:
@@ -312,7 +307,7 @@ void initState() {
                                             Text(getInvNumber == null ? '...' : getInvNumber,
                                               style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Hexcolor("#516067"),
+                                                  color: HexColor("#516067"),
                                                   fontFamily: 'VarelaRound'),textAlign: TextAlign.left,)),
                                         Padding(
                                             padding :  const EdgeInsets.only(right: 10),
@@ -320,7 +315,7 @@ void initState() {
                                             Text("Detail",
                                               style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Hexcolor("#516067"),
+                                                  color: HexColor("#516067"),
                                                   fontFamily: 'VarelaRound',fontWeight: FontWeight.bold), textAlign: TextAlign.right,)),
                                       ],
                                     ),
@@ -339,7 +334,7 @@ void initState() {
 
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color : Hexcolor("#d4eaf5"),
+                                color : HexColor("#d4eaf5"),
                                 boxShadow: [
                                   //BoxShadow(color: Colors.white, spreadRadius: 1),
                                 ],
@@ -351,7 +346,7 @@ void initState() {
                                     DateTime.now(), [dd, ' ', MM, ' ', yyyy]),
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Hexcolor("#516067"),
+                                      color: HexColor("#516067"),
                                       fontFamily: 'VarelaRound',)),
                               )
                           )
@@ -359,7 +354,7 @@ void initState() {
                     ),
                     Flexible(
                         child: Container(
-                            color: Hexcolor("#efe6dd"),
+                            color: HexColor("#efe6dd"),
                             height: double.infinity,
                             margin: const EdgeInsets.only(bottom: 1.0),
                             child: new FutureBuilder(
@@ -390,7 +385,7 @@ void initState() {
                                                         Container(
                                                             decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(10),
-                                                              color : Hexcolor("#ffffff"),
+                                                              color : HexColor("#ffffff"),
                                                               boxShadow: [
                                                                 //BoxShadow(color: Colors.white, spreadRadius: 1),
                                                               ],
@@ -479,7 +474,7 @@ void initState() {
                                                               Container(
                                                                 decoration: BoxDecoration(
                                                                   borderRadius: BorderRadius.circular(10),
-                                                                  color : Hexcolor("#e2ffc7"),
+                                                                  color : HexColor("#e2ffc7"),
                                                                   boxShadow: [
                                                                     // BoxShadow(color: Colors.white, spreadRadius: 1),
                                                                   ],
@@ -594,9 +589,9 @@ void initState() {
                                               toAnimate: false,
                                               child: FloatingActionButton(
                                                 elevation: 1,
-                                                backgroundColor: Hexcolor("#f8f7f5"),
+                                                backgroundColor: HexColor("#f8f7f5"),
                                                 child:  Center(
-                                                  child: FaIcon(FontAwesomeIcons.angleDoubleDown, size: 18,color: Hexcolor("#727270"),),
+                                                  child: FaIcon(FontAwesomeIcons.angleDoubleDown, size: 18,color: HexColor("#727270"),),
                                                 ),onPressed: (){
                                                 _removeread();
                                                 _scrollController
@@ -607,9 +602,9 @@ void initState() {
                                                 :
                                             FloatingActionButton(
                                               elevation: 1,
-                                              backgroundColor: Hexcolor("#f8f7f5"),
+                                              backgroundColor: HexColor("#f8f7f5"),
                                               child:  Center(
-                                                child: FaIcon(FontAwesomeIcons.angleDoubleDown, size: 18,color: Hexcolor("#727270"),),
+                                                child: FaIcon(FontAwesomeIcons.angleDoubleDown, size: 18,color: HexColor("#727270"),),
                                               ),onPressed: (){
                                               _scrollController
                                                   .jumpTo(_scrollController.position.maxScrollExtent);

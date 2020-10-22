@@ -1,22 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/loader/gf_loader.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_historychat.dart';
 import 'package:mico/user/mico_detailappointment.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
-
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
 
 
 class GetAppointment extends StatefulWidget {
@@ -63,7 +53,7 @@ class _GetAppointmentState extends State<GetAppointment> {
           onRefresh: _getData,
           child :
           Container(
-              color: Hexcolor("#f5f5f5"),
+              color: HexColor("#f5f5f5"),
               margin: EdgeInsets.all(10.0),
               child: new FutureBuilder<List>(
                   future: getData(),
@@ -120,7 +110,7 @@ class _GetAppointmentState extends State<GetAppointment> {
                                                                borderRadius: BorderRadius.circular(5),
                                                                border: Border.all(
                                                                  color:
-                                                                 data[i]["c"] == 'DONE' ? Hexcolor("#075e55") : Colors.red,
+                                                                 data[i]["c"] == 'DONE' ? HexColor("#075e55") : Colors.red,
                                                                  //                   <--- border color
                                                                  width: 1.0,
                                                                ),

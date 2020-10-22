@@ -1,22 +1,12 @@
 
-
-
-
-
-
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
-import 'package:mico/mico_home.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:responsive_container/responsive_container.dart';
-import 'package:steps/steps.dart';
-import 'package:steps_indicator/steps_indicator.dart';
 import 'package:http/http.dart' as http;
-import 'package:toast/toast.dart';
+
 
 class DetailTagihan extends StatefulWidget {
   final String idAppointment;
@@ -67,7 +57,7 @@ class _DetailTagihanState extends State<DetailTagihan> {
         onWillPop: _onWillPop,
         child: Scaffold(
             appBar: new AppBar(
-              backgroundColor: Hexcolor("#075e55"),
+              backgroundColor: HexColor("#075e55"),
               title: Text(
                 "Detail Tagihan",
                 style: TextStyle(
@@ -101,7 +91,7 @@ class _DetailTagihanState extends State<DetailTagihan> {
 
                             getStatus == 'OPEN' ?
                         RaisedButton(
-                          color: Hexcolor("#075e55"),
+                          color: HexColor("#075e55"),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                               //side: BorderSide(color: Colors.red)

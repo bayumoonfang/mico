@@ -9,7 +9,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/page_login.dart';
 
-
+/*
 class Chatroomfix extends StatefulWidget {
   final String MyIDDokter, MyNamaDokter;
   const Chatroomfix(this.MyIDDokter, this.MyNamaDokter);
@@ -254,4 +254,4 @@ class _ChatroomfixState extends State<Chatroomfix> {
                       });
                 })));
   }
-}
+}*/

@@ -122,7 +122,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
-          backgroundColor: Hexcolor("#075e55"),
+          backgroundColor: HexColor("#075e55"),
           title: Text(
             "Pembayaran",
             style: TextStyle(
@@ -432,7 +432,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
                           :
 
                       RaisedButton(
-                        color:  Hexcolor("#075e55"),
+                        color:  HexColor("#075e55"),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           //side: BorderSide(color: Colors.red, width: 2.0)

@@ -1,24 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/mico_home.dart';
-import 'package:mico/mico_detaildokter.dart';
-import 'package:mico/mico_pembayaran2.dart';
-import 'package:mico/mico_dokter.dart';
 import 'package:mico/services/mico_chatroom.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
 import 'package:toast/toast.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'package:flutter/services.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroom.dart';
+
 
 class PrepareRoomCreate extends StatefulWidget {
   final String idAppointment;
@@ -143,7 +134,7 @@ class _PrepareRoomCreateState extends State<PrepareRoomCreate> {
                         Padding(
                           padding: const EdgeInsets.only(top:10),
                           child:   RaisedButton(
-                            color:  Hexcolor("#075e55"),
+                            color:  HexColor("#075e55"),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                               //side: BorderSide(color: Colors.red, width: 2.0)

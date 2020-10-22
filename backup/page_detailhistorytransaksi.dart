@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-
+/*
 
 class DetailHistoryTransaksi extends StatefulWidget {
   final String InvNumber;
@@ -312,5 +312,5 @@ class _DetailHistoryTransaksiState extends State<DetailHistoryTransaksi> {
     }
 
 
-}
+}*/
 

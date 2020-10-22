@@ -22,7 +22,7 @@ import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart
 import 'package:toast/toast.dart';
 import 'package:photo_view/photo_view.dart';
 
-
+/*
 class ChathistoryArchived extends StatefulWidget {
   final String MyInvoiced;
   const ChathistoryArchived(this.MyInvoiced);
@@ -447,6 +447,6 @@ class _ChathistoryArchivedState extends State<ChathistoryArchived> {
 
 
 }
-
+*/
 
 

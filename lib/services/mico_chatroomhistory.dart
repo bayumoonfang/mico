@@ -1,21 +1,12 @@
-
-
-
-
 import 'dart:io';
-
-import 'package:badges/badges.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/mico_home.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:mico/services/mico_detailimagechat.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 
@@ -127,7 +118,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
         child :
         Scaffold(
           appBar: new AppBar(
-            backgroundColor: Hexcolor("#075e55"),
+            backgroundColor: HexColor("#075e55"),
             title: new Text(getNamaDokter,
                 style: TextStyle(
                     color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16)),
@@ -148,7 +139,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
           ),
 
           body: new Container(
-              color: Hexcolor("#efe6dd"),
+              color: HexColor("#efe6dd"),
               child: Column(
                   children: [
                     Padding(
@@ -156,7 +147,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
                       child: Center(
                           child: Container(
                               width: double.infinity,
-                              color : Hexcolor("#ffffff"),
+                              color : HexColor("#ffffff"),
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 10  ,right: 10,top: 15,bottom: 15),
                                   child:
@@ -172,7 +163,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
                                             Text(getInvNumber == null ? '...' : getInvNumber,
                                               style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Hexcolor("#516067"),
+                                                  color: HexColor("#516067"),
                                                   fontFamily: 'VarelaRound'),textAlign: TextAlign.left,)),
                                         Padding(
                                             padding :  const EdgeInsets.only(right: 10),
@@ -180,7 +171,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
                                             Text("Detail",
                                               style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Hexcolor("#516067"),
+                                                  color: HexColor("#516067"),
                                                   fontFamily: 'VarelaRound',fontWeight: FontWeight.bold), textAlign: TextAlign.right,)),
                                       ],
                                     ),
@@ -194,7 +185,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
                     ),
                     Flexible(
                         child: Container(
-                            color: Hexcolor("#efe6dd"),
+                            color: HexColor("#efe6dd"),
                             height: double.infinity,
                             margin: const EdgeInsets.only(bottom: 1.0),
                             child: new FutureBuilder(
@@ -225,7 +216,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
                                                         Container(
                                                             decoration: BoxDecoration(
                                                               borderRadius: BorderRadius.circular(10),
-                                                              color : Hexcolor("#ffffff"),
+                                                              color : HexColor("#ffffff"),
                                                               boxShadow: [
                                                                 //BoxShadow(color: Colors.white, spreadRadius: 1),
                                                               ],
@@ -314,7 +305,7 @@ class _ChatroomhistoryState extends State<Chatroomhistory> {
                                                               Container(
                                                                   decoration: BoxDecoration(
                                                                     borderRadius: BorderRadius.circular(10),
-                                                                    color : Hexcolor("#e2ffc7"),
+                                                                    color : HexColor("#e2ffc7"),
                                                                     boxShadow: [
                                                                       // BoxShadow(color: Colors.white, spreadRadius: 1),
                                                                     ],

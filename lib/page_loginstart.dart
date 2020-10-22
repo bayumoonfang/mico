@@ -51,14 +51,14 @@ class _LoginStartState extends State<LoginStart> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
-                        color: Hexcolor("#8cc63e"),
+                        color: HexColor("#8cc63e"),
                         child: Text(
                           "Login As Customer",
                           style: TextStyle(
                             fontFamily: 'VarelaRound',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Hexcolor("#8cc63e"),
+                            color: HexColor("#8cc63e"),
                           ),
                         ),
                         onPressed: () =>  Navigator.of(context).push(

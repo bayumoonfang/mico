@@ -1,19 +1,17 @@
 import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/components/badge/gf_icon_badge.dart';
-import 'package:getwidget/components/carousel/gf_carousel.dart';
-import 'package:getwidget/components/carousel/gf_items_carousel.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/mico_detailimagehome.dart';
+import 'package:mico/mico_regional.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
@@ -24,7 +22,6 @@ import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/user/mico_notfikasi.dart';
 import 'package:mico/user/mico_userprofile.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -246,7 +243,7 @@ class _HomeState extends State<Home> {
         child : Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(
-            //backgroundColor: Hexcolor("#075e55"),
+            //backgroundColor: HexColor("#075e55"),
             backgroundColor: Colors.white,
             elevation: 0,
             leading: Builder(
@@ -287,7 +284,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 UserAccountsDrawerHeader(
                   decoration: BoxDecoration(
-                    color: Hexcolor("#075e55"),
+                    color: HexColor("#075e55"),
                   ),
                   accountName: new Text(getName.toString(),
                       style: TextStyle(fontSize: 18)),
@@ -407,7 +404,7 @@ class _HomeState extends State<Home> {
                         GestureDetector(
                         child :
                             Badge(
-                                position: BadgePosition.topLeft(top: 0,left: 0),
+                                position: BadgePosition.topStart(top: 0),
                                 animationDuration: Duration(milliseconds: 300),
                                 animationType: BadgeAnimationType.slide,
                                 badgeContent: Text(
@@ -419,7 +416,7 @@ class _HomeState extends State<Home> {
                                 Card(
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
-                                      side: BorderSide(color: Hexcolor("#DDDDDD"), width: 1),
+                                      side: BorderSide(color: HexColor("#DDDDDD"), width: 1),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child : ListTile(
@@ -488,7 +485,7 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                                          Navigator.pushReplacement(context, EnterPage(page: Regional()));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
@@ -767,7 +764,7 @@ Padding(
       ],
       onTap: _onTap,
       currentIndex: _currentTabIndex,
-      selectedItemColor: Hexcolor("#628b2c"),
+      selectedItemColor: HexColor("#628b2c"),
     );
   }
 

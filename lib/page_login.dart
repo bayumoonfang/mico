@@ -154,7 +154,7 @@ class _LoginState extends State<Login> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
-                              color: Hexcolor("#8cc63e"),
+                              color: HexColor("#8cc63e"),
                                 child: Text(
                                   "Selanjutnya",
                                   style: TextStyle(

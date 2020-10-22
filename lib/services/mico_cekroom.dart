@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -9,14 +8,8 @@ import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/services/mico_videoroomhome.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
 import 'package:toast/toast.dart';
-import 'package:getwidget/getwidget.dart';
-
-import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'package:flutter/services.dart';
 
 
 class CekRoomKonsultasi extends StatefulWidget {
@@ -215,7 +208,7 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
                     Padding(
                       padding: const EdgeInsets.only(top:10),
                       child:   RaisedButton(
-                        color:  Hexcolor("#075e55"),
+                        color:  HexColor("#075e55"),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           //side: BorderSide(color: Colors.red, width: 2.0)
@@ -277,7 +270,7 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
                     Padding(
                       padding: const EdgeInsets.only(top:10),
                       child:   RaisedButton(
-                        color:  Hexcolor("#075e55"),
+                        color:  HexColor("#075e55"),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           //side: BorderSide(color: Colors.red, width: 2.0)

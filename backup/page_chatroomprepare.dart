@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroom.dart';
-
+/*
 class ChatRoomPrepare extends StatefulWidget {
   final String accdokter, namadokter, klinik, MyPhone;
   const ChatRoomPrepare(this.accdokter, this.namadokter, this.klinik, this.MyPhone);
@@ -123,4 +123,4 @@ class _ChatRoomPrepareState extends State<ChatRoomPrepare> {
               ),
             )));
   }
-}
+}*/

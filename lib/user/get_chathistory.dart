@@ -1,19 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/loader/gf_loader.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_historychat.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart';
 import 'dart:async';
 import 'dart:convert';
-
-import 'file:///D:/PROJECT%20KANTOR/mico/lib/backup/mico_historytransaksi_BACKUP.dart';
-
 
 class ChatHistory extends StatefulWidget {
   final String getPhone;
@@ -156,14 +145,14 @@ class ChatHistory extends StatefulWidget {
                                   )
                               ),
                               onTap: (){
-                                data[i]["d"] == 'CLOSE' ?
+                              /*  data[i]["d"] == 'CLOSE' ?
                                 Navigator.of(context).push(
                                     new MaterialPageRoute(
                                         builder: (BuildContext context) => ChathistoryArchived(data[i]["e"])))
                                     :
                                 Navigator.of(context).push(
                                     new MaterialPageRoute(
-                                        builder: (BuildContext context) => Chatroomhome(widget.getPhone,'2')));
+                                        builder: (BuildContext context) => Chatroomhome(widget.getPhone,'2')));*/
                                 //Navigator.push(context, EnterPage(page:DetailHistoryTransaksi(snapshot.data[i]["e"])));
                               },
                             )

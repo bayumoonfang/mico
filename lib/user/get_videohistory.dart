@@ -1,22 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/loader/gf_loader.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_historychat.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_videochatuser.dart';
-import 'package:mico/services/mico_videoroomhome.dart';
 import 'file:///D:/PROJECT%20KANTOR/mico/backup/services_videoconfprepare.dart';
 import 'dart:async';
 import 'dart:convert';
-
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart';
-import 'package:mico/utils/page_tespertama.dart';
-
 
 class VideoHistory extends StatefulWidget {
   final String getPhone;
@@ -159,7 +146,7 @@ class _VideoHistoryState extends State<VideoHistory> {
                                       )
                                   ),
                                   onTap: (){
-                                    data[i]["d"] == 'CLOSE' ?
+                                  /*  data[i]["d"] == 'CLOSE' ?
                                     Navigator.of(context).push(
                                         new MaterialPageRoute(
                                             builder: (BuildContext context) => ChathistoryArchived(data[i]["e"])))
@@ -167,7 +154,7 @@ class _VideoHistoryState extends State<VideoHistory> {
 
                                 Navigator.of(context).push(
                                         new MaterialPageRoute(
-                                            builder: (BuildContext context) => VideoConfPrepare(widget.getPhone)));
+                                            builder: (BuildContext context) => VideoConfPrepare(widget.getPhone)));*/
                                     //Navigator.push(context, EnterPage(page:DetailHistoryTransaksi(snapshot.data[i]["e"])));
                                   },
                                 )
