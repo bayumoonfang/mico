@@ -122,16 +122,16 @@ class _cekPembayaranState extends State<CekPembayaran> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
-          backgroundColor: HexColor("#075e55"),
+          backgroundColor: Colors.white,
           title: Text(
-            "Pembayaran",
+            "Checkout",
             style: TextStyle(
-                color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16),
+                color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
           ),
           leading: Builder(
             builder: (context) => IconButton(
                 icon: new Icon(Icons.arrow_back),
-                color: Colors.white,
+                color: Colors.black,
                 onPressed: () => {
                   Navigator.pop(context)
                 }),
@@ -151,7 +151,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 25),
+                  padding: const EdgeInsets.only(top: 20, left: 25),
                   child: Text("Jenis Konsultasi", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14)),
                 ),
                 Padding (

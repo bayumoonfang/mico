@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/mico_homesearch.dart';
+import 'package:mico/mico_homesearchdetail.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -16,34 +18,25 @@ import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/page_login.dart';
 import 'package:toast/toast.dart';
 
-class SearchResultDokter extends StatefulWidget {
-  //HomePage({this.namaklinik});
-  //final String namaklinik;
-  final String namaklinik;
+class HomeSearchResult extends StatefulWidget {
   final String valCari;
-  const SearchResultDokter(this.namaklinik, this.valCari);
+  const HomeSearchResult(this.valCari);
   @override
-  _SearchResultDokterPageState createState() =>
-      new _SearchResultDokterPageState(
-          getKlinik: this.namaklinik, getValcari: this.valCari);
+  _HomeSearchResultPageState createState() =>
+      new _HomeSearchResultPageState(
+         getValcari: this.valCari);
 }
 
-class _SearchResultDokterPageState extends State<SearchResultDokter> {
+class _HomeSearchResultPageState extends State<HomeSearchResult> {
   List data;
-  String getKlinik;
   String getValcari;
-  String getFilter = '';
-  Icon custIcon = Icon(Icons.search);
-  String valq = "0";
-  _SearchResultDokterPageState({this.getKlinik, this.getValcari});
+  _HomeSearchResultPageState({this.getValcari});
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
   Future<List> getData() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_doktercari&id=" +
-            getKlinik +
-            "&cari=" +
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_doktercarihome&cari=" +
             getValcari);
     setState((){
       data = json.decode(response.body);
@@ -94,12 +87,11 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
 
 
   Future<bool> _onWillPop() async {
-    Navigator.pushReplacement(context, ExitPage(page: DokterSearch(widget.namaklinik)));
+    Navigator.push(context, ExitPage(page: HomeSearch()));
   }
 
   Future<void> _getData() async {
     setState(() {
-      getFilter = '';
       getData();
     });
   }
@@ -113,21 +105,21 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
         child: new Scaffold(
             backgroundColor: Colors.white,
             appBar: new AppBar(
-              backgroundColor: Colors.white,
-              title: Text(
-               getValcari.toString(),
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'VarelaRound',
-                    fontSize: 16),
-              ),
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: new Icon(Icons.arrow_back),
-                  color: Colors.black,
-                  onPressed: () =>     Navigator.pushReplacement(context, ExitPage(page: DokterSearch(widget.namaklinik)))
+                backgroundColor: Colors.white,
+                title: Text(
+                  getValcari.toString(),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'VarelaRound',
+                      fontSize: 16),
                 ),
-              )
+                leading: Builder(
+                  builder: (context) => IconButton(
+                      icon: new Icon(Icons.arrow_back),
+                      color: Colors.black,
+                      onPressed: () =>      Navigator.push(context, ExitPage(page: HomeSearch()))
+                  ),
+                )
             ),
 
             body:
@@ -138,7 +130,7 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
 
                     Padding(
                       padding: const EdgeInsets.only(top: 15.0),
-                     /* child: Divider(
+                      /* child: Divider(
                         height: 3,
                       ),*/
                     ),
@@ -201,9 +193,8 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
                           onTap: () {
                             Navigator.of(context).push(
                                 new MaterialPageRoute(
-                                    builder: (BuildContext context) => Pembayaran(
+                                    builder: (BuildContext context) => DetailDokterHome(
                                         data[i]["f"],
-                                        widget.namaklinik,
                                         data[i]["b"])));
                           },
                           child:

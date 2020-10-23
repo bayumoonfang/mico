@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:mico/mico_home.dart';
+import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/user/get_appointment.dart';
+import 'package:mico/user/mico_detailappointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/user/mico_notfikasi.dart';
 import 'package:mico/user/mico_userprofile.dart';
@@ -27,7 +31,7 @@ class _AppointmentListState extends State<AppointmentList> with SingleTickerProv
   String getAcc, getPhoneState;
   _AppointmentListState({this.getPhoneState});
 
-
+List data;
 
 
   @override
@@ -60,6 +64,17 @@ class _AppointmentListState extends State<AppointmentList> with SingleTickerProv
     });
   }
 
+
+  Future<List> getData() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_appointment&id=" +
+            widget.getPhone);
+    setState((){
+      data = json.decode(response.body);
+    });
+  }
+
+
   void _loaddata() async {
     await _getCountMessage();
     await _getCountApp();
@@ -68,7 +83,6 @@ class _AppointmentListState extends State<AppointmentList> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    controller = TabController(vsync: this, length: 1);
     _loaddata();//LENGTH = TOTAL TAB YANG AKAN DIBUAT
   }
 
@@ -80,21 +94,178 @@ class _AppointmentListState extends State<AppointmentList> with SingleTickerProv
     return new WillPopScope(
         onWillPop: _onWillPop,
         child:  Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: HexColor("#075e55"),
-            leading: Icon(Icons.clear,color: HexColor("#075e55"),),
-            title: new Text("Appointment",style: TextStyle(color : Colors.white,fontFamily: 'VarelaRound',fontSize: 18),),
-            elevation: 0.0,
-            centerTitle: true,
-          ),
           body:
-          TabBarView(
-            controller: controller,
-            children: <Widget>[
-              GetAppointment(getPhoneState),
-            ],
-          ),
+        Container(
+          width: double.infinity,
+        color: Colors.white,
+            child: Column(
+              children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left:20,top: 50),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("My Activity",
+                          style: TextStyle(
+                            fontFamily: 'VarelaRound',
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold
+                          )),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(left:15,top: 20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child:  RaisedButton(
+                      elevation: 0,
+                      color: HexColor("#f7f7f7"),
+                      child: Text("Recent",
+                          style: TextStyle(
+                              fontFamily: 'VarelaRound',
+                            fontWeight: FontWeight.bold,
+                            color: HexColor("#00b250")
+                          )),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      onPressed: (){
+
+
+                      },
+                    )
+                  ),
+                ),
+
+                Container(
+                  height: 400,
+                    margin: EdgeInsets.all(10.0),
+                    child: new FutureBuilder<List>(
+                        future: getData(),
+                        builder : (context, snapshot) {
+                            return ListView.builder(
+                                padding: const EdgeInsets.only(top: 15.0),
+                                itemCount: data == null ? 0 : data.length,
+                                itemBuilder: (context, i) {
+                                  return
+                                    InkWell(
+                                      child : Card(
+                                        elevation: 0,
+                                        color: HexColor("#f7f7f7"),
+                                          child :
+                                          Column(
+                                              children: <Widget>[
+                                                Padding(
+                                                    padding: const EdgeInsets.only(top: 15,left: 13,right: 10,bottom: 10),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                      //mainAxisSize: MainAxisSize.max,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          "Konsultasi " + data[i]["m"] + " dengan",
+                                                          textAlign: TextAlign.left,
+                                                          style: TextStyle(
+                                                              fontFamily: 'VarelaRound',
+                                                              fontSize: 14),
+                                                        ),
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(5),
+                                                            border: Border.all(
+                                                              color:
+                                                              data[i]["c"] == 'DONE' ? HexColor("#075e55") : Colors.red,
+                                                              //                   <--- border color
+                                                              width: 1.0,
+                                                            ),
+                                                          ),
+                                                          padding: const EdgeInsets.all(5),
+                                                          child:  Text(data[i]["c"] == 'PAID' ? "On Going" : data[i]["c"],
+                                                              style: TextStyle(
+                                                                  fontFamily: 'VarelaRound',
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color:
+                                                                  data[i]["c"] == 'DECLINE' ? Colors.red : Colors.black,
+                                                                  fontSize: 12)),
+                                                        )
+                                                      ],
+                                                    )
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 10,bottom: 10),
+                                                  child: ListTile(
+                                                      leading:         CircleAvatar(
+                                                        backgroundImage: CachedNetworkImageProvider("https://duakata-dev.com/miracle/media/photo/" +
+                                                            data[i]["e"],
+                                                        ),
+                                                        backgroundColor: Colors.white,
+                                                        radius: 30,
+                                                      ),
+                                                      title:  Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: Text(
+                                                          data[i]["f"],
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontFamily: 'VarelaRound'),
+                                                        ),
+                                                      ),
+                                                      subtitle:
+                                                      Column(
+                                                        children: [
+                                                          Padding (
+                                                              padding: const EdgeInsets.only(top: 2)
+                                                              ,
+                                                              child :
+                                                              Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Text(
+                                                                  data[i]["g"],
+                                                                  style: TextStyle(
+                                                                      fontSize: 13,
+                                                                      fontFamily: 'VarelaRound'),
+                                                                ),
+                                                              )),
+                                                          Padding (
+                                                              padding: const EdgeInsets.only(top: 2),
+                                                              child :
+                                                              Align(
+                                                                alignment: Alignment.centerLeft,
+                                                                child: Text(
+                                                                  data[i]["k"]+ " - "+ new DateFormat.MMM().format(DateTime.parse(data[i]["l"]))
+                                                                      + " - "+ data[i]["i"] + " (" +data[i]["d"]+")",
+                                                                  style: TextStyle(
+                                                                      fontSize: 14,
+                                                                      color: Colors.black,
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontFamily: 'VarelaRound'),
+                                                                ),
+                                                              )),
+                                                        ],
+                                                      )
+                                                  ),
+                                                ),
+Padding(
+  padding: const EdgeInsets.only(bottom:15),
+)
+                                              ]
+                                          )
+                                      ),
+                                      onTap: () {
+                                        Navigator.of(context).push(new MaterialPageRoute(
+                                            builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
+
+                                      },
+                                    );
+                                }
+                            );
+
+                        }
+                    )
+                )
+
+              ],
+            ),
+        ),
           bottomNavigationBar: _bottomNavigationBar(),
         ));
 
@@ -216,9 +387,9 @@ class _AppointmentListState extends State<AppointmentList> with SingleTickerProv
                 builder: (BuildContext context) => AppointmentList(getPhoneState)));
         break;
       case 2:
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+        Navigator.of(context).push(new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                TransaksiHistoryNew(getPhoneState)));
         break;
       case 3:
         Navigator.of(context).pushReplacement(

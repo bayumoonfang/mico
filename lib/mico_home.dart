@@ -11,7 +11,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/mico_detailimagehome.dart';
+import 'package:mico/mico_homesearch.dart';
 import 'package:mico/mico_regional.dart';
+import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
@@ -263,7 +265,7 @@ class _HomeState extends State<Home> {
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.search),
                   color: Colors.black,
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  onPressed: () => Navigator.pushReplacement(context, EnterPage(page: HomeSearch()))
                 ),
               ),
               Builder(
@@ -783,9 +785,9 @@ Padding(
                 builder: (BuildContext context) => AppointmentList(getPhone)));
         break;
       case 2:
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhone)));
+        Navigator.of(context).push(new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                TransaksiHistoryNew(getPhone)));
         break;
       case 3:
         Navigator.of(context).pushReplacement(

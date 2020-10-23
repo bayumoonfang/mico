@@ -22,12 +22,20 @@ class HistoryTransaksi extends StatefulWidget {
 }
 
 
-class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerProviderStateMixin {
+class _HistoryTransaksiState extends State<HistoryTransaksi> {
   TabController controller;
+  List data;
   String getAcc, getPhoneState;
   _HistoryTransaksiState({this.getPhoneState});
 
-
+  Future<List> getData() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_appointment&id=" +
+            getPhoneState);
+    setState((){
+      data = json.decode(response.body);
+    });
+  }
 
 
   @override
@@ -68,7 +76,6 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> with SingleTickerPr
   @override
   void initState() {
     super.initState();
-    controller = TabController(vsync: this, length: 1);
     _loaddata();//LENGTH = TOTAL TAB YANG AKAN DIBUAT
   }
 

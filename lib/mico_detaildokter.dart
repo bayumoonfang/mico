@@ -12,6 +12,8 @@ import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+import 'package:responsive_container/responsive_container.dart';
+
 class Pembayaran extends StatefulWidget {
   final String iddokter;
   final String namaKlinik, namaDokter;
@@ -80,7 +82,7 @@ class _PembayaranState extends State<Pembayaran> {
   Future<List> getDateJadwal() async {
     http.Response response = await http.get(
         Uri.encodeFull("https://duakata-dev.com/miracle/api_script.php?do=getdata_jadwalhari&id=" +
-            getDokter),
+            widget.iddokter),
         headers: {"Accept":"application/json"}
     );
     setState((){
@@ -114,20 +116,21 @@ class _PembayaranState extends State<Pembayaran> {
         child: new Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(
-            backgroundColor: HexColor("#075e55"),
+            backgroundColor: Colors.white,
             title: Text(
               "Detail Dokter",
               style: TextStyle(
-                  color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16),
+                  color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
             ),
             leading: Builder(
               builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
-                  color: Colors.white,
+                  color: Colors.black,
                   onPressed: () => {
                   Navigator.pop(context)
                   }),
             ),
+
           ),
           body:
               _isvisible == true ?
@@ -145,64 +148,69 @@ class _PembayaranState extends State<Pembayaran> {
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Center(
-                      child:
+
+            ResponsiveContainer(
+              widthPercent: 100,
+              heightPercent: 25,
+              padding: const EdgeInsets.only(left: 10,right: 10),
+              child:
+
               GestureDetector(
-                  child: Hero(
+                child: Hero(
                   tag: getPhoto.toString(),
                   child :
-                      CachedNetworkImage(
-                        imageUrl:
-                        "http://duakata-dev.com/miracle/media/photo/" +
-                            getPhoto.toString(),
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
-                        imageBuilder: (context, image) =>
-                            CircleAvatar(
-                              backgroundImage: image,
-                              radius: 60,
-                            ),
-                      )
-                   ),
+                  getPhoto == '' ?
+                  Image.asset('assets/mira-ico.png')
+                      :
+                  CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: "https://duakata-dev.com/miracle/media/photo/"+getPhoto,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
                 onTap: (){
                   Navigator.of(context).push(
                       new MaterialPageRoute(
                           builder: (BuildContext context) => DetailImageDokter(getPhoto.toString())));
                 },
               )
-                  ),
+            )
+               ,
                   Padding(
                       padding: const EdgeInsets.only(
                           top: 15, left: 15.0, right: 15.0),
                       child: Divider(height: 3.0)),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10,top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(getNama.toString(),
+                        style: TextStyle(
+                            fontFamily: 'VarelaRound',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10,top: 5),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(getLokasi.toString(),
+                        style: TextStyle(
+                            fontFamily: 'VarelaRound',
+                            fontSize: 14),),
+                    ),
+                  ),
+
+
                   Padding(padding: const EdgeInsets.only(top: 30)),
+
                   Padding(
                       padding: const EdgeInsets.only(
-                          left: 15, top: 10, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Nama",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text(getNama.toString(),
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
-                        ],
-                      )),
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, top: 8, right: 15),
+                          left: 10, top: 8, right: 15),
                       child: Row(
                         mainAxisAlignment:
                         MainAxisAlignment.spaceBetween,
@@ -222,31 +230,10 @@ class _PembayaranState extends State<Pembayaran> {
                                   fontSize: 14)),
                         ],
                       )),
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, top: 8, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Lokasi Praktik",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text(getLokasi.toString(),
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
-                        ],
-                      )),
+
                      Padding(
                       padding: const EdgeInsets.only(
-                          left: 15, top: 8, right: 15),
+                          left: 10, top: 8, right: 15),
                       child: Row(
                         mainAxisAlignment:
                         MainAxisAlignment.spaceBetween,
@@ -268,10 +255,10 @@ class _PembayaranState extends State<Pembayaran> {
                       )),
                   Padding(
                       padding: const EdgeInsets.only(
-                          top: 30, left: 15.0, right: 15.0),
+                          top: 30, left: 10.0, right: 15.0),
                       child: Divider(height: 3.0)),
                   Padding(
-                    padding: const EdgeInsets.only(left: 15, top: 40),
+                    padding: const EdgeInsets.only(left: 10, top: 30),
                     child: Text("Tanggal Konsultasi",
                         style: TextStyle(
                             fontFamily: 'VarelaRound',
@@ -279,7 +266,7 @@ class _PembayaranState extends State<Pembayaran> {
                             fontWeight: FontWeight.bold)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 15, top: 5,bottom: 10),
+                    padding: const EdgeInsets.only(left: 10, top: 5,bottom: 10),
                     child: Text("Pilih tanggal dan jam konsultasi ",
                         style: TextStyle(
                             fontFamily: 'VarelaRound',

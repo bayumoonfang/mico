@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_doktersearchresult.dart';
+import 'package:mico/mico_home.dart';
+import 'package:mico/mico_homesearchresult.dart';
 import 'package:mico/page_login.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:toast/toast.dart';
@@ -10,25 +12,22 @@ import 'dart:async';
 import 'dart:convert';
 
 
-class DokterSearch extends StatefulWidget {
-  final String namaKlinik;
-  const DokterSearch(this.namaKlinik);
+class HomeSearch extends StatefulWidget {
   @override
-  _DokterSearchPageState createState() =>
-      _DokterSearchPageState(getKlinik: this.namaKlinik);
+  _HomeSearchPageState createState() =>
+      _HomeSearchPageState();
 }
 
-class _DokterSearchPageState extends State<DokterSearch> {
-  String getKlinik;
+class _HomeSearchPageState extends State<HomeSearch> {
+
   List data;
 
-  _DokterSearchPageState({this.getKlinik});
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
   final TextEditingController _textController = new TextEditingController();
   Future<bool> _onWillPop() async {
-    Navigator.pop(context);
+    Navigator.pushReplacement(context, ExitPage(page: Home()));
   }
 
 
@@ -44,7 +43,7 @@ class _DokterSearchPageState extends State<DokterSearch> {
 
 
   @override
-   initState() {
+  initState() {
     super.initState();
     _session();
   }
@@ -94,7 +93,7 @@ class _DokterSearchPageState extends State<DokterSearch> {
                     showToast("Pencarian tidak boleh kosong", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
                   } else {
                     _addSearchQuery();
-                     Navigator.pushReplacement(context, EnterPage(page: SearchResultDokter(getKlinik, value)));
+                     Navigator.pushReplacement(context, EnterPage(page: HomeSearchResult(value)));
                   }
                 },
                 decoration: new InputDecoration(
@@ -107,47 +106,47 @@ class _DokterSearchPageState extends State<DokterSearch> {
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
                   color: Colors.black,
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: Home()))
                 ),
               ),
             ),
             body: new ResponsiveContainer(
-                     heightPercent: 100,
-                    widthPercent: 100,
-                    child :
-                    FutureBuilder<List>(
-                            future: getData(),
-                            builder: (context, snapshot) {
-                                return ListView.builder(
-                                      itemCount: data == null ? 0 : data.length,
-                                      padding: const EdgeInsets.only(left:10,right: 15 ,top: 10 ),
-                                      itemBuilder: (context, i) {
-                                          return Column(
-                                            children: [
+                heightPercent: 100,
+                widthPercent: 100,
+                child :
+                FutureBuilder<List>(
+                  future: getData(),
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      itemCount: data == null ? 0 : data.length,
+                      padding: const EdgeInsets.only(left:10,right: 15 ,top: 10 ),
+                      itemBuilder: (context, i) {
+                        return Column(
+                          children: [
 
-                                              InkWell(
-                                                    child :
-                                                    ListTile(
-                                                    title: Text(data[i]["a"],
-                                                        style: new TextStyle(
-                                                            fontFamily: 'VarelaRound', fontSize: 16)),
-                                                  trailing:  Icon(Icons.arrow_forward_ios_outlined,size: 12,),
+                            InkWell(
+                              child :
+                              ListTile(
+                                title: Text(data[i]["a"],
+                                    style: new TextStyle(
+                                        fontFamily: 'VarelaRound', fontSize: 16)),
+                                trailing:  Icon(Icons.arrow_forward_ios_outlined,size: 12,),
 
-                                                  ),
-                                              onTap: () {
-                                                Navigator.pushReplacement(context, EnterPage(page: SearchResultDokter(widget.namaKlinik, data[i]["a"])));
-                                              },),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top:2),
-                                                child: Divider(height: 5,),
-                                              )
-                                            ],
-                                          );
-                                    },
-                                  );
+                              ),
+                              onTap: () {
+                                Navigator.pushReplacement(context, EnterPage(page: HomeSearchResult(data[i]["a"])));
+                              },),
+                            Padding(
+                              padding: const EdgeInsets.only(top:2),
+                              child: Divider(height: 5,),
+                            )
+                          ],
+                        );
+                      },
+                    );
 
-                        },
-                    )
+                  },
+                )
             )));
   }
 }
