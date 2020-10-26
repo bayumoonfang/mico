@@ -11,6 +11,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/mico_detailimagehome.dart';
+import 'package:mico/mico_favorite.dart';
 import 'package:mico/mico_homesearch.dart';
 import 'package:mico/mico_regional.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
@@ -24,12 +25,14 @@ import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'package:mico/user/mico_notfikasi.dart';
 import 'package:mico/user/mico_userprofile.dart';
+import 'package:mico/mico_resep.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:toast/toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 final List<String> imgList = [
   'https://duakata-dev.com/miracle/media/promo/b.jpg',
   'https://duakata-dev.com/miracle/media/promo/a.jpg',
@@ -131,6 +134,27 @@ class _HomeState extends State<Home> {
       countapp = data2["a"].toString();
     });
   }
+
+  _launchWebsite() async {
+    const url = 'https://miracle-clinic.com/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+
+  _launchSosmed() async {
+    const url = 'https://www.instagram.com/miracle_clinic/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 
 
   _getCountApp2() async {
@@ -265,18 +289,16 @@ class _HomeState extends State<Home> {
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.search),
                   color: Colors.black,
-                  onPressed: () => Navigator.pushReplacement(context, EnterPage(page: HomeSearch()))
+                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: HomeSearch()))
                 ),
               ),
               Builder(
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.favorite_border_outlined),
                   color: Colors.black,
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: Favorite(getPhone)))
                 ),
               ),
-
-
             ],
           ),
           drawer: Drawer(
@@ -345,7 +367,10 @@ class _HomeState extends State<Home> {
                                 child: ResponsiveContainer(
                                   widthPercent: 90,
                                   heightPercent: 100,
-                                  child: Image.network(imgList[index], fit: BoxFit.fitWidth,),
+                                  child: CachedNetworkImage(
+                                    imageUrl: imgList[index],
+                                    fit: BoxFit.fitWidth,
+                                  ),
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
                               )
@@ -487,7 +512,7 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: Regional()));
+                                                          Navigator.pushReplacement(context, ExitPage(page: Regional()));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
@@ -513,7 +538,7 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                                          Navigator.pushReplacement(context, ExitPage(page: MicoResep(getPhone)));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
@@ -603,18 +628,22 @@ class _HomeState extends State<Home> {
                     child: Text("Temukan informasi terbaru lain ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,),textAlign: TextAlign.left,),
                   )
               ),
-Padding(
-  padding: const EdgeInsets.only(top : 10),
-  child: Column(
-    children: [
-  Padding(
-    padding: const EdgeInsets.only(top: 5,left: 21,right: 15),
-    child: Container(
-      width: double.infinity,
-      height: 100,
-      child : Image(image: AssetImage("assets/web2.png"),fit: BoxFit.fitWidth,)
-    ),
-  ),
+                          Padding(
+                            padding: const EdgeInsets.only(top : 10),
+                            child: Column(
+                              children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5,left: 21,right: 15),
+                              child:    InkWell(
+                                onTap: () {
+                                  _launchWebsite();
+                                },
+                                child :Container(
+                                width: double.infinity,
+                                height: 100,
+                                child : Image(image: AssetImage("assets/web2.png"),fit: BoxFit.fitWidth,)
+                                )),
+                            ),
    Padding(
      padding: const EdgeInsets.only(left: 19,top :10),
      child:    Align(
@@ -631,12 +660,20 @@ Padding(
 
       Padding(
         padding: const EdgeInsets.only(top: 25,left: 21,right: 15),
-        child: Container(
+        child:
+        InkWell(
+          onTap: () {
+            _launchSosmed();
+          },
+          child :
+        Container(
             width: double.infinity,
             height: 100,
             child : Image(image: AssetImage("assets/web3.png"),fit: BoxFit.fitWidth,)
-        ),
+        )),
       ),
+
+
       Padding(
         padding: const EdgeInsets.only(left: 19,top :10,bottom: 25),
         child:    Align(
@@ -702,7 +739,7 @@ Padding(
                 GFBadgeShape.circle,
               )
           ),
-          title: Text("Appointment",
+          title: Text("Activity",
               style: TextStyle(
                 fontFamily: 'VarelaRound',
               )),

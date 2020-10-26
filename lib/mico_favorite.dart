@@ -1,65 +1,57 @@
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/mico_home.dart';
 import 'package:mico/mico_detaildokter.dart';
-import 'package:mico/mico_homesearch.dart';
+import 'package:mico/mico_home.dart';
 import 'package:mico/mico_homesearchdetail.dart';
-import 'package:mico/mico_searchdokter.dart';
+import 'package:mico/page_login.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:getwidget/getwidget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:mico/mico_dokter.dart';
-import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/page_login.dart';
+
 import 'package:toast/toast.dart';
 
-class HomeSearchResult extends StatefulWidget {
-  final String valCari;
-  const HomeSearchResult(this.valCari);
+
+class Favorite extends StatefulWidget {
+  final String getPhone ;
+  const Favorite(this.getPhone);
   @override
-  _HomeSearchResultPageState createState() =>
-      new _HomeSearchResultPageState(
-         getValcari: this.valCari);
+
+  _FavoriteState createState() => new _FavoriteState();
 }
 
-class _HomeSearchResultPageState extends State<HomeSearchResult> {
+
+class _FavoriteState extends State<Favorite> {
   List data;
-  String getValcari;
-  _HomeSearchResultPageState({this.getValcari});
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
+
+  Future<bool> _onWillPop() async {
+    Navigator.pushReplacement(context, EnterPage(page: Home()));
+  }
+
+
   Future<List> getData() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_doktercarihome&cari=" +
-            getValcari);
+    http.Response response = await http.get(
+        Uri.encodeFull("https://duakata-dev.com/miracle/api_script.php?do=getdata_dokterfavorite&id="+widget.getPhone),
+        headers: {"Accept":"application/json"}
+    );
     setState((){
       data = json.decode(response.body);
     });
   }
 
-
-  String getPhone = "...";
-  _session() async {
-    getPhone = await Session.getPhone();
-    int value = await Session.getValue();
-    if (value != 1) {
-      Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => Login()));
-    }
-  }
-
-
   void _addfavorite(String iddokter) {
     var url = "https://duakata-dev.com/miracle/api_script.php?do=action_addfavorite";
     http.post(url,
         body: {
-          "iduser": getPhone,
+          "iduser": widget.getPhone,
           "iddokter" : iddokter
         });
     showToast("Favorite berhasil ditambahkan", gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
@@ -70,7 +62,7 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
     var url = "https://duakata-dev.com/miracle/api_script.php?do=action_deletefavorite";
     http.post(url,
         body: {
-          "iduser": getPhone,
+          "iduser": widget.getPhone,
           "iddokter" : iddokter
         });
     showToast("Favorite berhasil dihapus", gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
@@ -78,71 +70,57 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
   }
 
 
-
   @override
   void initState() {
     super.initState();
-    _session();
   }
-
-
-  Future<bool> _onWillPop() async {
-    Navigator.push(context, EnterPage(page: HomeSearch()));
-  }
-
-  Future<void> _getData() async {
-    setState(() {
-      getData();
-    });
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-        onWillPop: _onWillPop,
-        child: new Scaffold(
+        return WillPopScope(
+          onWillPop: _onWillPop,
+          child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: new AppBar(
+              appBar: new AppBar(
                 backgroundColor: Colors.white,
-                title: Text(
-                  getValcari.toString(),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'VarelaRound',
-                      fontSize: 16),
-                ),
+                title: Text("Favorite",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'VarelaRound',
+                        fontSize: 16)),
                 leading: Builder(
                   builder: (context) => IconButton(
-                      icon: new Icon(Icons.arrow_back),
-                      color: Colors.black,
-                      onPressed: () =>      Navigator.push(context, EnterPage(page: HomeSearch()))
+                    icon: new Icon(Icons.arrow_back),
+                    color: Colors.black,
+                    onPressed: () => Navigator.push(context, EnterPage(page: Home())),
                   ),
-                )
-            ),
+                ),
+              ),
 
-            body:
-            Container(
-                child :
-                Column(
-                  children: <Widget>[
+              body:
+              Container(
+                  child :
+                  Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        /* child: Divider(
+                              height: 3,
+                            ),*/
+                      ),
+                      Expanded(
+                          child :
+                          _datafield()
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom:10),
+                      )
+                    ],
+                  )
+              )
 
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      /* child: Divider(
-                        height: 3,
-                      ),*/
-                    ),
-                    Expanded(
-                        child :
-                        _datafield()
-                    )
-                  ],
-                )
-            )
-        )
-    );
+          ),
+        );
   }
 
 
@@ -161,6 +139,7 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
               )
           );
         } else {
+
           return data.isEmpty ?
           Center(
               child: new Column(
@@ -180,11 +159,9 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
                 ],
               ))
               :
-          RefreshIndicator(
-              onRefresh: _getData,
-              child :
+
               new ListView.builder(
-                padding: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.only(top: 10.0,bottom: 10),
                 itemCount: data == null ? 0 : data.length,
                 itemBuilder: (context, i) {
                   return Column(
@@ -289,7 +266,7 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
                                   ]),
                               trailing:
 
-                              data[i]["l"] == getPhone ?
+                              data[i]["l"] == widget.getPhone ?
                               Builder(
                                 builder: (context) => IconButton(
                                     icon: new Icon(Icons.favorite,color: Colors.red,),
@@ -315,9 +292,12 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
 
                           )
                       ),
+
+
+
                       Padding(
                           padding: const EdgeInsets.only(
-                              left: 95, right: 15),
+                              left: 95, right: 15,bottom: 10,top: 10),
                           child: Divider(
                             height: 3.0,
                           )),
@@ -328,13 +308,11 @@ class _HomeSearchResultPageState extends State<HomeSearchResult> {
                     ],
                   );
                 },
-              ));
+              );
         }
       },
     );
   }
 
 
-
 }
-

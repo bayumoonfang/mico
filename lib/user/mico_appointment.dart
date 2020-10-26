@@ -136,126 +136,221 @@ List data;
                   ),
                 ),
 
-                Container(
-                  height: 400,
-                    margin: EdgeInsets.all(10.0),
+         Expanded(
                     child: new FutureBuilder<List>(
                         future: getData(),
                         builder : (context, snapshot) {
                             return ListView.builder(
                                 padding: const EdgeInsets.only(top: 15.0),
-                                itemCount: data == null ? 0 : data.length,
+                                itemCount: data == null ? 1 : data.isEmpty ? 1 : data.length,
                                 itemBuilder: (context, i) {
-                                  return
-                                    InkWell(
-                                      child : Card(
-                                        elevation: 0,
-                                        color: HexColor("#f7f7f7"),
-                                          child :
-                                          Column(
+                                  if (data == null) {
+                                    return
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                        top: 200),
+                                  child:
+                                      Center(
+                                        child: Image.asset(
+                                          "assets/loadingq.gif",
+                                          width: 110.0,
+                                        )
+                                    ));
+                                  } else {
+                                    return data.isEmpty ?
+
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 200),
+                                        child:
+                                        Center(
+                                            child: new Column(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .center,
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .center,
                                               children: <Widget>[
-                                                Padding(
-                                                    padding: const EdgeInsets.only(top: 15,left: 13,right: 10,bottom: 10),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.spaceBetween,
-                                                      //mainAxisSize: MainAxisSize.max,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          "Konsultasi " + data[i]["m"] + " dengan",
-                                                          textAlign: TextAlign.left,
-                                                          style: TextStyle(
-                                                              fontFamily: 'VarelaRound',
-                                                              fontSize: 14),
-                                                        ),
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(5),
-                                                            border: Border.all(
-                                                              color:
-                                                              data[i]["c"] == 'DONE' ? HexColor("#075e55") : Colors.red,
-                                                              //                   <--- border color
-                                                              width: 1.0,
-                                                            ),
-                                                          ),
-                                                          padding: const EdgeInsets.all(5),
-                                                          child:  Text(data[i]["c"] == 'PAID' ? "On Going" : data[i]["c"],
+                                                new Text(
+                                                  "Tidak ada aktifitas",
+                                                  style: new TextStyle(
+                                                      fontFamily: 'VarelaRound',
+                                                      fontSize: 18),
+                                                ),
+                                              ],
+                                            )))
+                                        :
+                                    InkWell(
+                                      child:
+                                      Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10),
+                                          child:
+                                          Card(
+                                              elevation: 0,
+                                              color: HexColor("#f7f7f7"),
+                                              child:
+                                              Column(
+                                                  children: <Widget>[
+                                                    Padding(
+                                                        padding: const EdgeInsets
+                                                            .only(top: 15,
+                                                            left: 13,
+                                                            right: 10,
+                                                            bottom: 10),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                          //mainAxisSize: MainAxisSize.max,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              "Konsultasi " +
+                                                                  data[i]["m"] +
+                                                                  " dengan",
+                                                              textAlign: TextAlign
+                                                                  .left,
                                                               style: TextStyle(
                                                                   fontFamily: 'VarelaRound',
-                                                                  fontWeight: FontWeight.bold,
+                                                                  fontSize: 14),
+                                                            ),
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .circular(
+                                                                    5),
+                                                                border: Border
+                                                                    .all(
                                                                   color:
-                                                                  data[i]["c"] == 'DECLINE' ? Colors.red : Colors.black,
-                                                                  fontSize: 12)),
+                                                                  data[i]["c"] ==
+                                                                      'DONE'
+                                                                      ? HexColor(
+                                                                      "#075e55")
+                                                                      : Colors
+                                                                      .red,
+                                                                  //                   <--- border color
+                                                                  width: 1.0,
+                                                                ),
+                                                              ),
+                                                              padding: const EdgeInsets
+                                                                  .all(5),
+                                                              child: Text(
+                                                                  data[i]["c"] ==
+                                                                      'PAID'
+                                                                      ? "On Going"
+                                                                      : data[i]["c"],
+                                                                  style: TextStyle(
+                                                                      fontFamily: 'VarelaRound',
+                                                                      fontWeight: FontWeight
+                                                                          .bold,
+                                                                      color:
+                                                                      data[i]["c"] ==
+                                                                          'DECLINE'
+                                                                          ? Colors
+                                                                          .red
+                                                                          : Colors
+                                                                          .black,
+                                                                      fontSize: 12)),
+                                                            )
+                                                          ],
                                                         )
-                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .only(
+                                                          top: 10, bottom: 10),
+                                                      child: ListTile(
+                                                          leading: CircleAvatar(
+                                                            backgroundImage: CachedNetworkImageProvider(
+                                                              "https://duakata-dev.com/miracle/media/photo/" +
+                                                                  data[i]["e"],
+                                                            ),
+                                                            backgroundColor: Colors
+                                                                .white,
+                                                            radius: 30,
+                                                          ),
+                                                          title: Align(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Text(
+                                                              data[i]["f"],
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'VarelaRound'),
+                                                            ),
+                                                          ),
+                                                          subtitle:
+                                                          Column(
+                                                            children: [
+                                                              Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .only(
+                                                                      top: 2)
+                                                                  ,
+                                                                  child:
+                                                                  Align(
+                                                                    alignment: Alignment
+                                                                        .centerLeft,
+                                                                    child: Text(
+                                                                      data[i]["g"],
+                                                                      style: TextStyle(
+                                                                          fontSize: 13,
+                                                                          fontFamily: 'VarelaRound'),
+                                                                    ),
+                                                                  )),
+                                                              Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .only(
+                                                                      top: 2),
+                                                                  child:
+                                                                  Align(
+                                                                    alignment: Alignment
+                                                                        .centerLeft,
+                                                                    child: Text(
+                                                                      data[i]["k"] +
+                                                                          " - " +
+                                                                          new DateFormat
+                                                                              .MMM()
+                                                                              .format(
+                                                                              DateTime
+                                                                                  .parse(
+                                                                                  data[i]["l"]))
+                                                                          +
+                                                                          " - " +
+                                                                          data[i]["i"] +
+                                                                          " (" +
+                                                                          data[i]["d"] +
+                                                                          ")",
+                                                                      style: TextStyle(
+                                                                          fontSize: 14,
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily: 'VarelaRound'),
+                                                                    ),
+                                                                  )),
+                                                            ],
+                                                          )
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .only(bottom: 15),
                                                     )
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(top: 10,bottom: 10),
-                                                  child: ListTile(
-                                                      leading:         CircleAvatar(
-                                                        backgroundImage: CachedNetworkImageProvider("https://duakata-dev.com/miracle/media/photo/" +
-                                                            data[i]["e"],
-                                                        ),
-                                                        backgroundColor: Colors.white,
-                                                        radius: 30,
-                                                      ),
-                                                      title:  Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text(
-                                                          data[i]["f"],
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily: 'VarelaRound'),
-                                                        ),
-                                                      ),
-                                                      subtitle:
-                                                      Column(
-                                                        children: [
-                                                          Padding (
-                                                              padding: const EdgeInsets.only(top: 2)
-                                                              ,
-                                                              child :
-                                                              Align(
-                                                                alignment: Alignment.centerLeft,
-                                                                child: Text(
-                                                                  data[i]["g"],
-                                                                  style: TextStyle(
-                                                                      fontSize: 13,
-                                                                      fontFamily: 'VarelaRound'),
-                                                                ),
-                                                              )),
-                                                          Padding (
-                                                              padding: const EdgeInsets.only(top: 2),
-                                                              child :
-                                                              Align(
-                                                                alignment: Alignment.centerLeft,
-                                                                child: Text(
-                                                                  data[i]["k"]+ " - "+ new DateFormat.MMM().format(DateTime.parse(data[i]["l"]))
-                                                                      + " - "+ data[i]["i"] + " (" +data[i]["d"]+")",
-                                                                  style: TextStyle(
-                                                                      fontSize: 14,
-                                                                      color: Colors.black,
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontFamily: 'VarelaRound'),
-                                                                ),
-                                                              )),
-                                                        ],
-                                                      )
-                                                  ),
-                                                ),
-Padding(
-  padding: const EdgeInsets.only(bottom:15),
-)
-                                              ]
-                                          )
-                                      ),
+                                                  ]
+                                              )
+                                          )),
                                       onTap: () {
-                                        Navigator.of(context).push(new MaterialPageRoute(
-                                            builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
-
+                                        Navigator.of(context).push(
+                                            new MaterialPageRoute(
+                                                builder: (
+                                                    BuildContext context) =>
+                                                    DetailAppointment(
+                                                        data[i]["a"]
+                                                            .toString())));
                                       },
                                     );
+                                  }
                                 }
                             );
 
@@ -309,7 +404,7 @@ Padding(
                 GFBadgeShape.circle,
               )
           ),
-          title: Text("Appointment",
+          title: Text("Activity",
               style: TextStyle(
                 fontFamily: 'VarelaRound',
               )),

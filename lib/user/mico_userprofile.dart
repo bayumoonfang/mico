@@ -10,6 +10,7 @@ import 'package:mico/helper/session_user.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:mico/mico_home.dart';
+import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
@@ -219,7 +220,7 @@ class _UserProfileState extends State<UserProfile> {
                 GFBadgeShape.circle,
               )
           ),
-          title: Text("Appointment",
+          title: Text("Activity",
               style: TextStyle(
                 fontFamily: 'VarelaRound',
               )),
@@ -272,26 +273,27 @@ class _UserProfileState extends State<UserProfile> {
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => Home()));
+
         break;
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => AppointmentList(getPhoneState)));
+                builder: (BuildContext context) => AppointmentList(widget.getPhone)));
         break;
       case 2:
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+        Navigator.of(context).push(new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                TransaksiHistoryNew(widget.getPhone)));
         break;
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => Notifikasi(widget.getPhone)));
         break;
       case 4:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => UserProfile(getPhoneState)));
+                builder: (BuildContext context) => UserProfile(widget.getPhone)));
         break;
     }
     setState(() {

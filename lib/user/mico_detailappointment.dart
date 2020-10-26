@@ -236,7 +236,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                               child: Container(
                                 color: HexColor("#DDDDDD"),
                                 width: double.infinity,
-                                height: 10,
+                                height: 5,
                               ),
                             ),
                             ResponsiveContainer(

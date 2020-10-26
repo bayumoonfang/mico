@@ -92,7 +92,7 @@ class _ListDokterState extends State<ListDokter> {
 
 
   Future<bool> _onWillPop() async {
-    Navigator.pushReplacement(context, ExitPage(page: Regional()));
+    Navigator.pushReplacement(context, EnterPage(page: Regional()));
   }
 
   void _addfavorite(String iddokter) {

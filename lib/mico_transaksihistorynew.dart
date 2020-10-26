@@ -26,10 +26,14 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
 
 
   List data;
+
+  String getColor = '1';
+  String getFilter = 'DONE';
   Future<List> getData() async {
     final response = await http.get(
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_appointment3&id=" +
-            widget.getPhone);
+            widget.getPhone+"&filter=" +
+        getFilter);
     setState((){
       data = json.decode(response.body);
     });
@@ -46,6 +50,8 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
   Widget build(BuildContext context) {
       return Scaffold(
           appBar: new AppBar(
+            bottomOpacity: 0.0,
+            elevation: 0.0,
             backgroundColor: Colors.white,
             leading: Builder(
               builder: (context) => IconButton(
@@ -61,7 +67,8 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                   color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
             ),
           ),
-        body: Container(
+        body:
+        Container(
           color: Colors.white,
           child: Column(
             children: [
@@ -72,42 +79,47 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(right: 5.0),
-                      child: RaisedButton(
-                        elevation: 0,
-                        color: HexColor("#f7f7f7"),
-                        child: Text("Selesai",
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontWeight: FontWeight.bold,
-                                color: HexColor("#00b250")
-                            )),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        onPressed: (){
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: RaisedButton(
+                          elevation: 0,
+                          color: HexColor("#f7f7f7"),
+                          child: Text("Selesai",
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontWeight: FontWeight.bold,
+                                  color: getColor == '1' ? HexColor("#00b24e") : HexColor("#9a9a9a")
+                              )),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          onPressed: ()async {
+                            getColor = '1';
+                            getFilter = 'DONE';
+                            data.clear();
 
-
-                        },
-                      )
+                          },
+                        )
                     ),
+
 
                     Padding(
                         padding: const EdgeInsets.only(right: 5.0),
                         child: RaisedButton(
                           elevation: 0,
                           color: HexColor("#f7f7f7"),
-                          child: Text("Decline",
+                          child: Text("Batal",
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
                                   fontWeight: FontWeight.bold,
-                                  color: HexColor("#FF4136")
+                                  color: getColor == '2' ? HexColor("#00b24e") : HexColor("#9a9a9a")
                               )),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
-                          onPressed: (){
-
+                          onPressed: ()async {
+                            getColor = '2';
+                            getFilter = 'DECLINE';
+                            data.clear();
 
                           },
                         )
@@ -118,11 +130,14 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                 ),
               ),
 
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Divider(
+                  height: 4,
+                ),
+              ),
 
-              ResponsiveContainer(
-                widthPercent: 100,
-                  heightPercent: 80,
-                  margin: EdgeInsets.all(10.0),
+              Expanded(
                   child: new FutureBuilder<List>(
                       future: getData(),
                       builder : (context, snapshot) {
@@ -142,7 +157,7 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   new Text(
-                                    "Tidak ada Transaksi",
+                                    "Tidak ada history transaksi",
                                     style: new TextStyle(
                                         fontFamily: 'VarelaRound', fontSize: 18),
                                   ),
@@ -150,198 +165,67 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                               ))
                               :
                           new ListView.builder(
-                              padding: const EdgeInsets.only(top: 5.0),
+                              padding: const EdgeInsets.only(top: 5.0,left: 10,right: 10,bottom: 10),
                               itemCount: data == null ? 0 : data.length,
                               itemBuilder: (context, i) {
-                                return
-                                  InkWell(
-                                    child :
-                                    Padding (
-                                        padding: const EdgeInsets.only(bottom: 10,left: 5,right: 5),
-                                        child : Card(
+                                        return InkWell(
+                                          child: Container(
+                                            margin: const EdgeInsets.only(bottom: 5),
                                             child :
-                                            Column(
-                                                children: <Widget>[
-                                                  Padding(
-                                                      padding: const EdgeInsets.only(bottom: 5),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        children: <Widget>[
-                                                          Expanded(
-                                                              child :
-                                                              Container (
-                                                                  color : data[i]["c"] == 'DECLINE' ? HexColor("#fdebeb") : HexColor("#f2fef2"),
-                                                                  child :
-                                                                  Center(
-                                                                      child : Padding(
-                                                                          padding : const EdgeInsets.all(10),
-                                                                          child : Text(data[i]["c"] == 'DECLINE' ? "Dibatalkan" : "Selesai",
-                                                                            style: TextStyle(
-                                                                                fontSize: 14,
-                                                                                color : HexColor("#756b6a"),
-                                                                                fontFamily: 'VarelaRound'),)
-                                                                      )
-                                                                  )
-                                                              ))
-
-                                                        ],
-                                                      )
+                                                Card(
+                                                  margin: const EdgeInsets.all(8),
+                                                  color: HexColor("#f7f7f7"),
+elevation: 0,
+                                                child: ListTile(
+                                                  leading: CircleAvatar(
+                                                    backgroundImage: AssetImage("assets/mira-ico.png") ,
+                                                    radius: 20,
+                                                    backgroundColor: Colors.white,
                                                   ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 10,bottom: 5,left: 15),
-                                                    child: Align(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: Text(data[i]["k"]+ " - "+ new DateFormat.MMM().format(DateTime.parse(data[i]["l"]))
-                                                          + " - "+ data[i]["i"] + " (" +data[i]["d"]+")",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color : HexColor("#756b6a"),
-                                                            fontFamily: 'VarelaRound'),
-                                                      ),
-                                                    ),
+                                                  title: Text(data[i]["f"],
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        color : Colors.black,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: 'VarelaRound'),
                                                   ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 5,left: 15),
-                                                    child: Align(
+                                                  subtitle: Column(
+                                                    children: [
+                                                      Align(
                                                         alignment: Alignment.centerLeft,
                                                         child: Opacity(
-                                                          opacity: 0.7,
-                                                          child: Text(data[i]["b"],
+                                                          opacity: 0.9,
+                                                          child: Text("Konsultasi "+data[i]["m"]+ " |  (" +data[i]["d"]+")",
                                                             style: TextStyle(
-                                                                fontSize: 14,
-                                                                color : Colors.black,
+                                                                fontSize: 13,
+                                                                color : HexColor("#686868"),
                                                                 fontWeight: FontWeight.bold,
                                                                 fontFamily: 'VarelaRound'),
                                                           ),
-                                                        )
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                      padding: const EdgeInsets.only(bottom: 5,top: 10 ),
-                                                      child: Divider(
-                                                        height: 5,
-                                                        thickness: 2.0,
-                                                      )
-                                                  ),
-                                                  Padding (
-                                                    padding: const EdgeInsets.only(top: 10),
-                                                    child: ListTile(
-                                                        leading: CircleAvatar(
-                                                          backgroundColor: Colors.white,
-                                                          backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                          radius: 30,
                                                         ),
-                                                        title: Column(
-                                                          children: [
-                                                            Align(
-                                                              alignment: Alignment.centerLeft,
-                                                              child: Text("Konsultasi "+data[i]["m"],
-                                                                  style: TextStyle(
-                                                                      fontSize: 16,
-                                                                      color : Colors.black,
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontFamily: 'VarelaRound')),
-                                                            ),
-                                                            Padding (
-                                                                padding: const EdgeInsets.only(top:5),
-                                                                child : Align(
-                                                                    alignment: Alignment.centerLeft,
-                                                                    child: Opacity(
-                                                                      opacity: 0.5,
-                                                                      child: Text(data[i]["f"],
-                                                                          style: TextStyle(
-                                                                              fontSize: 14,
-                                                                              color : Colors.black,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: 'VarelaRound')),
-                                                                    )
-                                                                )
-                                                            ),
+                                                      ),
 
-                                                            Padding (
-                                                                padding: const EdgeInsets.only(top:15),
-                                                                child : Align(
-                                                                    alignment: Alignment.centerLeft,
-                                                                    child: Opacity(
-                                                                      opacity: 0.5,
-                                                                      child: Text("Kode Transaksi",
-                                                                          style: TextStyle(
-                                                                              fontSize: 14,
-                                                                              color : Colors.black,
-                                                                              fontFamily: 'VarelaRound')),
-                                                                    )
-                                                                )
-                                                            ),
-
-                                                            Padding (
-                                                                padding: const EdgeInsets.only(top:2,bottom: 5),
-                                                                child : Align(
-                                                                    alignment: Alignment.centerLeft,
-                                                                    child: Opacity(
-                                                                      opacity: 0.5,
-                                                                      child: Text(data[i]["n"] == null ? "-" : data[i]["n"] ,
-                                                                          style: TextStyle(
-                                                                              fontSize: 16,
-                                                                              color : Colors.black,
-                                                                              fontFamily: 'VarelaRound')),
-                                                                    )
-                                                                )
-                                                            )
-
-
-                                                          ],
-                                                        )
-                                                    ),),
-
-                                                  Padding(
-                                                      padding: const EdgeInsets.only(bottom: 5,top: 10 ),
-                                                      child: Divider(
-                                                        height: 5,
-                                                        thickness: 2.0,
-                                                      )
+                                                    ],
                                                   ),
-                                                  Padding (
-                                                      padding: const EdgeInsets.only(top:2,left: 93),
-                                                      child : Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Opacity(
-                                                            opacity: 0.5,
-                                                            child: Text("Total Pembayaran" ,
-                                                                style: TextStyle(
-                                                                    fontSize: 13,
-                                                                    color : Colors.black,
-                                                                    fontFamily: 'VarelaRound')),
-                                                          )
-                                                      )
+                                                  trailing:Text(data[i]["k"]+" "+new DateFormat.MMM().format(DateTime.parse(data[i]["l"]))+
+                                                      " "+data[i]["i"].substring(2),
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color : HexColor("#686868"),
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: 'VarelaRound'),
                                                   ),
 
-                                                  Padding (
-                                                      padding: const EdgeInsets.only(top:5,bottom: 15, left: 93),
-                                                      child : Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text(
-                                                            data[i]["o"] == null ? "-" : data[i]["o"] == 0 ? "Gratis" :
-                                                            "Rp. " +NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(data[i]["o"].toString())) ,
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                color : data[i]["o"] == 0 ? Colors.green : Colors.red,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontFamily: 'VarelaRound')),
+                                                )),
+                                              ),
+                                          onTap: (){
+                                            Navigator.of(context).push(new MaterialPageRoute(
+                                                builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
 
-                                                      )
-                                                  )
+                                          },
+                                        );
 
-
-
-                                                ]
-                                            )
-                                        )),
-                                    onTap: () {
-                                      Navigator.of(context).push(new MaterialPageRoute(
-                                          builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
-
-                                    },
-                                  );
                               }
                           );
                         }

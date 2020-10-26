@@ -27,7 +27,7 @@ class _HomeSearchPageState extends State<HomeSearch> {
   }
   final TextEditingController _textController = new TextEditingController();
   Future<bool> _onWillPop() async {
-    Navigator.pushReplacement(context, ExitPage(page: Home()));
+    Navigator.pushReplacement(context, EnterPage(page: Home()));
   }
 
 
@@ -93,7 +93,7 @@ class _HomeSearchPageState extends State<HomeSearch> {
                     showToast("Pencarian tidak boleh kosong", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
                   } else {
                     _addSearchQuery();
-                     Navigator.pushReplacement(context, EnterPage(page: HomeSearchResult(value)));
+                     Navigator.pushReplacement(context, ExitPage(page: HomeSearchResult(value)));
                   }
                 },
                 decoration: new InputDecoration(
@@ -106,7 +106,7 @@ class _HomeSearchPageState extends State<HomeSearch> {
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
                   color: Colors.black,
-                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: Home()))
+                  onPressed: () => Navigator.pushReplacement(context, EnterPage(page: Home()))
                 ),
               ),
             ),
@@ -134,7 +134,7 @@ class _HomeSearchPageState extends State<HomeSearch> {
 
                               ),
                               onTap: () {
-                                Navigator.pushReplacement(context, EnterPage(page: HomeSearchResult(data[i]["a"])));
+                                Navigator.pushReplacement(context, ExitPage(page: HomeSearchResult(data[i]["a"])));
                               },),
                             Padding(
                               padding: const EdgeInsets.only(top:2),

@@ -108,7 +108,7 @@ _getAddress() async {
   }
 
   Future<bool> _onWillPop() async {
-    Navigator.pushReplacement(context, ExitPage(page: Home()));
+    Navigator.pushReplacement(context, EnterPage(page: Home()));
   }
 
   @override
@@ -122,7 +122,7 @@ _getAddress() async {
               builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
                   color: Colors.black,
-                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: Home()))
+                  onPressed: () => Navigator.pushReplacement(context, EnterPage(page: Home()))
               ),
             ),
             title: Column(
@@ -190,7 +190,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Surabaya")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -217,7 +217,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Malang")));
+                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Malang")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -242,7 +242,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Balikpapan")));
+                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Balikpapan")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -269,7 +269,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, EnterPage(page: ListDokter("Denpasar")));
+                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Denpasar")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(

@@ -7,6 +7,7 @@ import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/mico_detailnotif.dart';
 import 'package:mico/mico_home.dart';
 import 'package:http/http.dart' as http;
+import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_historytransaksi.dart';
 import 'dart:async';
@@ -89,9 +90,9 @@ class _NotifikasiState extends State<Notifikasi> {
             child: new Scaffold(
                 backgroundColor: Colors.white,
                 appBar: new AppBar(
-                  backgroundColor: HexColor("#075e55"),
-                  leading: Icon(Icons.clear,color: HexColor("#075e55"),),
-                  title: new Text("Message",style: TextStyle(color : Colors.white,
+                  backgroundColor: Colors.white,
+                  leading: Icon(Icons.clear,color: Colors.white),
+                  title: new Text("Messages",style: TextStyle(color : Colors.black,
                       fontFamily: 'VarelaRound',fontSize: 17,
                       fontWeight: FontWeight.bold),),
                   elevation: 0.5,
@@ -101,7 +102,7 @@ class _NotifikasiState extends State<Notifikasi> {
                 RefreshIndicator(
         onRefresh: _getData ,
         child :
-                Container(
+                Expanded(
                   child: new FutureBuilder<List>(
                     future: getData2(),
                     builder: (context, snapshot) {
@@ -109,7 +110,7 @@ class _NotifikasiState extends State<Notifikasi> {
                         return Center(
                             child: Image.asset(
                               "assets/loadingq.gif",
-                              width: 150.0,
+                              width: 110.0,
                             )
                         );
                       } else {
@@ -131,91 +132,90 @@ class _NotifikasiState extends State<Notifikasi> {
                           itemCount: data == null ? 0 :
                           data.length,
                           itemBuilder: (context, i) {
-                            return Column(
-                              children: <Widget>[
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(context,
-                                        EnterPage(page: DetailNotif(data[i]["a"].toString(), getPhoneState)));
-                                  },
-                                  child: ListTile(
-                                      leading:
-                                          Padding (
-                                            padding : const EdgeInsets.only(left : 10.0),
-                                              child :
-                                                data[i]["d"] == '1' ?
-                                                  GFIconBadge(
-                                                      child: CircleAvatar(
-                                                      backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                      radius: 15,
-                                                      backgroundColor: Colors.white,
-                                                  ),
-                                                 )
-                                            :
-                                                  GFIconBadge(
-                                                      child: CircleAvatar(
-                                                        backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                        radius: 15,
-                                                        backgroundColor: Colors.white,
-                                                      ),
-                                                      counterChild: GFBadge(
-                                                        color:
-                                                        Colors.redAccent,
-                                                        size: 16,
-                                                        shape:
-                                                        GFBadgeShape.circle,
-                                                      )
-                                                  ),
-                                          ),
-                                      title: Container(
-                                        margin: EdgeInsets.only(
-                                          left: 6,
-                                          top: 0,
-                                          right: 0,
-                                          bottom: 0,
-                                        ),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              data[i]["b"],
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'VarelaRound',fontSize: 15),
-                                            )),
-                                      ),
-                                      subtitle: Container(
-                                          margin: EdgeInsets.only(
-                                            left: 6,
-                                            top: 0,
-                                            right: 0,
-                                            bottom: 0,
-                                          ),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(
-                                                      2.0)),
-                                              Align(
-                                                alignment:
-                                                Alignment.bottomLeft,
-                                                child: Text("Diposting pada :"+
-                                                    data[i]["c"],
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                        'VarelaRound', fontSize: 13)),
-                                              ),
-                                            ],
-                                          ))),
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 80, right: 15),
-                                    child: Divider(
-                                      height: 3.0,
-                                    )),
+                            return InkWell(
+                              onTap: (){
+                                Navigator.push(context,
+                                    ExitPage(page: DetailNotif(data[i]["a"].toString(), getPhoneState)));
 
-                              ],
+                              },
+                              child: Container(
+                                  margin: const EdgeInsets.only(bottom: 5),
+                                  child:  Card(
+                                      margin: const EdgeInsets.only(left: 8,right: 8,bottom: 5),
+                                      color: HexColor("#f7f7f7"),
+                                      elevation: 0,
+                                      child: ListTile(
+                                          leading:
+                                          Padding (
+                                            padding : const EdgeInsets.only(left : 2.0),
+                                            child :
+                                            data[i]["d"] == '1' ?
+                                         CircleAvatar(
+                                                backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                radius: 20,
+                                                backgroundColor: Colors.white,
+
+                                            )
+                                                :
+                                            GFIconBadge(
+                                                child: CircleAvatar(
+                                                  backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                  radius: 20,
+                                                  backgroundColor: Colors.white,
+                                                ),
+                                                counterChild: GFBadge(
+                                                  color:
+                                                  Colors.redAccent,
+                                                  size: 18,
+                                                  shape:
+                                                  GFBadgeShape.circle,
+                                                )
+                                            ),
+                                          ),
+                                          title: Container(
+                                            margin: EdgeInsets.only(
+                                              left: 6,
+                                              top: 0,
+                                              right: 0,
+                                              bottom: 0,
+                                            ),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  data[i]["b"],
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'VarelaRound',fontSize: 15),
+                                                )),
+                                          ),
+                                          subtitle: Container(
+                                              margin: EdgeInsets.only(
+                                                left: 6,
+                                                top: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                              ),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Padding(
+                                                      padding:
+                                                      const EdgeInsets.all(
+                                                          2.0)),
+                                                  Align(
+                                                    alignment:
+                                                    Alignment.bottomLeft,
+                                                    child: Text("Diposting pada :"+
+                                                        data[i]["c"],
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                            'VarelaRound', fontSize: 13)),
+                                                  ),
+                                                ],
+                                              ))
+                                      )
+
+                                  )
+                              )
                             );
                           },
                         );
@@ -269,7 +269,7 @@ class _NotifikasiState extends State<Notifikasi> {
                 GFBadgeShape.circle,
               )
           ),
-          title: Text("Appointment",
+          title: Text("Activity",
               style: TextStyle(
                 fontFamily: 'VarelaRound',
               )),
@@ -340,26 +340,27 @@ class _NotifikasiState extends State<Notifikasi> {
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
                 builder: (BuildContext context) => Home()));
+
         break;
       case 1:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => AppointmentList(getPhoneState)));
+                builder: (BuildContext context) => AppointmentList(widget.getPhone)));
         break;
       case 2:
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => HistoryTransaksi(getPhoneState)));
+        Navigator.of(context).push(new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                TransaksiHistoryNew(widget.getPhone)));
         break;
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => Notifikasi(widget.getPhone)));
         break;
       case 4:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => UserProfile(getPhoneState)));
+                builder: (BuildContext context) => UserProfile(widget.getPhone)));
         break;
     }
     setState(() {

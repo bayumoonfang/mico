@@ -102,11 +102,11 @@ class _DetailNotifState extends State<DetailNotif> {
         child:
         Scaffold(
             appBar: new AppBar(
-              backgroundColor: HexColor("#075e55"),
+              backgroundColor: Colors.white,
               title: Text(
                 "Detail Message",
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontFamily: 'VarelaRound',
                     fontSize: 16),
               ),
@@ -114,7 +114,7 @@ class _DetailNotifState extends State<DetailNotif> {
                 builder: (context) =>
                     IconButton(
                         icon: new Icon(Icons.arrow_back),
-                        color: Colors.white,
+                        color: Colors.black,
                         onPressed: () {
                           _onWillPop();
                         }
@@ -129,7 +129,7 @@ class _DetailNotifState extends State<DetailNotif> {
                           IconButton(
                               icon: new FaIcon(
                                 FontAwesomeIcons.trashAlt, size: 18,),
-                              color: Colors.white,
+                              color: Colors.black,
                               onPressed: () {
                                 _deleteMessage(getIDMessage.toString());
                               }
