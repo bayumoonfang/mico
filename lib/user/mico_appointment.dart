@@ -94,6 +94,7 @@ List data;
     return new WillPopScope(
         onWillPop: _onWillPop,
         child:  Scaffold(
+          backgroundColor: HexColor("#f5f5f5"),
           body:
         Container(
           width: double.infinity,
@@ -101,13 +102,13 @@ List data;
             child: Column(
               children: [
                   Padding(
-                    padding: const EdgeInsets.only(left:20,top: 50),
+                    padding: const EdgeInsets.only(left:15,top: 50),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text("My Activity",
                           style: TextStyle(
                             fontFamily: 'VarelaRound',
-                            fontSize: 26,
+                            fontSize: 29,
                             fontWeight: FontWeight.bold
                           )),
                     ),

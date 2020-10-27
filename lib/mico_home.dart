@@ -166,6 +166,18 @@ class _HomeState extends State<Home> {
     });
   }
 
+  String countresep = "0";
+  _getCountResep() async {
+    final response = await http.get(
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countresep&id="+getPhone);
+    Map data4 = jsonDecode(response.body);
+    setState(() {
+      countresep = data4["a"].toString();
+    });
+  }
+
+
+
 
   void _detailcust() async {
     await _session();
@@ -189,6 +201,7 @@ class _HomeState extends State<Home> {
     await _getCountMessage();
     await _getCountApp();
     await _getCountApp2();
+    await _getCountResep();
 
   }
 
@@ -431,7 +444,7 @@ class _HomeState extends State<Home> {
                         GestureDetector(
                         child :
                             Badge(
-                                position: BadgePosition.topStart(top: 0),
+                                position: BadgePosition.topStart(top: 0,start: 2),
                                 animationDuration: Duration(milliseconds: 300),
                                 animationType: BadgeAnimationType.slide,
                                 badgeContent: Text(
@@ -540,13 +553,29 @@ class _HomeState extends State<Home> {
                                                         onTap: () {
                                                           Navigator.pushReplacement(context, ExitPage(page: MicoResep(getPhone)));
                                                         },
-                                                        child : Container(
-                                                          child: CircleAvatar(
-                                                            backgroundColor: Colors.white,
-                                                            backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                            radius: 25,
-                                                          ),
-                                                        ),
+                                                        child :
+                                                            countresep == '0' ?
+                                                            Container(
+                                                              child: CircleAvatar(
+                                                                backgroundColor: Colors.white,
+                                                                backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                                radius: 25,
+                                                              ),
+                                                            )
+
+                                                            :
+                                                        Badge(
+                                                            position: BadgePosition.topStart(top: 0, start: 0),
+                                                            toAnimate: false,
+                                                            badgeContent: Text(countresep,style: TextStyle(color: Colors.white,fontSize: 12),),
+                                                            child : Container(
+                                                                    child: CircleAvatar(
+                                                                  backgroundColor: Colors.white,
+                                                                  backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                                  radius: 25,
+                                                                ),
+                                                        )),
+
                                                       ),
                                                       Padding(
                                                           padding: const EdgeInsets.only(top : 10),

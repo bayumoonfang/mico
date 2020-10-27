@@ -104,11 +104,11 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
   }
 
   _cekroom_checkin() async {
-        if(checkroom == '0') {
-              await _cekroom_tanggal();
-              await _cekroom_jam();
-              await _cekroom_menit();
-        } else {
+        //if(checkroom == '0') {
+             // await _cekroom_tanggal();
+              //await _cekroom_jam();
+              //await _cekroom_menit();
+        //} else {
           setState(() {
              if(typekonsul == 'CHAT') {
                Navigator.of(context)
@@ -122,7 +122,7 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
                        VideoChatHome(widget.appKode, widget.appID)));
              }
           });
-        }
+       // }
   }
 
 

@@ -262,14 +262,15 @@ void initState() {
         child :
         Scaffold(
           appBar: new AppBar(
-            backgroundColor: HexColor("#075e55"),
+            //backgroundColor: HexColor("#075e55"),
+            backgroundColor: Colors.white,
             title: new Text(getNamaDokter,
                 style: TextStyle(
-                    color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16)),
+                    color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16)),
             leading: Builder(
               builder: (context) => IconButton(
                 icon: new Icon(Icons.arrow_back),
-                color: Colors.white,
+                color: Colors.black,
                 onPressed: () {
                   widget.idAppointment == '1' ?
                   Navigator.of(context).pushReplacement(
@@ -320,7 +321,7 @@ void initState() {
                                       ],
                                     ),
                                     onTap: (){
-                                     Navigator.push(context, EnterPage(page: DetailTagihan(widget.idAppointment)));
+                                     Navigator.push(context, ExitPage(page: DetailTagihan(widget.idAppointment)));
                                     },)
 
                               )

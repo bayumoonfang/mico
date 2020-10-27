@@ -49,6 +49,7 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+        backgroundColor: HexColor("#f5f5f5"),
           appBar: new AppBar(
             bottomOpacity: 0.0,
             elevation: 0.0,

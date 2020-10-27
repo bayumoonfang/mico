@@ -126,7 +126,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
       appBar: new AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          "Detail Appointment",
+          "Detail Activity",
           style: TextStyle(
               color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
         ),

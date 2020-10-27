@@ -57,16 +57,17 @@ class _DetailTagihanState extends State<DetailTagihan> {
         onWillPop: _onWillPop,
         child: Scaffold(
             appBar: new AppBar(
-              backgroundColor: HexColor("#075e55"),
+              //backgroundColor: HexColor("#075e55"),
+              backgroundColor: Colors.white,
               title: Text(
                 "Detail Tagihan",
                 style: TextStyle(
-                    color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16),
+                    color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
               ),
               leading: Builder(
                 builder: (context) => IconButton(
                     icon: new Icon(Icons.arrow_back),
-                    color: Colors.white,
+                    color: Colors.black,
                     onPressed: () => {
                       Navigator.pop(context)
                     }),

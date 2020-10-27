@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/mico_home.dart';
+import 'package:mico/mico_resepdetail.dart';
 import 'package:mico/user/mico_detailappointment.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -31,7 +34,7 @@ class _MicoResepState extends State<MicoResep> {
   String getFilter = 'OPEN';
   Future<List> getData() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_appointment3&id=" +
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_resep&id=" +
             widget.getPhone+"&filter=" +
             getFilter);
     setState((){
@@ -46,9 +49,19 @@ class _MicoResepState extends State<MicoResep> {
   }
 
 
+  Future<bool> _onWillPop() async {
+    Navigator.pushReplacement(context, EnterPage(page: Home()));
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child :
+            Scaffold(
+              backgroundColor: HexColor("#f5f5f5"),
       appBar: new AppBar(
         bottomOpacity: 0.0,
         elevation: 0.0,
@@ -58,7 +71,7 @@ class _MicoResepState extends State<MicoResep> {
               icon: new Icon(Icons.arrow_back),
               color: Colors.black,
               onPressed: () => {
-                Navigator.pop(context)
+              Navigator.pushReplacement(context, EnterPage(page: Home()))
               }),
         ),
         title: Text(
@@ -94,7 +107,7 @@ class _MicoResepState extends State<MicoResep> {
                         ),
                         onPressed: ()async {
                           getColor = '1';
-                          getFilter = 'DONE';
+                          getFilter = 'OPEN';
                           data.clear();
 
                         },
@@ -118,7 +131,7 @@ class _MicoResepState extends State<MicoResep> {
                         ),
                         onPressed: ()async {
                           getColor = '2';
-                          getFilter = 'DECLINE';
+                          getFilter = 'PAID';
                           data.clear();
 
                         },
@@ -182,7 +195,7 @@ class _MicoResepState extends State<MicoResep> {
                                           radius: 20,
                                           backgroundColor: Colors.white,
                                         ),
-                                        title: Text(data[i]["f"],
+                                        title: Text(data[i]["p"],
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 15,
@@ -196,7 +209,7 @@ class _MicoResepState extends State<MicoResep> {
                                               alignment: Alignment.centerLeft,
                                               child: Opacity(
                                                 opacity: 0.9,
-                                                child: Text("Konsultasi "+data[i]["m"]+ " |  (" +data[i]["d"]+")",
+                                                child: Text(data[i]["g"],
                                                   style: TextStyle(
                                                       fontSize: 13,
                                                       color : HexColor("#686868"),
@@ -221,7 +234,7 @@ class _MicoResepState extends State<MicoResep> {
                                 ),
                                 onTap: (){
                                   Navigator.of(context).push(new MaterialPageRoute(
-                                      builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
+                                      builder: (BuildContext context) => ResepDetail(data[i]["p"])));
 
                                 },
                               );
@@ -238,6 +251,6 @@ class _MicoResepState extends State<MicoResep> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
