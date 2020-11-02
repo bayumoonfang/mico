@@ -52,7 +52,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
   String tahun, bulan, hari, jam, menit, getRoom = "0";
   void _getVideoDetail() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_videodetailuser&id="+widget.getApp);
+        "https://duakata-dev.com/miracle/api_script.php?do=getdata_appdetail&id="+widget.getApp);
     Map data = jsonDecode(response.body);
     setState(() {
       tahun = data["a"].toString();

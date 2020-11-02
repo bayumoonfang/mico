@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/user/mico_detailappointment.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -83,12 +84,12 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                         padding: const EdgeInsets.only(right: 5.0),
                         child: RaisedButton(
                           elevation: 0,
-                          color: HexColor("#f7f7f7"),
+                          color: getColor == '1' ? HexColor("#00b24e") : HexColor("#f7f7f7"),
                           child: Text("Selesai",
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
                                   fontWeight: FontWeight.bold,
-                                  color: getColor == '1' ? HexColor("#00b24e") : HexColor("#9a9a9a")
+                                  color: getColor == '1' ? HexColor("#ffffff") : HexColor("#9a9a9a")
                               )),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
@@ -107,12 +108,12 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                         padding: const EdgeInsets.only(right: 5.0),
                         child: RaisedButton(
                           elevation: 0,
-                          color: HexColor("#f7f7f7"),
+                          color: getColor == '2' ? HexColor("#ef6352") : HexColor("#f7f7f7"),
                           child: Text("Batal",
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
                                   fontWeight: FontWeight.bold,
-                                  color: getColor == '2' ? HexColor("#00b24e") : HexColor("#9a9a9a")
+                                  color: getColor == '2' ? HexColor("#ffffff") : HexColor("#9a9a9a")
                               )),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
@@ -176,7 +177,7 @@ class _TransaksiHistoryNewState extends State<TransaksiHistoryNew> {
                                                 Card(
                                                   margin: const EdgeInsets.all(8),
                                                   color: HexColor("#f7f7f7"),
-elevation: 0,
+                                                    elevation: 0,
                                                 child: ListTile(
                                                   leading: CircleAvatar(
                                                     backgroundImage: AssetImage("assets/mira-ico.png") ,
@@ -221,9 +222,7 @@ elevation: 0,
                                                 )),
                                               ),
                                           onTap: (){
-                                            Navigator.of(context).push(new MaterialPageRoute(
-                                                builder: (BuildContext context) => DetailAppointment(data[i]["a"].toString())));
-
+                                            Navigator.push(context, ExitPage(page: DetailAppointment(data[i]["a"].toString())));
                                           },
                                         );
 

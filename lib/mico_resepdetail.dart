@@ -49,16 +49,16 @@ class _ResepDetailState extends State<ResepDetail> {
         onWillPop: _onWillPop,
         child: Scaffold(
           appBar: new AppBar(
-            backgroundColor: HexColor("#f5f5f5"),
+            backgroundColor: HexColor("#075e55"),
             title: Text(
               "Detail Resep",
               style: TextStyle(
-                  color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
+                  color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16),
             ),
             leading: Builder(
               builder: (context) => IconButton(
                   icon: new Icon(Icons.arrow_back),
-                  color: Colors.black,
+                  color: Colors.white,
                   onPressed: () => {
                     Navigator.pop(context)
                   }),

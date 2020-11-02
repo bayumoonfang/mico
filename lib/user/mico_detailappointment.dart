@@ -124,16 +124,16 @@ class _DetailAppointmentState extends State<DetailAppointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: HexColor("#075e55"),
         title: Text(
           "Detail Activity",
           style: TextStyle(
-              color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
+              color: Colors.white, fontFamily: 'VarelaRound', fontSize: 16),
         ),
         leading: Builder(
           builder: (context) => IconButton(
               icon: new Icon(Icons.arrow_back),
-              color: Colors.black,
+              color: Colors.white,
               onPressed: () => {
                 Navigator.pop(context)
               }),

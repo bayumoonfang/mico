@@ -447,6 +447,7 @@ class _HomeState extends State<Home> {
                                 position: BadgePosition.topStart(top: 0,start: 2),
                                 animationDuration: Duration(milliseconds: 300),
                                 animationType: BadgeAnimationType.slide,
+                                badgeColor: HexColor("#ef6352"),
                                 badgeContent: Text(
                                   jenisKonsuls == 'CHAT' ?
                                   data[i]["a"].toString() : "1",
@@ -567,6 +568,7 @@ class _HomeState extends State<Home> {
                                                         Badge(
                                                             position: BadgePosition.topStart(top: 0, start: 0),
                                                             toAnimate: false,
+                                                            badgeColor: HexColor("#ef6352"),
                                                             badgeContent: Text(countresep,style: TextStyle(color: Colors.white,fontSize: 12),),
                                                             child : Container(
                                                                     child: CircleAvatar(
