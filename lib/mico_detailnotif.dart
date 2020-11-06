@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:getwidget/getwidget.dart';
-import 'package:mico/user/mico_notfikasi.dart';
+import 'package:mico/user/mico_notifnew.dart';
 
 
 class DetailNotif extends StatefulWidget {
@@ -35,7 +35,7 @@ class _DetailNotifState extends State<DetailNotif> {
         });
     Navigator.of(context).push(
         new MaterialPageRoute(
-            builder: (BuildContext context) => Notifikasi(getPhoneState)));
+            builder: (BuildContext context) => NotifNew(getPhoneState)));
   }
 
 

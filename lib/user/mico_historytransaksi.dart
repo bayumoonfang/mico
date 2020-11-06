@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/user/get_transaksi.dart';
 import 'package:mico/user/mico_appointment.dart';
-import 'package:mico/user/mico_notfikasi.dart';
+import 'package:mico/user/mico_notifnew.dart';
 import 'package:mico/user/mico_userprofile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -230,7 +230,7 @@ class _HistoryTransaksiState extends State<HistoryTransaksi> {
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhoneState)));
+                builder: (BuildContext context) => NotifNew(getPhoneState)));
         break;
       case 4:
         Navigator.of(context).pushReplacement(

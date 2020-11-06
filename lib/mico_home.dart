@@ -22,8 +22,7 @@ import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/mico_dokter.dart';
 import 'package:mico/services/mico_cekroom.dart';
 import 'package:mico/user/mico_appointment.dart';
-import 'package:mico/user/mico_historytransaksi.dart';
-import 'package:mico/user/mico_notfikasi.dart';
+import 'package:mico/user/mico_notifnew.dart';
 import 'package:mico/user/mico_userprofile.dart';
 import 'package:mico/mico_resep.dart';
 import 'package:responsive_container/responsive_container.dart';
@@ -860,7 +859,7 @@ class _HomeState extends State<Home> {
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(getPhone)));
+                builder: (BuildContext context) => NotifNew(getPhone)));
         break;
       case 4:
         Navigator.of(context).pushReplacement(

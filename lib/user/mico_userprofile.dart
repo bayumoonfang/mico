@@ -13,8 +13,7 @@ import 'package:mico/mico_home.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/user/mico_appointment.dart';
-import 'package:mico/user/mico_historytransaksi.dart';
-import 'package:mico/user/mico_notfikasi.dart';
+import 'package:mico/user/mico_notifnew.dart';
 
 
 class UserProfile extends StatefulWidget {
@@ -288,7 +287,7 @@ class _UserProfileState extends State<UserProfile> {
       case 3:
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(
-                builder: (BuildContext context) => Notifikasi(widget.getPhone)));
+                builder: (BuildContext context) => NotifNew(widget.getPhone)));
         break;
       case 4:
         Navigator.of(context).pushReplacement(
