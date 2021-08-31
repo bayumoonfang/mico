@@ -68,9 +68,7 @@ List data;
     final response = await http.get(
         "https://duakata-dev.com/miracle/api_script.php?do=getdata_appointment&id=" +
             widget.getPhone);
-    setState((){
-      data = json.decode(response.body);
-    });
+    return json.decode(response.body);
   }
 
 
@@ -142,9 +140,9 @@ List data;
                         builder : (context, snapshot) {
                             return ListView.builder(
                                 padding: const EdgeInsets.only(top: 15.0),
-                                itemCount: data == null ? 1 : data.isEmpty ? 1 : data.length,
+                                itemCount: snapshot.data == null ? 1 : snapshot.data.isEmpty ? 1 : snapshot.data.length,
                                 itemBuilder: (context, i) {
-                                  if (data == null) {
+                                  if (snapshot.data == null) {
                                     return
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -157,7 +155,7 @@ List data;
                                         )
                                     ));
                                   } else {
-                                    return data.isEmpty ?
+                                    return snapshot.data.isEmpty ?
 
                                     Padding(
                                         padding: const EdgeInsets.only(
@@ -205,7 +203,7 @@ List data;
                                                           children: <Widget>[
                                                             Text(
                                                               "Konsultasi " +
-                                                                  data[i]["m"] +
+                                                                  snapshot.data[i]["m"] +
                                                                   " dengan",
                                                               textAlign: TextAlign
                                                                   .left,
@@ -221,7 +219,7 @@ List data;
                                                                 border: Border
                                                                     .all(
                                                                   color:
-                                                                  data[i]["c"] ==
+                                                                  snapshot.data[i]["c"] ==
                                                                       'DONE'
                                                                       ? HexColor(
                                                                       "#075e55")
@@ -234,7 +232,7 @@ List data;
                                                               padding: const EdgeInsets
                                                                   .all(5),
                                                               child: Text(
-                                                                  data[i]["c"] ==
+                                                                  snapshot.data[i]["c"] ==
                                                                       'PAID'
                                                                       ? "On Going"
                                                                       : data[i]["c"],
@@ -243,7 +241,7 @@ List data;
                                                                       fontWeight: FontWeight
                                                                           .bold,
                                                                       color:
-                                                                      data[i]["c"] ==
+                                                                      snapshot.data[i]["c"] ==
                                                                           'DECLINE'
                                                                           ? Colors
                                                                           .red
@@ -262,7 +260,7 @@ List data;
                                                           leading: CircleAvatar(
                                                             backgroundImage: CachedNetworkImageProvider(
                                                               "https://duakata-dev.com/miracle/media/photo/" +
-                                                                  data[i]["e"],
+                                                                  snapshot.data[i]["e"],
                                                             ),
                                                             backgroundColor: Colors
                                                                 .white,
@@ -272,7 +270,7 @@ List data;
                                                             alignment: Alignment
                                                                 .centerLeft,
                                                             child: Text(
-                                                              data[i]["f"],
+                                                              snapshot.data[i]["f"],
                                                               style: TextStyle(
                                                                   fontSize: 15,
                                                                   fontFamily: 'VarelaRound'),
@@ -291,7 +289,7 @@ List data;
                                                                     alignment: Alignment
                                                                         .centerLeft,
                                                                     child: Text(
-                                                                      data[i]["g"],
+                                                                      snapshot.data[i]["g"],
                                                                       style: TextStyle(
                                                                           fontSize: 13,
                                                                           fontFamily: 'VarelaRound'),
@@ -306,19 +304,19 @@ List data;
                                                                     alignment: Alignment
                                                                         .centerLeft,
                                                                     child: Text(
-                                                                      data[i]["k"] +
+                                                                      snapshot.data[i]["k"] +
                                                                           " - " +
                                                                           new DateFormat
                                                                               .MMM()
                                                                               .format(
                                                                               DateTime
                                                                                   .parse(
-                                                                                  data[i]["l"]))
+                                                                                  snapshot.data[i]["l"]))
                                                                           +
                                                                           " - " +
-                                                                          data[i]["i"] +
+                                                                          snapshot.data[i]["i"] +
                                                                           " (" +
-                                                                          data[i]["d"] +
+                                                                          snapshot.data[i]["d"] +
                                                                           ")",
                                                                       style: TextStyle(
                                                                           fontSize: 14,
@@ -346,7 +344,7 @@ List data;
                                                 builder: (
                                                     BuildContext context) =>
                                                     DetailAppointment(
-                                                        data[i]["a"]
+                                                        snapshot.data[i]["a"]
                                                             .toString())));
                                       },
                                     );

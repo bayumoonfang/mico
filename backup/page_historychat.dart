@@ -18,7 +18,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/services/mico_detailimagechat.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_detailhistorytransaksi.dart';
+
 import 'package:toast/toast.dart';
 import 'package:photo_view/photo_view.dart';
 

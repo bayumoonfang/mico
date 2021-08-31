@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/components/badge/gf_icon_badge.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:getwidget/shape/gf_badge_shape.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/helper/session_user.dart';

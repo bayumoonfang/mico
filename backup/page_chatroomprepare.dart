@@ -3,8 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mico/mico_detaildokter.dart';
-import 'package:mico/mico_dokter.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
+import 'package:mico/konsultasi/mico_dokter.dart';
 import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:mico/helper/session_user.dart';
@@ -13,7 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroom.dart';
+
 /*
 class ChatRoomPrepare extends StatefulWidget {
   final String accdokter, namadokter, klinik, MyPhone;

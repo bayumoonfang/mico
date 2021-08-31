@@ -86,7 +86,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
   Widget build(BuildContext context) {
     return new WillPopScope(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: new AppBar(
           backgroundColor: HexColor("#075e55"),
           title: Text(

@@ -10,7 +10,6 @@ import 'package:mico/mico_home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:getwidget/getwidget.dart';
 import 'package:mico/user/mico_notifnew.dart';
 
 

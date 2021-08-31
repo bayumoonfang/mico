@@ -4,9 +4,7 @@ import 'dart:convert';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:mico/mico_detaildokter.dart';
-import 'package:mico/mico_dokter.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroomhome.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/services_videoconf.dart';
+import 'package:mico/konsultasi/mico_dokter.dart';
 import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:mico/helper/session_user.dart';
@@ -15,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'file:///D:/PROJECT%20KANTOR/mico/backup/page_chatroom.dart';
+
 
 class VideoConfPrepare extends StatefulWidget {
   final String MyPhone;
@@ -79,7 +77,7 @@ class _VideoConfPrepareState extends State<VideoConfPrepare> {
     await _session();
     await _getVideoDetail();
     await _handleCameraAndMic();
-    await Navigator.push(
+    /*await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => VideoConf(
@@ -89,7 +87,7 @@ class _VideoConfPrepareState extends State<VideoConfPrepare> {
           dokter : getNamaDokter
         ),
       ),
-    );
+    );*/
   }
 
   Future<bool> _onWillPop() async {

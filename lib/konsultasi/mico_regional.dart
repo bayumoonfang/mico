@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/mico_dokter.dart';
+import 'package:mico/konsultasi/mico_dokter.dart';
 import 'package:mico/mico_home.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -190,7 +190,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Surabaya")));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Surabaya")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -217,7 +217,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Malang")));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Malang")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -242,7 +242,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Balikpapan")));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Balikpapan")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -269,7 +269,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, ExitPage(page: ListDokter("Denpasar")));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Denpasar")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(

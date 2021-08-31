@@ -6,20 +6,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/badge/gf_badge.dart';
 import 'package:getwidget/components/badge/gf_icon_badge.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:getwidget/shape/gf_badge_shape.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/mico_detailimagehome.dart';
 import 'package:mico/mico_favorite.dart';
 import 'package:mico/mico_homesearch.dart';
-import 'package:mico/mico_regional.dart';
+import 'package:mico/konsultasi/mico_regional.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_verifikasilogin.dart';
-import 'package:mico/mico_dokter.dart';
+import 'package:mico/konsultasi/mico_dokter.dart';
 import 'package:mico/services/mico_cekroom.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_notifnew.dart';
@@ -33,6 +33,9 @@ import 'package:toast/toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 final List<String> imgList = [
+  'https://duakata-dev.com/miracle/media/promo/promo_new1.jpg',
+  'https://duakata-dev.com/miracle/media/promo/promo_new2.jpg',
+  'https://duakata-dev.com/miracle/media/promo/promo_new3.jpg',
   'https://duakata-dev.com/miracle/media/promo/b.jpg',
   'https://duakata-dev.com/miracle/media/promo/a.jpg',
   'https://duakata-dev.com/miracle/media/promo/c.jpg',
