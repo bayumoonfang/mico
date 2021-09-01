@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
@@ -25,20 +27,34 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
   String getPhone, getEmail;
   int getVal;
   final _tokenVal = TextEditingController();
-
+  bool _isvisible = false;
   _VerifikasiLoginState({this.getPhone, this.getEmail});
   //LoginStatus _loginStatus = LoginStatus.notSignIn;
-  void showToast(String msg, {int duration, int gravity}) {
-    Toast.show(msg, context, duration: duration, gravity: gravity);
+
+  showFlushBar(BuildContext context, String stringme) => Flushbar(
+    // title:  "Hey Ninja",
+    message:  stringme,
+    shouldIconPulse: false,
+    duration:  Duration(seconds: 3),
+    flushbarPosition: FlushbarPosition.TOP ,
+  )..show(context);
+
+
+  Future<bool> _onWillPop() async {
+    Navigator.pop(context);
   }
 
 
   login() async {
-
     if (_tokenVal.text.length < 6) {
-      showToast("Token harus 6 angka", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+      showFlushBar(context, "Token harus 6 angka");
       return;
     }
+    setState(() {
+      _isvisible = true;
+    });
+
+
     final response = await http.post("https://duakata-dev.com/miracle/api_script.php?do=act_ceklogin",
         body: {"phone": getPhone, "email": getEmail, "token": _tokenVal.text});
       Map data = jsonDecode(response.body);
@@ -46,19 +62,16 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       int getValue = data["value"];
       String getIDcust = data["idcust"].toString();
       String getAccnumber = getPhone;
-
       if (getValue == 1) {
         savePref(getValue, getPhone, getEmail, getIDcust, getAccnumber);
-        Navigator.of(context)
-        .push(new MaterialPageRoute(builder: (BuildContext context) => Home()));
+        Navigator.pushReplacement(context, ExitPage(page: Home()));
+        _isvisible = false;
+        return;
       } else {
-        showToast("Token anda tidak sesuai", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        showFlushBar(context, "Token anda tidak sesuai");
+        _isvisible = false;
         return;
       }
-      //_loginStatus = LoginStatus.signIn;
-      //savePref(value, getPhone, getEmail);
-      //Navigator.of(context)
-      //.push(new MaterialPageRoute(builder: (BuildContext context) => Home()));
     });
   }
 
@@ -79,6 +92,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
   @override
   Widget build(BuildContext context) {
       return new  WillPopScope(
+        onWillPop: _onWillPop,
           child: new
             Scaffold(
           body :(
@@ -122,6 +136,15 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
                                   controller: _tokenVal,
                                 ))
                           ),
+                          Visibility(
+                              visible: _isvisible,
+                              child: Center(
+                                child: Padding(padding: const EdgeInsets.only(top: 100),child:
+                                CircularProgressIndicator()),
+                              )),
+
+
+
 
                           Expanded(
                             child: Align(

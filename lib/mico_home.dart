@@ -9,11 +9,13 @@ import 'package:getwidget/components/badge/gf_icon_badge.dart';
 import 'package:getwidget/shape/gf_badge_shape.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/mico_detailimagehome.dart';
 import 'package:mico/mico_favorite.dart';
 import 'package:mico/mico_homesearch.dart';
 import 'package:mico/konsultasi/mico_regional.dart';
+import 'package:mico/mico_introduction.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
@@ -60,7 +62,7 @@ class _HomeState extends State<Home> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   List data;
   //int value;
-  String getEmail, getPhone, getBasedLogin;
+  String getEmail, getPhone;
   String getName, getName2;
   String countchat = '';
   String countvideo = '';
@@ -71,25 +73,22 @@ class _HomeState extends State<Home> {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 
-  _session() async {
-    int value = await Session.getValue();
-    getEmail = await Session.getEmail();
-    getPhone = await Session.getPhone();
-    getBasedLogin = await Session.getBasedLogin();
-    if (value != 1) {
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(
-          builder: (BuildContext context) => LoginStart()));
-    }
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
+    _displaySnackBar(BuildContext context, String stringme) {
+    final snackBar = SnackBar(content: Text(stringme));
+    _scaffoldKey.currentState.showSnackBar(snackBar); }
+
+  _startingVariable() async {
+    await AppHelper().getConnect().then((value){if(value == 'ConnInterupted'){
+      _displaySnackBar(context, "Koneksi Terputus..");}});
+    await AppHelper().getSession().then((value){if(value[0] != 1) {
+      Navigator.pushReplacement(context, ExitPage(page: IntroductionPage()));} else{setState(() {
+        getEmail = value[1];
+        getPhone = value[2];
+      });}});
   }
-  _connect() async {
-    Checkconnection().check().then((internet){
-      if (internet != null && internet) {
-        // Internet Present Case
-      } else {
-        showToast("Koneksi terputus..", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-      }
-    });
-  }
+
+
 
 
   Future<List> _getCountChat() async {
@@ -182,7 +181,6 @@ class _HomeState extends State<Home> {
 
 
   void _detailcust() async {
-    await _session();
     final response = await http.post(
         "https://duakata-dev.com/miracle/api_script.php?do=act_getdetailcust",
         body: {"phone": getPhone.toString(), "email":  getEmail.toString()});
@@ -196,8 +194,7 @@ class _HomeState extends State<Home> {
 
 
   void _loaddata() async {
-    await  _connect();
-    await _session();
+    await _startingVariable();
     await _cekAppointment();
     await _detailcust();
     await _getCountMessage();
@@ -229,45 +226,59 @@ class _HomeState extends State<Home> {
     });
   }
 
+
+/*
+  static final List<String> imgSlider = [
+    'elektronik.jpeg',
+    'fashion.jpg',
+    'food.jpg',
+    'rendang.jpg',
+    'sport.jpg'
+  ];
+
+
+  final CarouselSlider autoPlayImage = CarouselSlider(
+    items: imgSlider.map((fileImage) {
+      return Container(
+        margin: EdgeInsets.all(5.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: Image.asset(
+            'assets/${fileImage}',
+            width: 10000,
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }).toList(),
+    height: 150,
+    autoPlay: true,
+    enlargeCenterPage: true,
+    aspectRatio: 2.0,
+  );
+
+ */
+
+
+
   final List<Widget> imageSliders = imgList.map((item) => Container(
-    child: new Builder(
-        builder: (BuildContext context) {
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
                 margin: EdgeInsets.all(5.0),
                 child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => Home()));
-                          },
-                          child :
-                          // Image.network(item, fit: BoxFit.cover,width: 1000,)
-                          CachedNetworkImage(
-                              imageUrl: item,
-                              progressIndicatorBuilder: (context,
-                                  url, downloadProgress) =>
-                                  Center(
-                                      child :
-                                      Image.asset(
-                                        "assets/loadingq.gif",
-                                        width: 85.0,
-                                      )),
-                              imageBuilder: (context, image) =>
-                                  Image.network(item, fit: BoxFit.cover,width: 1000,)
-                          ),
-                        ),
-                      ],
-                    )
-                ),
-              );
-        }
-    )
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: CachedNetworkImage(
+                      imageUrl: item,
+                      progressIndicatorBuilder: (context,
+                          url, downloadProgress) =>
+                          Center(
+                              child :
+                              Image.asset(
+                                "assets/loadingq.gif",
+                                width: 85.0,
+                              )),
+                      imageBuilder: (context, image) =>
+                          Image.network(item, fit: BoxFit.cover,width: 10000)
+                  ),
+                )
   )).toList();
 
 
