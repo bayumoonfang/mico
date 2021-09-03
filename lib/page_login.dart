@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/helper/based_color.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -205,7 +206,7 @@ class _LoginState extends State<Login> {
                                  shape: RoundedRectangleBorder(
                                    borderRadius: BorderRadius.circular(5.0),
                                  ),
-                                 color: HexColor("#8cc63e"),
+                                 color: HexColor(second_color),
                                  child: Text(
                                    "Selanjutnya",
                                    style: TextStyle(

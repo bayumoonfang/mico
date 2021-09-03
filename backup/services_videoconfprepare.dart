@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/konsultasi/mico_detaildokter.dart';
 import 'package:mico/konsultasi/mico_dokter.dart';
 import 'package:toast/toast.dart';
 import 'package:getwidget/getwidget.dart';

@@ -7,7 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_cekappointment.dart';
-import 'package:mico/mico_detailimagedokter.dart';
+import 'package:mico/konsultasi/mico_detailimagedokter.dart';
 import 'package:mico/mico_homesearchcekappointment.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/check_connection.dart';
+import 'package:mico/konsultasi/mico_regional_new.dart';
 import 'package:mico/mico_detailimagehome.dart';
 import 'package:mico/mico_favorite.dart';
 import 'package:mico/mico_homesearch.dart';
@@ -22,7 +24,9 @@ import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/konsultasi/mico_dokter.dart';
-import 'package:mico/services/mico_cekroom.dart';
+import 'package:mico/services/mico_cekrom_new.dart';
+import 'package:mico/services/mico_cekroom_archived.dart';
+import 'package:mico/services/mico_chatroom.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_notifnew.dart';
 import 'package:mico/user/mico_userprofile.dart';
@@ -35,13 +39,13 @@ import 'package:toast/toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 final List<String> imgList = [
-  'https://duakata-dev.com/miracle/media/promo/promo_new1.jpg',
-  'https://duakata-dev.com/miracle/media/promo/promo_new2.jpg',
-  'https://duakata-dev.com/miracle/media/promo/promo_new3.jpg',
   'https://duakata-dev.com/miracle/media/promo/b.jpg',
   'https://duakata-dev.com/miracle/media/promo/a.jpg',
   'https://duakata-dev.com/miracle/media/promo/c.jpg',
   'https://duakata-dev.com/miracle/media/promo/d.jpg',
+  'https://duakata-dev.com/miracle/media/promo/promo_new1.jpg',
+  'https://duakata-dev.com/miracle/media/promo/promo_new2.jpg',
+  'https://duakata-dev.com/miracle/media/promo/promo_new3.jpg',
 ];
 
 final List<String> ListKota = [
@@ -63,7 +67,6 @@ class _HomeState extends State<Home> {
   List data;
   //int value;
   String getEmail, getPhone;
-  String getName, getName2;
   String countchat = '';
   String countvideo = '';
   String countchatnotread = '';
@@ -73,143 +76,105 @@ class _HomeState extends State<Home> {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 
-    final _scaffoldKey = GlobalKey<ScaffoldState>();
-    _displaySnackBar(BuildContext context, String stringme) {
-    final snackBar = SnackBar(content: Text(stringme));
-    _scaffoldKey.currentState.showSnackBar(snackBar); }
 
+   String appKode,namaDokters,jenisKonsuls, roomKonsul, getName = '...';
   _startingVariable() async {
     await AppHelper().getConnect().then((value){if(value == 'ConnInterupted'){
-      _displaySnackBar(context, "Koneksi Terputus..");}});
+     showToast("Koneksi Terputus..", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);}});
     await AppHelper().getSession().then((value){if(value[0] != 1) {
       Navigator.pushReplacement(context, ExitPage(page: IntroductionPage()));} else{setState(() {
-        getEmail = value[1];
-        getPhone = value[2];
-      });}});
+        getEmail = value[1]; getPhone = value[2];});}});
+    await AppHelper().cekAppointment(getPhone.toString()).then((value){
+      setState(() {
+        appKode = value[0];
+        namaDokters = value[1];
+        jenisKonsuls = value[2];
+        roomKonsul = value[3];});});
+    await AppHelper().getUserDetail(getPhone.toString(), getEmail.toString()).then((value){
+      setState(() {
+        getName = value[0];});});
+
   }
 
-
-
-
-  Future<List> _getCountChat() async {
+  String countmessagenotif = '0';
+  String countapp2, countmessageq, countchatread = "0";
+  _getCountMessageChat() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countchat&"
-            "id="+getPhone);
-    setState((){
-      data = json.decode(response.body);
-    });
-  }
-
-  String appKode,
-  namaDokters,
-  jenisKonsuls, roomKonsul = '';
-  _cekAppointment() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=cekappointment&id="+getPhone.toString());
-    Map data4 = jsonDecode(response.body);
+        AppHelper().applink+"do=getdata_countchat&id="+getPhone);
+    Map data5 = jsonDecode(response.body);
     setState(() {
-      appKode = data4["a"].toString();
-      namaDokters = data4["b"].toString();
-      jenisKonsuls = data4["c"].toString();
-      roomKonsul = data4["d"].toString();
+      countmessageq = data5["a"].toString();
     });
   }
 
-  String countmessage = '0';
-  String countapp, countapp2 = "0";
-
-  _getCountMessage() async {
+  _getCountMessageNotif() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countmessage&id="+appKode);
-    Map data = jsonDecode(response.body);
+        AppHelper().applink+"do=getdata_countnotif&id="+getPhone);
+    Map data6 = jsonDecode(response.body);
     setState(() {
-      countmessage = data["a"].toString();
+      countmessagenotif = data6["a"].toString();
     });
   }
 
-  _getCountApp() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp&id="+getPhone);
-    Map data2 = jsonDecode(response.body);
-    setState(() {
-      countapp = data2["a"].toString();
-    });
-  }
-
-  _launchWebsite() async {
-    const url = 'https://miracle-clinic.com/';
+  _launchSosmed(String urlSosmed) async {
+    String url = urlSosmed;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
   }
-
-
-
-  _launchSosmed() async {
-    const url = 'https://www.instagram.com/miracle_clinic/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-
 
   _getCountApp2() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countapp2&id="+getPhone);
+        AppHelper().applink+"do=getdata_countapp2&id="+getPhone);
     Map data2 = jsonDecode(response.body);
     setState(() {
       countapp2 = data2["a"].toString();
     });
   }
 
-  String countresep = "0";
-  _getCountResep() async {
+  _getCountChatRead() async {
     final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_countresep&id="+getPhone);
-    Map data4 = jsonDecode(response.body);
+        AppHelper().applink+"do=getdata_countchatread&id="+getPhone);
+    Map data3 = jsonDecode(response.body);
     setState(() {
-      countresep = data4["a"].toString();
+      countchatread = data3["a"].toString();
     });
   }
-
-
-
-
-  void _detailcust() async {
-    final response = await http.post(
-        "https://duakata-dev.com/miracle/api_script.php?do=act_getdetailcust",
-        body: {"phone": getPhone.toString(), "email":  getEmail.toString()});
-    Map showdata = jsonDecode(response.body);
-    setState(() {
-      getName = showdata['b'].toString();
-    });
-  }
-
-
 
 
   void _loaddata() async {
     await _startingVariable();
-    await _cekAppointment();
-    await _detailcust();
-    await _getCountMessage();
-    await _getCountApp();
     await _getCountApp2();
-    await _getCountResep();
-
+    await _getCountMessageChat();
+    await _getCountMessageNotif();
+    await _getCountChatRead();
   }
 
 
+  Timer mytimer;
   @override
   void initState() {
     super.initState();
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        _getCountApp2();
+        _getCountMessageChat();
+        _getCountMessageNotif();
+        _startingVariable();
+        _getCountChatRead();
+      });
+    });
     _loaddata();
   }
+
+  @override
+  void dispose() {
+    mytimer.cancel();
+    super.dispose();
+  }
+
 
 
   signOut() async {
@@ -226,59 +191,32 @@ class _HomeState extends State<Home> {
     });
   }
 
-
-/*
-  static final List<String> imgSlider = [
-    'elektronik.jpeg',
-    'fashion.jpg',
-    'food.jpg',
-    'rendang.jpg',
-    'sport.jpg'
-  ];
-
-
-  final CarouselSlider autoPlayImage = CarouselSlider(
-    items: imgSlider.map((fileImage) {
+  final List<Widget> imageSliders = imgList.map((item) => Builder(
+    builder: (BuildContext context) {
       return Container(
-        margin: EdgeInsets.all(5.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          child: Image.asset(
-            'assets/${fileImage}',
-            width: 10000,
-            fit: BoxFit.cover,
-          ),
-        ),
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: InkWell(
+                onTap: (){
+                  Navigator.of(context).push(
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) => DetailScreenHome(item)));
+                },
+                child: CachedNetworkImage(
+                    imageUrl: item,
+                    progressIndicatorBuilder: (context,
+                        url, downloadProgress) =>
+                        Center(
+                            child :
+                            CircularProgressIndicator()),
+                    imageBuilder: (context, image) =>
+                        Image.network(item, fit: BoxFit.cover,width: 10000,)
+                ),
+              )
+          )
       );
-    }).toList(),
-    height: 150,
-    autoPlay: true,
-    enlargeCenterPage: true,
-    aspectRatio: 2.0,
-  );
-
- */
-
-
-
-  final List<Widget> imageSliders = imgList.map((item) => Container(
-                margin: EdgeInsets.all(5.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: CachedNetworkImage(
-                      imageUrl: item,
-                      progressIndicatorBuilder: (context,
-                          url, downloadProgress) =>
-                          Center(
-                              child :
-                              Image.asset(
-                                "assets/loadingq.gif",
-                                width: 85.0,
-                              )),
-                      imageBuilder: (context, image) =>
-                          Image.network(item, fit: BoxFit.cover,width: 10000)
-                  ),
-                )
+    },
   )).toList();
 
 
@@ -287,6 +225,8 @@ class _HomeState extends State<Home> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   Future<bool> _onWillPop() async {}
   int _current = 0;
+  final CarouselController _controller = CarouselController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +246,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             title: new Text(
-              "Miracle Aesthetic Clinic",
+              "Miracle Telemedicine",
               style: new TextStyle(
                   fontFamily: 'VarelaRound', fontSize: 16, color: Colors.black),
             ),
@@ -363,152 +303,105 @@ class _HomeState extends State<Home> {
               SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child :
-
-          Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 1,left: 18,right: 15),
-       child :
-            ResponsiveContainer(
-              widthPercent: 100,
-              heightPercent: 18,
-              margin: EdgeInsets.symmetric(vertical: 20.0),
-              child:
-              ListView(
-                scrollDirection: Axis.horizontal,
-                children:
-                  List.generate(imgList.length, (index) {
-                      return
-                        Center(
-                      child :
-                        Padding (
-                          padding: const EdgeInsets.only(left: 0,right: 15),
-                          child : InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(new MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        DetailScreenHome(imgList[index])));
-                              },
-                              child : ClipRRect(
-                                child: ResponsiveContainer(
-                                  widthPercent: 90,
-                                  heightPercent: 100,
-                                  child: CachedNetworkImage(
-                                    imageUrl: imgList[index],
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              )
-                          )
-                      ));
-                  }),
-              )
-            )),
-                         /* CarouselSlider(
+                    Column(
+                      children: <Widget>[
+                        CarouselSlider(
                             items: imageSliders,
+                            carouselController: _controller,
                             options: CarouselOptions(
                                 autoPlay: false,
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                pauseAutoPlayOnTouch: true,
                                 enlargeCenterPage: true,
-                                aspectRatio: 2.5,
+                                viewportFraction: 0.8,
+                                aspectRatio: 2.0,
+                                height: 150,
                                 onPageChanged: (index, reason) {
                                   setState(() {
                                     _current = index;
                                   });
-                                }
+                                }),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top :10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: imgList.asMap().entries.map((entry) {
+                                return GestureDetector(
+                                  onTap: () => _controller.animateToPage(entry.key),
+                                  child: Container(
+                                    width: 8.0,
+                                    height: 8.0,
+                                    margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: (Theme.of(context).brightness == Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black)
+                                            .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: imgList.map((url) {
-                              int index = imgList.indexOf(url);
-                              return Container(
-                                width:  _current == index
-                                    ? 10.0
-                                    : 6.0,
-                                height: 8.0,
-                                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: _current == index
-                                      ? Hexcolor("#075e55")
-                                      : Hexcolor("#DDDDDD"),
-                                ),
-                              );
-                            }).toList(),
-                          ),*/
 
-              countapp2 == '1' ?
+                        countapp2 != '0' ?
 
-            Padding(
-              padding: const EdgeInsets.only(top : 20,left: 18,right: 15),
-              child:
-            ResponsiveContainer (
-              heightPercent: 10,
-              widthPercent: 100,
-              child :
-              new FutureBuilder(
-                future : _getCountChat(),
-                builder: (context, snapshot) {
-                    return ListView.builder(
-                      itemCount: data == null ? 0 : data.length,
-                      itemBuilder: (context, i) {
-                        return
-                        GestureDetector(
-                        child :
-                            Badge(
-                                position: BadgePosition.topStart(top: 0,start: 2),
-                                animationDuration: Duration(milliseconds: 300),
-                                animationType: BadgeAnimationType.slide,
-                                badgeColor: HexColor("#ef6352"),
-                                badgeContent: Text(
-                                  jenisKonsuls == 'CHAT' ?
-                                  data[i]["a"].toString() : "1",
-                                  style: TextStyle(color: Colors.white,fontSize: 15),
-                                ),
+                            Padding(
+                              padding: const EdgeInsets.only(top : 20,left: 18,right: 15),
+                              child:
+                            ResponsiveContainer (
+                              heightPercent: 10,
+                              widthPercent: 100,
+                              child :
+                              GestureDetector(
                                 child :
-                                Card(
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(color: HexColor("#DDDDDD"), width: 1),
-                                      borderRadius: BorderRadius.circular(10),
+                                Badge(
+                                    position: BadgePosition.topStart(top: 0,start: 2),
+                                    animationDuration: Duration(milliseconds: 300),
+                                    animationType: BadgeAnimationType.slide,
+                                    badgeColor: HexColor("#ef6352"),
+                                    badgeContent: Text(countchatread,
+                                      style: TextStyle(color: Colors.white,fontSize: 15),
                                     ),
-                                    child : ListTile(
-                                      title: Text(namaDokters == null ? '...' : namaDokters.toString(),
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'VarelaRound',
-                                              fontWeight: FontWeight.bold
-                                          )),
-                                      subtitle: Text("Konsultasi "+jenisKonsuls.toString(),
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontFamily: 'VarelaRound',
-                                              fontWeight: FontWeight.bold,
-                                          )),
-                                      trailing: Text("On Going",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: 'VarelaRound',
-                                          )),
-                                    )
-                                )),
+                                    child :
+                                    Card(
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child : ListTile(
+                                          title: Text(namaDokters == null ? '...' : namaDokters.toString(),
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'VarelaRound',
+                                                  fontWeight: FontWeight.bold
+                                              )),
+                                          subtitle: Text("Konsultasi "+jenisKonsuls.toString(),
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontFamily: 'VarelaRound',
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          trailing: Text("On Going",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontFamily: 'VarelaRound',
+                                              )),
+                                        )
+                                    )),
                                 onTap: (){
                                   Navigator.of(context).push(new MaterialPageRoute(
-                                      builder: (BuildContext context) => CekRoomKonsultasi(appKode, "1")));
-
+                                      builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString())));
                                 },
+                              )
 
-                        );
-                      },
-                    );
-                },
-    )))
+                            ))
 
-              :
-                  Text(""),
-
-
+                          :
+                              Text(""),
                                 Padding(
                                   padding: const EdgeInsets.only(top : 30.0, left: 25.0),
                                   child: Align(
@@ -539,12 +432,14 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, ExitPage(page: Regional()));
+                                                           //Navigator.push(context, ExitPage(page: Regional()));
+                                                           Navigator.of(context).push(new MaterialPageRoute(
+                                                               builder: (BuildContext context) => RegionalNew(getPhone.toString())));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
                                                             backgroundColor: Colors.white,
-                                                            backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                            backgroundImage: AssetImage("assets/konsul.png"),
                                                             radius: 25,
                                                           ),
                                                         ),
@@ -568,29 +463,13 @@ class _HomeState extends State<Home> {
                                                           Navigator.pushReplacement(context, ExitPage(page: MicoResep(getPhone)));
                                                         },
                                                         child :
-                                                            countresep == '0' ?
                                                             Container(
                                                               child: CircleAvatar(
                                                                 backgroundColor: Colors.white,
-                                                                backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                                backgroundImage: AssetImage("assets/resep.png"),
                                                                 radius: 25,
                                                               ),
                                                             )
-
-                                                            :
-                                                        Badge(
-                                                            position: BadgePosition.topStart(top: 0, start: 0),
-                                                            toAnimate: false,
-                                                            badgeColor: HexColor("#ef6352"),
-                                                            badgeContent: Text(countresep,style: TextStyle(color: Colors.white,fontSize: 12),),
-                                                            child : Container(
-                                                                    child: CircleAvatar(
-                                                                  backgroundColor: Colors.white,
-                                                                  backgroundImage: AssetImage("assets/mira-ico.png"),
-                                                                  radius: 25,
-                                                                ),
-                                                        )),
-
                                                       ),
                                                       Padding(
                                                           padding: const EdgeInsets.only(top : 10),
@@ -607,7 +486,7 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                                          //Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
@@ -633,7 +512,7 @@ class _HomeState extends State<Home> {
                                                     children: <Widget>[
                                                       GestureDetector(
                                                         onTap: () {
-                                                          Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
+                                                          //Navigator.pushReplacement(context, EnterPage(page: ListDokter("Surabaya")));
                                                         },
                                                         child : Container(
                                                           child: CircleAvatar(
@@ -650,92 +529,90 @@ class _HomeState extends State<Home> {
                                                       )
                                                     ],
                                                   )
-                                              ),
-
-
-                                            ],
-                                          )
+                                                ),
+                                              ],
+                                            )
                                           ),
-              Padding(
-                  padding: const EdgeInsets.only(top : 80.0, left: 25.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Connect With Us ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18,
-                        fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
-                  )
-              ),
-
-              Padding(
-                  padding: const EdgeInsets.only(top : 2.0, left: 25.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Temukan informasi terbaru lain ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,),textAlign: TextAlign.left,),
-                  )
-              ),
-                          Padding(
-                            padding: const EdgeInsets.only(top : 10),
-                            child: Column(
-                              children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5,left: 21,right: 15),
-                              child:    InkWell(
-                                onTap: () {
-                                  _launchWebsite();
-                                },
-                                child :Container(
-                                width: double.infinity,
-                                height: 100,
-                                child : Image(image: AssetImage("assets/web2.png"),fit: BoxFit.fitWidth,)
-                                )),
-                            ),
-   Padding(
-     padding: const EdgeInsets.only(left: 19,top :10),
-     child:    Align(
-       alignment: Alignment.centerLeft,
-       child: Opacity(
-         opacity: 0.7,
-         child: Text("Website Miracle",
-             style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,fontWeight: FontWeight.bold)
-         ),
-       )
-     ),
-   ),
 
 
-      Padding(
-        padding: const EdgeInsets.only(top: 25,left: 21,right: 15),
-        child:
-        InkWell(
-          onTap: () {
-            _launchSosmed();
-          },
-          child :
-        Container(
-            width: double.infinity,
-            height: 100,
-            child : Image(image: AssetImage("assets/web3.png"),fit: BoxFit.fitWidth,)
-        )),
-      ),
+                                 /* Padding(
+                                      padding: const EdgeInsets.only(top : 80.0, left: 25.0),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("Connect With Us ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 18,
+                                            fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
+                                      )
+                                  ),
+
+                                  Padding(
+                                      padding: const EdgeInsets.only(top : 2.0, left: 25.0),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("Temukan informasi terbaru lain ", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,),textAlign: TextAlign.left,),
+                                      )
+                                  ),
 
 
-      Padding(
-        padding: const EdgeInsets.only(left: 19,top :10,bottom: 25),
-        child:    Align(
-            alignment: Alignment.centerLeft,
-            child: Opacity(
-              opacity: 0.7,
-              child: Text("Social Media Miracle",
-                  style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,fontWeight: FontWeight.bold)
-              ),
-            )
-        ),
-      )
+                                  Padding(
+                                    padding: const EdgeInsets.only(top : 10),
+                                    child: Column(
+                                      children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5,left: 21,right: 15),
+                                      child:    InkWell(
+                                        onTap: () {
+                                          _launchWebsite();
+                                        },
+                                        child :Container(
+                                        width: double.infinity,
+                                        height: 100,
+                                        child : Image(image: AssetImage("assets/web2.png"),fit: BoxFit.fitWidth,)
+                                        )),
+                                    ),
 
+                                   Padding(
+                                     padding: const EdgeInsets.only(left: 19,top :10),
+                                     child:    Align(
+                                       alignment: Alignment.centerLeft,
+                                       child: Opacity(
+                                         opacity: 0.7,
+                                         child: Text("Website Miracle",
+                                             style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,fontWeight: FontWeight.bold)
+                                         ),
+                                       )
+                                     ),
+                                   ),
 
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 25,left: 21,right: 15),
+                                      child:
+                                      InkWell(
+                                        onTap: () {
+                                          _launchSosmed();
+                                        },
+                                        child :
+                                      Container(
+                                          width: double.infinity,
+                                          height: 100,
+                                          child : Image(image: AssetImage("assets/web3.png"),fit: BoxFit.fitWidth,)
+                                      )),
+                                    ),
 
-    ],
-  ),
-)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 19,top :10,bottom: 25),
+                                      child:    Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Opacity(
+                                            opacity: 0.7,
+                                            child: Text("Social Media Miracle",
+                                                style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14,fontWeight: FontWeight.bold)
+                                            ),
+                                          )
+                                      ),
+                                    )
+                                ],
+                              ),
+                            )*/
               
                                   ],
                                 )),
@@ -751,7 +628,6 @@ class _HomeState extends State<Home> {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       items: [
-
         BottomNavigationBarItem(
             icon: FaIcon(
               FontAwesomeIcons.home,
@@ -762,87 +638,64 @@ class _HomeState extends State<Home> {
                   fontFamily: 'VarelaRound',
                 ))),
 
+                    BottomNavigationBarItem(
+                    icon:   countapp2 == '0' ?
+                          FaIcon(
+                            FontAwesomeIcons.calendarCheck,
+                            size: 22,
+                          )
+                      :
+                      Badge(
+                      badgeContent: Text("",
+                          style: TextStyle(color: Colors.white,fontSize: 12),),
+                          child: FaIcon(FontAwesomeIcons.calendarAlt, size: 22,),
+                      ),
+                      title: Text("Activity",
+                          style: TextStyle(
+                            fontFamily: 'VarelaRound',
+                          )),
+                    ),
 
+                  BottomNavigationBarItem(
+                    icon: FaIcon(
+                      FontAwesomeIcons.fileAlt,
+                      size: 22,
+                    ),
+                    title: Text("History",
+                        style: TextStyle(
+                          fontFamily: 'VarelaRound',
+                        )),
+                    ),
 
-        BottomNavigationBarItem(
-          icon:   countapp == '0' ?
-          FaIcon(
-            FontAwesomeIcons.calendarCheck,
-            size: 22,
-          )
-              :
-          GFIconBadge(
-              child:FaIcon(
-                FontAwesomeIcons.calendarCheck,
-                size: 22,
-              ),
-              counterChild: GFBadge(
-                color: Colors.redAccent,
-                size: 16,
-                shape:
-                GFBadgeShape.circle,
-              )
-          ),
-          title: Text("Activity",
-              style: TextStyle(
-                fontFamily: 'VarelaRound',
-              )),
-        ),
+                  BottomNavigationBarItem(
+                    icon:
+                    countmessagenotif == '0' ?
+                            FaIcon(
+                              FontAwesomeIcons.envelopeOpenText,
+                              size: 22,
+                            )
+                          :
+                            Badge(
+                              badgeContent: Text("",
+                                style: TextStyle(color: Colors.white,fontSize: 12),),
+                              child: FaIcon(FontAwesomeIcons.envelopeOpenText, size: 22,),
+                            ),
+                    title: Text("Message",
+                        style: TextStyle(
+                          fontFamily: 'VarelaRound',
+                        )),
+                  ),
 
-
-
-        BottomNavigationBarItem(
-          icon: FaIcon(
-            FontAwesomeIcons.fileAlt,
-            size: 22,
-          ),
-          title: Text("History",
-              style: TextStyle(
-                fontFamily: 'VarelaRound',
-              )),
-        ),
-
-        BottomNavigationBarItem(
-          icon:
-          countmessage == '0' ?
-          FaIcon(
-            FontAwesomeIcons.envelopeOpenText,
-            size: 22,
-          )
-    :
-    GFIconBadge(
-          child:FaIcon(
-                FontAwesomeIcons.envelopeOpenText,
-                size: 22,
-                ),
-                 counterChild: GFBadge(
-                color:
-                Colors.redAccent,
-                size: 16,
-                shape:
-                GFBadgeShape.circle,
-          )
-    ),
-
-
-
-
-          title: Text("Message",
-              style: TextStyle(
-                fontFamily: 'VarelaRound',
-              )),
-        ),
-
-        BottomNavigationBarItem(
-          icon: FaIcon(
-            FontAwesomeIcons.userCircle,
-            size: 22,
-          ),
-          title: Text("Account",
-              style: TextStyle(
-                fontFamily: 'VarelaRound',
-              )),
-        )
+                  BottomNavigationBarItem(
+                    icon: FaIcon(
+                      FontAwesomeIcons.userCircle,
+                      size: 22,
+                    ),
+                    title: Text("Account",
+                        style: TextStyle(
+                          fontFamily: 'VarelaRound',
+                        )),
+                  )
 
       ],
       onTap: _onTap,
@@ -855,28 +708,33 @@ class _HomeState extends State<Home> {
     switch (tabIndex) {
       case 0:
        // _navigatorKey.currentState.pushReplacementNamed("Home");
-        Navigator.of(context).pushReplacement(
+        Navigator.pop(context);
+        Navigator.of(context).push(
             new MaterialPageRoute(
                 builder: (BuildContext context) => Home()));
 
         break;
       case 1:
-        Navigator.of(context).pushReplacement(
+        Navigator.pop(context);
+        Navigator.of(context).push(
             new MaterialPageRoute(
                 builder: (BuildContext context) => AppointmentList(getPhone)));
         break;
       case 2:
+        Navigator.pop(context);
         Navigator.of(context).push(new MaterialPageRoute(
             builder: (BuildContext context) =>
                 TransaksiHistoryNew(getPhone)));
         break;
       case 3:
-        Navigator.of(context).pushReplacement(
+        Navigator.pop(context);
+        Navigator.of(context).push(
             new MaterialPageRoute(
                 builder: (BuildContext context) => NotifNew(getPhone)));
         break;
       case 4:
-        Navigator.of(context).pushReplacement(
+        Navigator.pop(context);
+        Navigator.of(context).push(
             new MaterialPageRoute(
                 builder: (BuildContext context) => UserProfile(getPhone)));
         break;

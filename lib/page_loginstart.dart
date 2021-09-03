@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/helper/based_color.dart';
 
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_introduction.dart';
@@ -57,18 +58,19 @@ class _LoginStartState extends State<LoginStart> {
 
                     Padding(
                         padding: const EdgeInsets.only(right: 15.0, left: 15.0, bottom: 15.0, top: 10),
-                        child: OutlineButton(
+                        child: RaisedButton(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
-                          color: HexColor("#8cc63e"),
+                          color: HexColor(second_color),
+                          elevation: 0,
                           child: Text(
                             "Login As Customer",
                             style: TextStyle(
                               fontFamily: 'VarelaRound',
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: HexColor("#8cc63e"),
+                              color: HexColor(five_color),
                             ),
                           ),
                           onPressed: () =>  Navigator.of(context).push(

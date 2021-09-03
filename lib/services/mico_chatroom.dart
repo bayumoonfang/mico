@@ -6,18 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/helper/app_helper.dart';
 import 'package:mico/mico_home.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:mico/services/mico_chatroom_detailtagihan.dart';
 import 'package:mico/services/mico_detailimagechat.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 
 
 class Chatroom extends StatefulWidget {
-  final String idAppointment, idPage;
-  const Chatroom(this.idAppointment,this.idPage);
+  final String idApp, getPhone;
+  const Chatroom(this.idApp,this.getPhone);
 
   @override
   _ChatroomState createState() => new _ChatroomState();
@@ -36,46 +38,35 @@ String Base64;
 String _isLoading = '0';
 
   Future<bool> _onWillPop() async {
-    widget.idAppointment == '1' ?
-    Navigator.of(context).pushReplacement(
-        new MaterialPageRoute(
-            builder: (BuildContext context) => Home()))
-        :
     Navigator.pop(context);
   }
 
 
-
   //==================HTTP GET DATA========================================================
-    String getInvNumber, getNamaDokter = "...";
-      _getChatDetail() async {
-      final response = await http.get(
-          "https://duakata-dev.com/miracle/api_script.php?do=getdata_chatdetail2&id="+widget.idAppointment);
-      Map dataq = jsonDecode(response.body);
-      setState(() {
-        getInvNumber = dataq["a"].toString();
-        getNamaDokter = dataq["b"].toString();
-      });
-    }
+          String getInvNumber, getNamaDokter= "...";
+          String getStatusRoom = 'OPEN';
+          _startingVariable() async {
+            await AppHelper().getAppDetailWithInvoiced(widget.idApp.toString()).then((value){
+              setState(() {
+                getInvNumber = value[0];
+                getNamaDokter = value[1];
+                getStatusRoom = value[2];
+              });});
+          }
 
-  Future<List> getDataChat2() async {
-    final response = await http.get(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_chat2&"
-            "id="+widget.idAppointment);
-    setState((){
-      data = json.decode(response.body);
-    });
-  }
+          Future<List> getDataChat2() async {
+            final response = await http.get(
+               AppHelper().applink+"do=getdata_chat2&"
+                    "id="+widget.idApp);
+            return json.decode(response.body);
+          }
 
-Future<List> getDataChat3() async {
-  final response = await http.get(
-      "https://duakata-dev.com/miracle/api_script.php?do=getdata_countchatfixed&"
-          "id="+widget.idAppointment);
-  setState((){
-    data2 = json.decode(response.body);
-
-  });
-}
+          Future<List> getDataChat3() async {
+            final response = await http.get(
+                AppHelper().applink+"do=getdata_countchatfixed&"
+                    "id="+widget.idApp);
+            return json.decode(response.body);
+          }
 
 //==========================================================================================
 
@@ -90,12 +81,13 @@ Future<List> getDataChat3() async {
       return;
     } else {
       final response = await http.post(
-          "https://duakata-dev.com/miracle/api_script.php?do=addata_chat2",
+          AppHelper().applink+"do=addata_chat2",
           body: { "messagetext": _textController.text,
-            "id": widget.idAppointment});
+            "id": widget.idApp});
       setState(() {
         _textController.clear();
         myFocusNode.requestFocus();
+        //FocusScope.of(context).requestFocus(FocusNode());
         _isLoading = '0';
       });
     }
@@ -110,10 +102,11 @@ Future<List> getDataChat3() async {
     http.post("https://duakata-dev.com/miracle/api_script.php?do=addata_chatimage2", body: {
       "image": Base64,
       "name": fileName,
-      "id": widget.idAppointment
+      "id": widget.idApp
     });
     print("You selected gallery image : " + Base64);
     setState(() {
+      FocusScope.of(context).requestFocus(FocusNode());
       _scrollController
           .jumpTo(_scrollController.position.maxScrollExtent);
     });
@@ -121,20 +114,22 @@ Future<List> getDataChat3() async {
 
 
   void _dodeletepesan(String valID) {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_deletechatuser";
+    var url = AppHelper().applink+"do=action_deletechatuser";
     http.post(url,
         body: {
           "idmessage": valID
         });
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 
 
   void _dodeletepesanimage(String valID) {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_deletechatimageuser";
+    var url = AppHelper().applink+"do=action_deletechatimageuser";
     http.post(url,
         body: {
           "idmessage": valID
         });
+    FocusScope.of(context).requestFocus(FocusNode());
   }
   //=================================================================================================
 
@@ -152,7 +147,6 @@ Future<List> getDataChat3() async {
                   onPressed: () {
                     _dodeletepesan(IDMessage);
                     Navigator.pop(context);
-                    myFocusNode.dispose();
                   },
                   child:
                   Text("Iya", style: TextStyle(fontFamily: 'VarelaRound',
@@ -188,7 +182,6 @@ Future<List> getDataChat3() async {
                   onPressed: () {
                     _dodeletepesanimage(IDMessage);
                     Navigator.pop(context);
-                    myFocusNode.dispose();
                   },
                   child:
                   Text("Iya", style: TextStyle(fontFamily: 'VarelaRound',
@@ -211,10 +204,10 @@ Future<List> getDataChat3() async {
 
 
   void _removeread() async {
-  var url = "https://duakata-dev.com/miracle/api_script.php?do=action_removeread";
+  var url = AppHelper().applink+"do=action_removeread";
   http.post(url,
       body: {
-        "id": widget.idAppointment,
+        "id": widget.idApp,
       });
 }
 
@@ -239,21 +232,27 @@ _scrollListener() {
   }
 }
 
+  void _loaddata() async {
+    await _startingVariable();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+     _loaddata();
+    Timer.periodic(Duration(seconds: 3), (timer) {
+      setState(() {
+        _startingVariable();
+      });
+    });
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _removeread();
+  }
 
 
 
 
-
-
-@override
-void initState() {
-  super.initState();
-   _getChatDetail();
-   _scrollController = ScrollController();
-  _scrollController.addListener(_scrollListener);
-  _removeread();
-
-}
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +271,7 @@ void initState() {
                 icon: new Icon(Icons.arrow_back),
                 color: Colors.black,
                 onPressed: () {
-                  widget.idAppointment == '1' ?
+                  widget.idApp == '1' ?
                   Navigator.of(context).pushReplacement(
                       new MaterialPageRoute(
                           builder: (BuildContext context) => Home()))
@@ -321,7 +320,9 @@ void initState() {
                                       ],
                                     ),
                                     onTap: (){
-                                     Navigator.push(context, ExitPage(page: DetailTagihan(widget.idAppointment)));
+                                     Navigator.of(context).push(new MaterialPageRoute(
+                                         builder: (BuildContext context) => ChatRoomDetailTagihan(widget.idApp)));
+                                          FocusScope.of(context).requestFocus(FocusNode());
                                     },)
 
                               )
@@ -361,6 +362,11 @@ void initState() {
                             child: new FutureBuilder(
                                 future: getDataChat2(),
                                 builder: (context, snapshot) {
+                                  if (snapshot.data == null) {
+                                    return Center(
+                                        child: CircularProgressIndicator()
+                                    );
+                                  } else {
                                   return ListView.builder(
                                       controller: _scrollController,
                                       shrinkWrap: true,
@@ -368,9 +374,9 @@ void initState() {
                                           left: 15.0, right: 15.0, bottom: 60.0),
                                       reverse: false,
                                       itemCount:
-                                      data == null ? 0 : data.length,
+                                      snapshot.data == null ? 0 : snapshot.data.length,
                                       itemBuilder: (context, i) {
-                                        if (data[i]["d"] == '1') {
+                                        if (snapshot.data[i]["d"] == '1') {
                                           return Column(children: [
                                             Padding(
                                               padding: const EdgeInsets.only(top:5),
@@ -392,24 +398,24 @@ void initState() {
                                                               ],
                                                             ),
                                                             child :
-                                                            data[i]["e"] != 'Message has been deleted..' ?
+                                                            snapshot.data[i]["e"] != 'Message has been deleted..' ?
                                                             Padding(
                                                                 padding: const EdgeInsets.all(10.0),
                                                                 child:
-                                                                data[i]["h"] != '' && data[i]["d"] == '1' ?
+                                                                snapshot.data[i]["h"] != '' && snapshot.data[i]["d"] == '1' ?
                                                                 GestureDetector(
                                                                   child: Hero(
-                                                                      tag: data[i]["h"],
+                                                                      tag: snapshot.data[i]["h"],
                                                                       child :
                                                                       Image(
-                                                                        image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
+                                                                        image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ snapshot.data[i]["h"]),
                                                                         height: 160,
                                                                         width: 160,
                                                                       )),
                                                                   onTap: (){
                                                                     Navigator.of(context).push(
                                                                         new MaterialPageRoute(
-                                                                            builder: (BuildContext context) => DetailScreen(data[i]["h"].toString())));
+                                                                            builder: (BuildContext context) => DetailScreen(snapshot.data[i]["h"].toString())));
                                                                   },
                                                                   onLongPress: (){
                                                                     //_doDeleteMessageImage(data[i]["i"].toString());
@@ -418,7 +424,7 @@ void initState() {
                                                                     :
                                                                 GestureDetector(
                                                                   child :
-                                                                  Text(data[i]["e"],
+                                                                  Text(snapshot.data[i]["e"],
                                                                       style: TextStyle(
                                                                         fontSize: 14,
                                                                         fontFamily: 'VarelaRound',
@@ -432,7 +438,7 @@ void initState() {
                                                             Padding (
                                                                 padding: const EdgeInsets.all(10),
                                                                 child :
-                                                                Text(data[i]["e"],
+                                                                Text(snapshot.data[i]["e"],
                                                                     style: TextStyle(
                                                                         fontSize: 14,
                                                                         fontFamily: 'VarelaRound',
@@ -450,7 +456,7 @@ void initState() {
                                                   padding: const EdgeInsets.only(
                                                       left: 3.0, top: 5),
                                                   child: Text(
-                                                      data[i]["g"],
+                                                      snapshot.data[i]["g"],
                                                       style: TextStyle(
                                                         fontSize: 8,
                                                         fontFamily: 'VarelaRound',
@@ -481,39 +487,39 @@ void initState() {
                                                                   ],
                                                                 ),
                                                                 child :
-                                                                data[i]["e"] != 'Message has been deleted..' ?
+                                                                snapshot.data[i]["e"] != 'Message has been deleted..' ?
                                                                   Padding(
                                                                       padding: const EdgeInsets.all(10.0),
                                                                       child:
-                                                                      data[i]["h"] != '' && data[i]["d"] == '2' ?
+                                                                      snapshot.data[i]["h"] != '' && snapshot.data[i]["d"] == '2' ?
                                                                       GestureDetector(
                                                                         child: Hero(
-                                                                            tag: data[i]["h"],
+                                                                            tag: snapshot.data[i]["h"],
                                                                             child :
                                                                             Image(
-                                                                              image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ data[i]["h"]),
+                                                                              image: NetworkImage("https://duakata-dev.com/miracle/media/imgchat/"+ snapshot.data[i]["h"]),
                                                                               height: 160,
                                                                               width: 160,
                                                                             )),
                                                                         onTap: (){
                                                                           Navigator.of(context).push(
                                                                               new MaterialPageRoute(
-                                                                                  builder: (BuildContext context) => DetailScreen(data[i]["h"].toString())));
+                                                                                  builder: (BuildContext context) => DetailScreen(snapshot.data[i]["h"].toString())));
                                                                         },
                                                                         onLongPress: (){
-                                                                          _doDeleteMessageImage(data[i]["i"].toString());
+                                                                          _doDeleteMessageImage(snapshot.data[i]["i"].toString());
                                                                         },
                                                                       )
                                                                           :
                                                                           GestureDetector(
                                                                             child :
-                                                                              Text(data[i]["e"],
+                                                                              Text(snapshot.data[i]["e"],
                                                                                   style: TextStyle(
                                                                                     fontSize: 14,
                                                                                     fontFamily: 'VarelaRound',
                                                                                   )),
                                                                             onLongPress: (){
-                                                                              _doDeleteMessage(data[i]["i"].toString());
+                                                                              _doDeleteMessage(snapshot.data[i]["i"].toString());
                                                                             },
                                                                           )
                                                                   )
@@ -521,7 +527,7 @@ void initState() {
                                                                     Padding (
                                                                       padding: const EdgeInsets.all(10),
                                                                       child :
-                                                                Text(data[i]["e"],
+                                                                Text(snapshot.data[i]["e"],
                                                                     style: TextStyle(
                                                                         fontSize: 14,
                                                                         fontFamily: 'VarelaRound',
@@ -536,7 +542,7 @@ void initState() {
                                                         padding: const EdgeInsets.only(
                                                             right: 3.0, top: 5),
                                                         child: Text(
-                                                            data[i]["g"],
+                                                            snapshot.data[i]["g"],
                                                             style: TextStyle(
                                                               fontSize: 8,
                                                               fontFamily: 'VarelaRound',
@@ -549,7 +555,7 @@ void initState() {
                                       }
 
                                   );
-                                }
+                                }}
                             )
                         )
                     ),
@@ -573,7 +579,7 @@ void initState() {
                               future: getDataChat3(),
                               builder: (context, snapshot) {
                                 return ListView.builder(
-                                  itemCount: data2 == null ? 0 : data2.length ,
+                                  itemCount: snapshot.data == null ? 0 : snapshot.data.length ,
                                   itemBuilder: (context, i) {
                                     return   Padding(
                                       padding: const EdgeInsets.only(right: 15, bottom: 15),
@@ -583,9 +589,9 @@ void initState() {
                                             height: 40.0,
                                             child:
 
-                                            data2[i]["a"] != 0 ?
+                                            snapshot.data[i]["a"] != 0 ?
                                             Badge(
-                                              badgeContent: Text(data2[i]["a"].toString(), style: TextStyle(color: Colors.white),),
+                                              badgeContent: Text(snapshot.data[i]["a"].toString(), style: TextStyle(color: Colors.white),),
                                               animationType: null,
                                               toAnimate: false,
                                               child: FloatingActionButton(
@@ -635,7 +641,70 @@ _buildTextComposer()
 
 
 Widget _buildTextComposer() {
-  return new
+  return
+  getStatusRoom == 'CLOSED' ?
+  Opacity(
+    opacity: 0.4,
+    child: Column(
+      children: <Widget>[
+        Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: new Row(
+              children: <Widget>[
+                Flexible(
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 15,bottom: 5,top:5),
+                      child: TextField(
+                        readOnly: true,
+                        minLines: 1,
+                        maxLines: 5,
+                        controller: _textController,
+                        focusNode: myFocusNode,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'VarelaRound',
+                        ),
+                        decoration: new InputDecoration.collapsed(
+                          hintText: 'Tulis Pesan..',
+                        ),
+                      )),
+                ),
+                new Container(
+                    margin: new EdgeInsets.symmetric(horizontal: 4.0),
+                    child:
+                    Row (
+                        children: <Widget>[
+                          Opacity(
+                              opacity: 0.8,
+                              child :
+                              new IconButton(
+                                  icon: new FaIcon(FontAwesomeIcons.image),
+                              )),
+                          Opacity(
+                              opacity: 0.8,
+                              child :
+                              new IconButton(
+                                  icon: new Icon(Icons.send))),
+                        ])
+                ),
+              ],
+            ))
+      ],
+    ),
+  )
+
+      :
   GestureDetector(
     child :
     Column(
@@ -661,7 +730,6 @@ Widget _buildTextComposer() {
             //margin: const EdgeInsets.symmetric(horizontal: 8.0),
             child: new Row(
               children: <Widget>[
-
                 Flexible(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 15,bottom: 5,top:5),
@@ -719,7 +787,10 @@ Widget _buildTextComposer() {
     onTap: (){
       _scrollController
           .jumpTo(_scrollController.position.maxScrollExtent);
-    },);
+    },)
+
+
+  ;
 }
 
 

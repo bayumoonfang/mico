@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
-import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/konsultasi/mico_detaildokter.dart';
 import 'package:mico/mico_homesearch.dart';
 import 'package:mico/mico_homesearchdetail.dart';
 import 'package:mico/mico_searchdokter.dart';

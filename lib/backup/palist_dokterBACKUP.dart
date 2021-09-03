@@ -12,7 +12,7 @@ import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/konsultasi/mico_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'package:toast/toast.dart';
 

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/helper/based_color.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
@@ -177,7 +178,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
                                       padding: const EdgeInsets.only(bottom: 15.0),
                                       child :
                                       RaisedButton(
-                                        color: HexColor("#8cc63e"),
+                                        color: HexColor(second_color),
                                         child: Text(
                                           "Verifikasi",
                                           style: TextStyle(

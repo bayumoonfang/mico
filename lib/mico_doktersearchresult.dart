@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
-import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/konsultasi/mico_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -198,12 +198,12 @@ class _SearchResultDokterPageState extends State<SearchResultDokter> {
                     children: <Widget>[
                       InkWell(
                           onTap: () {
-                            Navigator.of(context).push(
+                          /*  Navigator.of(context).push(
                                 new MaterialPageRoute(
                                     builder: (BuildContext context) => Pembayaran(
                                         data[i]["f"],
                                         widget.namaklinik,
-                                        data[i]["b"])));
+                                        data[i]["b"])));*/
                           },
                           child:
                           ListTile(

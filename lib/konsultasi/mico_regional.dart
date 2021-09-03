@@ -190,7 +190,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Surabaya")));
+                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Surabaya")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -217,7 +217,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Malang")));
+                                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Malang")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -242,7 +242,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Balikpapan")));
+                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Balikpapan")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(
@@ -269,7 +269,7 @@ _getAddress() async {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Denpasar")));
+                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Denpasar")));
                                 },
                                 child : Container(
                                   child: CircleAvatar(

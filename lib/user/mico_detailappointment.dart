@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/mico_home.dart';
-import 'package:mico/services/mico_cekroom.dart';
+import 'package:mico/services/mico_cekroom_archived.dart';
 import 'package:mico/services/mico_chatroomhistory.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 import 'package:responsive_container/responsive_container.dart';

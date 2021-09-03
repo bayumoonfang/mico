@@ -5,53 +5,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_cekappointment.dart';
-import 'package:mico/mico_detailimagedokter.dart';
+import 'package:mico/konsultasi/mico_detailimagedokter.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
 import 'package:responsive_container/responsive_container.dart';
 
-class Pembayaran extends StatefulWidget {
-  final String iddokter;
-  final String namaKlinik, namaDokter;
-
-
-
-  const Pembayaran(this.iddokter, this.namaKlinik, this.namaDokter);
+class DetailDokter extends StatefulWidget {
+  final String idDokter;
+  final String getPhone;
+  const DetailDokter(this.idDokter, this.getPhone);
   @override
-  _PembayaranState createState() => new _PembayaranState(
-      getDokter: this.iddokter,
-      getKlinik: this.namaKlinik,
-      getNamaDokter: this.namaDokter);
+  _DetailDokter createState() => new _DetailDokter();
 }
 
-class _PembayaranState extends State<Pembayaran> {
-  String getKlinik;
-  String getDokter, getNamaDokter, getAcc;
+class _DetailDokter extends State<DetailDokter> {
   bool _isvisible = true ;
-
-
-  _PembayaranState({this.getDokter, this.getKlinik, this.getNamaDokter});
   List data;
   String getChatStatus, getVideoStatus;
 
-  _session() async {
-    int value = await Session.getValue();
-    getAcc = await Session.getPhone();
-    if (value != 1) {
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(
-          builder: (BuildContext context) => Login()));
-    }
-  }
+
 
   String getPhoto, getNama, getRegional, getLokasi, getSRT;
   _getDetail() async {
     final response = await http.post(
-        "https://duakata-dev.com/miracle/api_script.php?do=getdata_dokterdetail&id=" +
-            getDokter);
+       AppHelper().applink+"do=getdata_dokterdetail&id=" +
+            widget.idDokter);
     Map data2 = jsonDecode(response.body);
     setState(() {
       getPhoto = data2["e"].toString();
@@ -66,7 +49,6 @@ class _PembayaranState extends State<Pembayaran> {
 
 
   _sinkronall() async {
-    await _session();
     await _getDetail();
   }
 
@@ -81,13 +63,11 @@ class _PembayaranState extends State<Pembayaran> {
 
   Future<List> getDateJadwal() async {
     http.Response response = await http.get(
-        Uri.encodeFull("https://duakata-dev.com/miracle/api_script.php?do=getdata_jadwalhari&id=" +
-            widget.iddokter),
+        Uri.encodeFull(AppHelper().applink+"do=getdata_jadwalhari&id=" +
+            widget.idDokter),
         headers: {"Accept":"application/json"}
     );
-    setState((){
-      data = json.decode(response.body);
-    });
+    return json.decode(response.body);
   }
 
   Future<bool> _onWillPop() async {
@@ -135,10 +115,7 @@ class _PembayaranState extends State<Pembayaran> {
           body:
               _isvisible == true ?
           Center(
-                    child: Image.asset(
-                    "assets/loadingq.gif",
-                      width: 110.0,
-                    )
+                    child: CircularProgressIndicator()
                 )
               :
               Padding(
@@ -259,7 +236,7 @@ class _PembayaranState extends State<Pembayaran> {
                       child: Divider(height: 3.0)),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, top: 30),
-                    child: Text("Tanggal Konsultasi",
+                    child: Text("Tanggal Available",
                         style: TextStyle(
                             fontFamily: 'VarelaRound',
                             fontSize: 16,
@@ -267,7 +244,7 @@ class _PembayaranState extends State<Pembayaran> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, top: 5,bottom: 10),
-                    child: Text("Pilih tanggal dan jam konsultasi ",
+                    child: Text("Dokter juga akan online pada jam berikut ",
                         style: TextStyle(
                             fontFamily: 'VarelaRound',
                             fontSize: 14)),
@@ -282,9 +259,9 @@ class _PembayaranState extends State<Pembayaran> {
                         ListView.builder(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.only(top: 10.0, left: 10),
-                          itemCount: data == null ? 0 : data.length ,
+                          itemCount: snapshot.data == null ? 0 : snapshot.data.length ,
                           itemBuilder: (context, i) {
-                                          return data.isEmpty ?
+                                          return snapshot.data.isEmpty ?
                                                 Container(
                                                     width: 160,
                                                     height: 200,
@@ -300,7 +277,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                     width: 160,
                                                     padding: const EdgeInsets.only(right: 10),
                                                     child:
-                                                    data[i]['g'] == 'ONLINE' ?
+                                                    snapshot.data[i]['g'] == 'ONLINE' ?
                                                     Card(
                                                       elevation: 0,
                                                       margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
@@ -318,7 +295,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                           onTap: () {
                                                             _onSelected(i);
                                                             _onButton(2);
-                                                            _getDate(data[i]['i']);
+                                                            _getDate(snapshot.data[i]['i']);
                                                           },
                                                           child:
                                                           Container(
@@ -328,7 +305,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 Padding(
                                                                   child:
                                                                   Text(new DateFormat.EEEE().format(
-                                                                      DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                                      DateTime.parse(snapshot.data[i]['f'])), style: new TextStyle(
                                                                       color: Colors.black,
                                                                       fontFamily: 'VarelaRound',
                                                                       fontWeight: FontWeight.bold,
@@ -338,9 +315,9 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 ),
                                                                 Padding(
                                                                   child:
-                                                                  Text("(" + data[i]['d'] + " " +
+                                                                  Text("(" + snapshot.data[i]['d'] + " " +
                                                                       new DateFormat.MMM().format(
-                                                                          DateTime.parse(data[i]['f'])) + ")",
+                                                                          DateTime.parse(snapshot.data[i]['f'])) + ")",
                                                                     style: new TextStyle(
                                                                       color: Colors.black,
                                                                       fontFamily: 'VarelaRound',
@@ -349,7 +326,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 ),
                                                                 Padding(
                                                                   child:
-                                                                  Text(data[i]['e'],
+                                                                  Text(snapshot.data[i]['e'],
                                                                     style: new TextStyle(
                                                                         color: Colors.black,
                                                                         fontFamily: 'VarelaRound',
@@ -365,7 +342,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                       ),
                                                     )
 
-                                                        : data[i]['g'] == 'BOOKED' ?
+                                                        : snapshot.data[i]['g'] == 'BOOKED' ?
                                                     Opacity(
                                                         opacity: 0.3,
                                                         child:
@@ -385,7 +362,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 Padding(
                                                                   child:
                                                                   Text(new DateFormat.EEEE().format(
-                                                                      DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                                      DateTime.parse(snapshot.data[i]['f'])), style: new TextStyle(
                                                                       color: Colors.black,
                                                                       fontFamily: 'VarelaRound',
                                                                       fontWeight: FontWeight.bold,
@@ -395,7 +372,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 ),
                                                                 Padding(
                                                                   child:
-                                                                  Text("(" + data[i]['d'] + " " +
+                                                                  Text("(" + snapshot.data[i]['d'] + " " +
                                                                       new DateFormat.MMM().format(
                                                                           DateTime.parse(data[i]['f'])) + ")",
                                                                     style: new TextStyle(
@@ -406,7 +383,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 ),
                                                                 Padding(
                                                                   child:
-                                                                  Text(data[i]['e'],
+                                                                  Text(snapshot.data[i]['e'],
                                                                     style: new TextStyle(
                                                                         color: Colors.black,
                                                                         fontFamily: 'VarelaRound',
@@ -441,7 +418,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 Padding(
                                                                   child:
                                                                   Text(new DateFormat.EEEE().format(
-                                                                      DateTime.parse(data[i]['f'])), style: new TextStyle(
+                                                                      DateTime.parse(snapshot.data[i]['f'])), style: new TextStyle(
                                                                       color: Colors.black,
                                                                       fontFamily: 'VarelaRound',
                                                                       fontWeight: FontWeight.bold,
@@ -451,9 +428,9 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 ),
                                                                 Padding(
                                                                   child:
-                                                                  Text("(" + data[i]['d'] + " " +
+                                                                  Text("(" + snapshot.data[i]['d'] + " " +
                                                                       new DateFormat.MMM().format(
-                                                                          DateTime.parse(data[i]['f'])) + ")",
+                                                                          DateTime.parse(snapshot.data[i]['f'])) + ")",
                                                                     style: new TextStyle(
                                                                       color: Colors.black,
                                                                       fontFamily: 'VarelaRound',
@@ -462,7 +439,7 @@ class _PembayaranState extends State<Pembayaran> {
                                                                 ),
                                                                 Padding(
                                                                   child:
-                                                                  Text(data[i]['e'],
+                                                                  Text(snapshot.data[i]['e'],
                                                                     style: new TextStyle(
                                                                         color: Colors.black,
                                                                         fontFamily: 'VarelaRound',
@@ -532,8 +509,8 @@ class _PembayaranState extends State<Pembayaran> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (BuildContext context) => CekAppointment(_isGetJadwal.toString(),getAcc.toString(),getDokter,getNamaDokter, getKlinik)));
+                      /*  Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => CekAppointment(_isGetJadwal.toString(),getAcc.toString(),getDokter,getNamaDokter, getKlinik)));*/
                       },
                     ),
 

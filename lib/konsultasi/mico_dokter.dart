@@ -2,6 +2,7 @@ import 'package:async_loader/async_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -9,22 +10,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/helper/PageRoute.dart';
+import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_home.dart';
 import 'package:mico/konsultasi/mico_regional.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/mico_detaildokter.dart';
+import 'package:mico/konsultasi/mico_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'package:toast/toast.dart';
 
 
 
 class ListDokter extends StatefulWidget {
-  final String namaklinik;
-  const ListDokter(this.namaklinik);
+  final String regional;
+  final String getPhone;
+  const ListDokter(this.regional, this.getPhone);
   @override
-  _ListDokterState createState() =>
-      new _ListDokterState(getKlinik: this.namaklinik);
+  _ListDokterState createState() => _ListDokterState();
 }
 
 
@@ -38,24 +40,13 @@ class _ListDokterState extends State<ListDokter> {
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
-  final GlobalKey<AsyncLoaderState> _asyncLoaderState =
-  new GlobalKey<AsyncLoaderState>();
 
-    String getPhone = "...";
-  _session() async {
-    getPhone = await Session.getPhone();
-    int value = await Session.getValue();
-    if (value != 1) {
-      Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => Login()));
-    }
-  }
+
 
 
   @override
   void initState() {
     super.initState();
-   _session();
    getData();
     _focus.addListener(_onFocusChange);
   }
@@ -73,7 +64,7 @@ class _ListDokterState extends State<ListDokter> {
 
   Future<List> getData() async {
      http.Response response = await http.get(
-         Uri.encodeFull("https://duakata-dev.com/miracle/api_script.php?do=getdata_dokter&id="+widget.namaklinik),
+         Uri.encodeFull(AppHelper().applink+"do=getdata_dokter&id="+widget.regional+"&filter="+getFilter),
          headers: {"Accept":"application/json"}
      );
      return json.decode(response.body);
@@ -87,42 +78,121 @@ class _ListDokterState extends State<ListDokter> {
     });
   }
 
-
   Future<bool> _onWillPop() async {
     Navigator.pop(context);
   }
 
   void _addfavorite(String iddokter) {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_addfavorite";
+    var url = AppHelper().applink+"do=action_addfavorite";
     http.post(url,
         body: {
-          "iduser": getPhone,
+          "iduser": widget.getPhone,
           "iddokter" : iddokter
         });
-    showToast("Favorite berhasil ditambahkan", gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
-    setState(() {
-      getData();
-    });
+    setState(() {});
   }
 
   void _deletefavorite(String iddokter) {
-    var url = "https://duakata-dev.com/miracle/api_script.php?do=action_deletefavorite";
+    var url = AppHelper().applink+"do=action_deletefavorite";
     http.post(url,
         body: {
-          "iduser": getPhone,
+          "iduser": widget.getPhone,
           "iddokter" : iddokter
         });
-    showToast("Favorite berhasil dihapus", gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
-    setState(() {
-      getData();
-    });
+    setState(() {});
   }
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  _displaySnackBar(BuildContext context, String stringme) {
+    final snackBar = SnackBar(content: Text(stringme));
+    _scaffoldKey.currentState.showSnackBar(snackBar); }
+
+
+  void _filterMe() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content:
+              Container(
+                  height: 125,
+                  child:
+                  SingleChildScrollView(
+                    child :
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              //filter = 'Semua';
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Align(alignment: Alignment.centerLeft,
+                            child:    Text(
+                              "Favorite",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontSize: 15),
+                            ),),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                          child: Divider(height: 5,),),
+
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              //filter = 'Semua';
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Align(alignment: Alignment.centerLeft,
+                            child:    Text(
+                              "Abjad",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontSize: 15),
+                            ),),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                          child: Divider(height: 5,),),
+
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              //filter = 'Semua';
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Align(alignment: Alignment.centerLeft,
+                            child:    Text(
+                              "Diskon",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontSize: 15),
+                            ),),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                          child: Divider(height: 5,),),
+
+                      ],
+                    ),
+                  ))
+          );
+        });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: _onWillPop,
         child: new Scaffold(
+          key: _scaffoldKey,
           backgroundColor: Colors.white,
             appBar: new AppBar(
               backgroundColor: Colors.white,
@@ -145,7 +215,7 @@ class _ListDokterState extends State<ListDokter> {
                     padding: const EdgeInsets.only(top:2),
                     child:  Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(widget.namaklinik,
+                      child: Text(widget.regional,
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: 'VarelaRound',
@@ -163,6 +233,21 @@ class _ListDokterState extends State<ListDokter> {
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
+
+              actions: [
+                Padding(padding: const EdgeInsets.only(top:0,right: 18), child:
+                Builder(
+                  builder: (context) => IconButton(
+                      icon: new FaIcon(FontAwesomeIcons.sortAmountDown,size: 18,),
+                      color: Colors.black,
+                      onPressed: ()  {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        _filterMe();
+                      }
+                  ),
+                )),
+
+              ],
             ),
 
             body:
@@ -178,7 +263,7 @@ class _ListDokterState extends State<ListDokter> {
                                   enableInteractiveSelection: false,
                                   onChanged: (text) {
                                     setState(() {
-                                      //filter = text;
+                                      getFilter = text;
                                       //_isvisible = false;
                                       //startSCreen();
                                     });
@@ -235,7 +320,7 @@ class _ListDokterState extends State<ListDokter> {
               child: CircularProgressIndicator()
           );
         } else {
-          return snapshot.data == 0 ?
+          return snapshot.data.length == 0 ?
           Container(
               height: double.infinity, width : double.infinity,
               child: new
@@ -246,15 +331,16 @@ class _ListDokterState extends State<ListDokter> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       new Text(
-                        "Data tidak ditemukan",
+                        "Mohon maaf",
                         style: new TextStyle(
-                            fontFamily: 'VarelaRound', fontSize: 18),
+                            fontFamily: 'VarelaRound', fontSize: 22,fontWeight: FontWeight.bold),
                       ),
-                      new Text(
-                        "Silahkan lakukan input data",
+                      Padding(padding: const EdgeInsets.only(left: 25,right:25,top: 10),
+                      child: new Text(
+                        "Saat ini tidak ada dokter yang sedang online, mohon mencoba beberapa saat lagi",
                         style: new TextStyle(
-                            fontFamily: 'VarelaRound', fontSize: 12),
-                      ),
+                            fontFamily: 'VarelaRound', fontSize: 12,height: 1.5),textAlign: TextAlign.center,
+                      ),)
                     ],
                   )))
               :
@@ -271,10 +357,9 @@ class _ListDokterState extends State<ListDokter> {
                     onTap: () {
                       Navigator.of(context).push(
                           new MaterialPageRoute(
-                              builder: (BuildContext context) => Pembayaran(
-                                  snapshot.data[i]["f"],
-                                  widget.namaklinik,
-                                  snapshot.data[i]["b"])));
+                              builder: (BuildContext context) => DetailDokter(
+                                  snapshot.data[i]["a"].toString(),
+                                  widget.getPhone)));
                     },
                     child:
                     ListTile(
@@ -348,25 +433,18 @@ class _ListDokterState extends State<ListDokter> {
                                             ]))
                               ]),
                         trailing:
-
-                        snapshot.data[i]["l"] == getPhone ?
                                 Builder(
                                   builder: (context) => IconButton(
-                                      icon: new Icon(Icons.favorite,color: Colors.red,),
+                                      icon: snapshot.data[i]["l"] == widget.getPhone ?
+                                      new Icon(Icons.favorite,color: Colors.red,) :
+                                      new Icon(Icons.favorite_border_outlined),
                                       color: Colors.black,
                                       onPressed: () {
-                                        _deletefavorite(snapshot.data[i]["a"].toString());
-                                      }
-                                    //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => DokterSearch())),
-                                  ),
-                                )
-                                  :
-                                Builder(
-                                  builder: (context) => IconButton(
-                                      icon: new Icon(Icons.favorite_border_outlined),
-                                      color: Colors.black,
-                                      onPressed: () {
-                                          _addfavorite(snapshot.data[i]["a"].toString());
+                                         snapshot.data[i]["l"] == widget.getPhone ?
+                                         _deletefavorite(snapshot.data[i]["a"].toString())
+                                             :
+                                         _addfavorite(snapshot.data[i]["a"].toString());
+                                         _displaySnackBar(context, "Favorite berhasil dirubah");
                                       }
                                     //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => DokterSearch())),
                                   ),
