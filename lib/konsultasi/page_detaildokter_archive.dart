@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_cekappointment.dart';
-import 'package:mico/konsultasi/mico_detailimagedokter.dart';
+import 'package:mico/konsultasi/page_detailimagedokter.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';

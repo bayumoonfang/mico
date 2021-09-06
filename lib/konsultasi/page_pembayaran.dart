@@ -14,16 +14,10 @@ import 'package:responsive_container/responsive_container.dart';
 
 
 class CekPembayaran2 extends StatefulWidget{
-  final String idJadwal, idUser, idDokter, idTotal, idLayanan;
-  const CekPembayaran2(this.idJadwal, this.idUser, this.idDokter, this.idTotal, this.idLayanan);
+  //final String idJadwal, idUser, idDokter, idTotal, idLayanan;
+  //const CekPembayaran2(this.idJadwal, this.idUser, this.idDokter, this.idTotal, this.idLayanan);
   @override
-  _cekPembayaran2State createState() => _cekPembayaran2State(
-      getIDJadwal: this.idJadwal,
-      getUser: this.idUser,
-      getDokter: this.idDokter,
-      getTotal : this.idTotal,
-      getLayanan : this.idLayanan
-  );
+  _cekPembayaran2State createState() => _cekPembayaran2State();
 }
 
 
@@ -141,7 +135,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                                             color: HexColor("#516067"),
                                             fontFamily: 'VarelaRound'),textAlign: TextAlign.left,),
 
-                                      Text("Rp. "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(widget.idTotal)),
+                                      Text("Rp. ",//+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(widget.idTotal)),
                                         style: TextStyle(
                                             fontSize: 16,
                                             color: HexColor("#516067"),

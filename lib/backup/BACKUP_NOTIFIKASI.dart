@@ -10,7 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/mico_detailnotif.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'dart:async';

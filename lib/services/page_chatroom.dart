@@ -7,13 +7,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/app_helper.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:mico/services/mico_chatroom_detailtagihan.dart';
-import 'package:mico/services/mico_detailimagechat.dart';
+import 'package:mico/services/page_chatroom_detailtagihan.dart';
+import 'package:mico/services/page_detailimagechat.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 
 
@@ -291,6 +291,7 @@ _scrollListener() {
                       child: Center(
                           child: Container(
                               width: double.infinity,
+                              height: 40,
                               color : HexColor("#ffffff"),
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 10  ,right: 10,top: 15,bottom: 15),
@@ -306,7 +307,7 @@ _scrollListener() {
                                             child :
                                             Text(getInvNumber == null ? '...' : getInvNumber,
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: HexColor("#516067"),
                                                   fontFamily: 'VarelaRound'),textAlign: TextAlign.left,)),
                                         Padding(
@@ -314,7 +315,7 @@ _scrollListener() {
                                             child :
                                             Text("Detail",
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: HexColor("#516067"),
                                                   fontFamily: 'VarelaRound',fontWeight: FontWeight.bold), textAlign: TextAlign.right,)),
                                       ],

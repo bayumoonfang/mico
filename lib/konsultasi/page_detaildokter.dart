@@ -8,8 +8,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/session_user.dart';
+import 'package:mico/konsultasi/page_checkout.dart';
 import 'package:mico/mico_cekappointment.dart';
-import 'package:mico/konsultasi/mico_detailimagedokter.dart';
+import 'package:mico/konsultasi/page_detailimagedokter.dart';
+import 'package:mico/konsultasi/page_checkout_archived.dart';
+import 'package:mico/konsultasi/page_pembayaran.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -34,6 +37,7 @@ class _DetailDokter extends State<DetailDokter> {
 
   String getPhoto, getNama, getRegional, getLokasi, getSRT;
   String getStatus = '';
+  String getAccnum = "...";
   _getDetail() async {
     final response = await http.post(
        AppHelper().applink+"do=getdata_dokterdetail&id=" +
@@ -46,6 +50,7 @@ class _DetailDokter extends State<DetailDokter> {
           getLokasi = data2["c"].toString();
           getSRT = data2["i"].toString();
           getStatus = data2["j"].toString();
+          getAccnum = data2["f"].toString();
           _isvisible = false;
         });
   }
@@ -82,7 +87,11 @@ class _DetailDokter extends State<DetailDokter> {
         showFlushBar(context, "Anda masih mempunyai konsultasi berjalan, mohon selesaikan dahulu konsultasi anda");
         return;
       } else {
-        showToast("Data anda tidak ditemukan", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        Navigator.of(context)
+            .push(new MaterialPageRoute(builder: (BuildContext context) => Checkout(
+            widget.idDokter,
+            getAccnum.toString(),
+            widget.getPhone)));
       }
     });
 

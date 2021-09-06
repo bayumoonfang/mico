@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 
 
 class SplashScreenPage extends StatefulWidget {

@@ -10,9 +10,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/konsultasi/mico_detaildokter.dart';
+import 'package:mico/konsultasi/page_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'package:toast/toast.dart';
 

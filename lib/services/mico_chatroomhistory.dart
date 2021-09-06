@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:mico/services/mico_detailimagechat.dart';
+import 'package:mico/services/page_detailimagechat.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
 
 

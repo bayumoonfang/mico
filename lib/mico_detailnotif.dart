@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';

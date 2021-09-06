@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:mico/mico_home.dart';
-import 'package:mico/konsultasi/mico_detaildokter.dart';
-import 'package:mico/mico_pembayaran2.dart';
-import 'package:mico/konsultasi/mico_dokter.dart';
+import 'package:mico/page_home.dart';
+import 'package:mico/konsultasi/page_detaildokter.dart';
+import 'package:mico/konsultasi/page_checkout_archived.dart';
+import 'package:mico/konsultasi/page_dokter.dart';
 import 'package:toast/toast.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
@@ -78,13 +78,13 @@ class _CekAppointmentState extends State<CekAppointment> {
             setMessage = 2;
         });
       } else {
-        Navigator.of(context)
+     /*   Navigator.of(context)
             .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => CekPembayaran(
             getIDJadwal,
             getUser,
             getDokter,
             getNamaDokter,
-            getKlinik)));
+            getKlinik)));*/
       }
     });
   }

@@ -12,21 +12,21 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/check_connection.dart';
-import 'package:mico/konsultasi/mico_regional_new.dart';
-import 'package:mico/mico_detailimagehome.dart';
-import 'package:mico/mico_favorite.dart';
+import 'package:mico/konsultasi/page_regional_new.dart';
+import 'package:mico/page_detailimagehome.dart';
+import 'package:mico/page_favorite.dart';
 import 'package:mico/mico_homesearch.dart';
-import 'package:mico/konsultasi/mico_regional.dart';
+import 'package:mico/konsultasi/page_regional.dart';
 import 'package:mico/mico_introduction.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_verifikasilogin.dart';
-import 'package:mico/konsultasi/mico_dokter.dart';
-import 'package:mico/services/mico_cekrom_new.dart';
-import 'package:mico/services/mico_cekroom_archived.dart';
-import 'package:mico/services/mico_chatroom.dart';
+import 'package:mico/konsultasi/page_dokter.dart';
+import 'package:mico/services/page_cekrom_new.dart';
+import 'package:mico/services/page_cekroom_archived.dart';
+import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_notifnew.dart';
 import 'package:mico/user/mico_userprofile.dart';
@@ -97,7 +97,9 @@ class _HomeState extends State<Home> {
   }
 
   String countmessagenotif = '0';
-  String countapp2, countmessageq, countchatread = "0";
+  String countapp2 = '0';
+  String countmessageq = '0';
+  String countchatread = "0";
   _getCountMessageChat() async {
     final response = await http.get(
         AppHelper().applink+"do=getdata_countchat&id="+getPhone);
@@ -262,7 +264,9 @@ class _HomeState extends State<Home> {
                 builder: (context) => IconButton(
                   icon: new Icon(Icons.favorite_border_outlined),
                   color: Colors.black,
-                  onPressed: () => Navigator.pushReplacement(context, ExitPage(page: Favorite(getPhone)))
+                  onPressed: () =>
+                              Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (BuildContext context) => Favorite(getPhone.toString())))
                 ),
               ),
             ],

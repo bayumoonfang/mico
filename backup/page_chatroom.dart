@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:getwidget/getwidget.dart';

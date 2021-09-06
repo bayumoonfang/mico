@@ -11,13 +11,13 @@ import 'package:intl/intl.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:getwidget/getwidget.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/services/mico_detailimagechat.dart';
+import 'package:mico/services/page_detailimagechat.dart';
 
 import 'package:toast/toast.dart';
 import 'package:photo_view/photo_view.dart';

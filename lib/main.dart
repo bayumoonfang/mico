@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mico/SplashScreen.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'package:mico/mico_introduction.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_login.dart';

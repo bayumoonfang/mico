@@ -12,10 +12,10 @@ import 'package:intl/intl.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/session_user.dart';
-import 'package:mico/mico_home.dart';
-import 'package:mico/konsultasi/mico_regional.dart';
+import 'package:mico/page_home.dart';
+import 'package:mico/konsultasi/page_regional.dart';
 import 'package:mico/page_login.dart';
-import 'package:mico/konsultasi/mico_detaildokter.dart';
+import 'package:mico/konsultasi/page_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
 import 'package:toast/toast.dart';
 
@@ -234,7 +234,7 @@ class _ListDokterState extends State<ListDokter> {
                 ),
               ),
 
-              actions: [
+             /* actions: [
                 Padding(padding: const EdgeInsets.only(top:0,right: 18), child:
                 Builder(
                   builder: (context) => IconButton(
@@ -247,7 +247,7 @@ class _ListDokterState extends State<ListDokter> {
                   ),
                 )),
 
-              ],
+              ],*/
             ),
 
             body:
@@ -288,7 +288,7 @@ class _ListDokterState extends State<ListDokter> {
                                           width: 1.0),
                                       borderRadius: BorderRadius.circular(5.0),
                                     ),
-                                    hintText: 'Cari Produk...',
+                                    hintText: 'Cari Dokter...',
                                   ),
                                 ),
                               )

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_doktersearchresult.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 import 'package:mico/mico_homesearchresult.dart';
 import 'package:mico/page_login.dart';
 import 'package:responsive_container/responsive_container.dart';

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:mico/mico_pembayaran3.dart';
+import 'package:mico/konsultasi/page_pembayaran.dart';
 import 'package:mico/mico_preparekonsultasi.dart';
 
 
@@ -446,7 +446,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
                           ),
                         ),
                         onPressed: () {
-                          getDiskonPersen == '100' ?
+                        /*  getDiskonPersen == '100' ?
 
                               Navigator.of(context).pushReplacement(new MaterialPageRoute(
                               builder: (BuildContext context) => PrepareRoom(widget.idJadwal.toString(),widget.idUser,widget.idDokter, valLayanan)))
@@ -455,7 +455,7 @@ class _cekPembayaranState extends State<CekPembayaran> {
                           Navigator.of(context).pushReplacement(new MaterialPageRoute(
                           builder: (BuildContext context) => CekPembayaran2(widget.idJadwal.toString(),widget.idUser,widget.idDokter, getTotal, valLayanan)));
 
-
+*/
                         },
                       ),
                    )

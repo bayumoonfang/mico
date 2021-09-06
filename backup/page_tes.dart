@@ -3,7 +3,7 @@ import 'package:flutter_gifimage/flutter_gifimage.dart';
 
 import 'dart:async';
 
-import 'package:mico/mico_home.dart';
+import 'package:mico/page_home.dart';
 
 
 class TesPage extends StatefulWidget {

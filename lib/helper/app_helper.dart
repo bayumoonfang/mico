@@ -29,7 +29,7 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
  */
 
   String applink = "https://duakata-dev.com/miracle/api_script.php?";
-
+  String applinksource = "https://duakata-dev.com/miracle/";
   Future<String> getConnect() async {
     Checkconnection().check().then((internet){
       if (internet != null && internet) {} else {

@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mico/helper/app_helper.dart';
-import 'package:mico/services/mico_chatroom.dart';
+import 'package:mico/services/page_chatroom.dart';
 class CekRoomNew extends StatefulWidget {
   final String idApp;
   final String getPhone;

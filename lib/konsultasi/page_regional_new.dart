@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:mico/helper/PageRoute.dart';
-import 'package:mico/konsultasi/mico_dokter.dart';
-import 'package:mico/mico_home.dart';
+import 'package:mico/konsultasi/page_dokter.dart';
+import 'package:mico/page_home.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
