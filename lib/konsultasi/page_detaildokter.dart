@@ -11,7 +11,7 @@ import 'package:mico/helper/session_user.dart';
 import 'package:mico/konsultasi/page_checkout.dart';
 import 'package:mico/mico_cekappointment.dart';
 import 'package:mico/konsultasi/page_detailimagedokter.dart';
-import 'package:mico/konsultasi/page_checkout_archived.dart';
+import 'package:mico/archived/page_checkout_archived.dart';
 import 'package:mico/konsultasi/page_pembayaran.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
@@ -323,7 +323,7 @@ class _DetailDokter extends State<DetailDokter> {
                               ));
                       } else {
                       return Container(
-                          height: 115,
+                          height: 120,
                           padding: const EdgeInsets.only(right: 15),
                           child:
                           snapshot.data.length == 0 ?

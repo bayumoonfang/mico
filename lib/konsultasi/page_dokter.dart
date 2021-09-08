@@ -13,7 +13,7 @@ import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_home.dart';
-import 'package:mico/konsultasi/page_regional.dart';
+import 'package:mico/archived/page_regional_archive.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/konsultasi/page_detaildokter.dart';
 import 'package:mico/mico_searchdokter.dart';
@@ -32,8 +32,6 @@ class ListDokter extends StatefulWidget {
 
 class _ListDokterState extends State<ListDokter> {
   List data;
-  String getKlinik;
-  _ListDokterState({this.getKlinik});
   Icon custIcon = Icon(Icons.search);
   String valq = "0";
   String getFilter = '';

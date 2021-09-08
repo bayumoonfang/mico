@@ -16,7 +16,7 @@ import 'package:mico/konsultasi/page_regional_new.dart';
 import 'package:mico/page_detailimagehome.dart';
 import 'package:mico/page_favorite.dart';
 import 'package:mico/mico_homesearch.dart';
-import 'package:mico/konsultasi/page_regional.dart';
+import 'package:mico/archived/page_regional_archive.dart';
 import 'package:mico/mico_introduction.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_login.dart';

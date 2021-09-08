@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/page_home.dart';
 import 'package:mico/konsultasi/page_detaildokter.dart';
-import 'package:mico/konsultasi/page_checkout_archived.dart';
+import 'package:mico/archived/page_checkout_archived.dart';
 import 'package:mico/konsultasi/page_dokter.dart';
 import 'package:toast/toast.dart';
 import 'package:mico/helper/session_user.dart';
