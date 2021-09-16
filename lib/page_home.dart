@@ -269,6 +269,19 @@ class _HomeState extends State<Home> {
                               builder: (BuildContext context) => Favorite(getPhone.toString())))
                 ),
               ),
+
+              Builder(
+                builder: (context) => IconButton(
+                    icon: new FaIcon(FontAwesomeIcons.bell,size: 21,),
+                    color: Colors.black,
+                    onPressed: () =>
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => Favorite(getPhone.toString())))
+                ),
+              ),
+
+
+
             ],
           ),
           drawer: Drawer(
@@ -427,8 +440,6 @@ class _HomeState extends State<Home> {
                                           Wrap(
                                             spacing: 40,
                                             children: <Widget>[
-
-
                                               Padding(
                                                   padding : const EdgeInsets.only(top:40, ),
                                                   child :

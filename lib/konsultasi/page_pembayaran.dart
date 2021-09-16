@@ -76,7 +76,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
         setState(() {
           if(data2["message"].toString() == "1") {
             Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => ShowTagihan()));
+                builder: (BuildContext context) => ShowTagihan(widget.totalOrder)));
           }
         });
   }
@@ -336,7 +336,9 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                               ),
 
                             onPressed: (){
-                              prosesbayar();
+                              //prosesbayar();
+                              Navigator.of(context).push(new MaterialPageRoute(
+                                  builder: (BuildContext context) => ShowTagihan(widget.totalOrder)));
                             },
                           ),
                         ),)
