@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -23,8 +22,9 @@ import 'package:toast/toast.dart';
 
 
 class ListDokter extends StatefulWidget {
+  final String regional;
   final String getPhone;
-  const ListDokter(this.getPhone);
+  const ListDokter(this.regional, this.getPhone);
   @override
   _ListDokterState createState() => _ListDokterState();
 }
@@ -62,7 +62,7 @@ class _ListDokterState extends State<ListDokter> {
 
   Future<List> getData() async {
      http.Response response = await http.get(
-         Uri.encodeFull(AppHelper().applink+"do=getdata_dokter2&filter="+getFilter),
+         Uri.encodeFull(AppHelper().applink+"do=getdata_dokter&id="+widget.regional+"&filter="+getFilter),
          headers: {"Accept":"application/json"}
      );
      return json.decode(response.body);
@@ -193,12 +193,36 @@ class _ListDokterState extends State<ListDokter> {
           key: _scaffoldKey,
           backgroundColor: Colors.white,
             appBar: new AppBar(
-              elevation: 1,
               backgroundColor: Colors.white,
-              title: Text(
-                "Pilih Dokter",
-                style: TextStyle(
-                    color: Colors.black, fontFamily: 'VarelaRound', fontSize: 16),
+              title: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child:     Opacity(
+                        opacity: 0.6,
+                        child: Text(
+                          "Regional",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'VarelaRound',
+                              fontSize: 12),
+                        ),
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:2),
+                    child:  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(widget.regional,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'VarelaRound',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                    ),
+                  )
+                ],
               ),
               leading: Builder(
                 builder: (context) => IconButton(
@@ -229,69 +253,7 @@ class _ListDokterState extends State<ListDokter> {
                 child :
                     Column(
                         children: <Widget>[
-                          Container(
-
-                            height: 60,
-                            padding: const EdgeInsets.only(left: 5),
-                            width: double.infinity,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Expanded(
-                                child: Row(
-                                  children: [
-                                    Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
-                                      child: OutlinedButton(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Gender", style: GoogleFonts.varelaRound(fontSize: 13,color: Colors.black),),
-                                            Padding(padding: const EdgeInsets.only(left:10),
-                                              child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
-                                          ],
-                                        ),
-                                        onPressed: (){},
-                                      ),),
-
-                                    Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
-                                      child: OutlinedButton(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Harga Konsultasi", style: GoogleFonts.varelaRound(fontSize: 13,color: Colors.black),),
-                                            Padding(padding: const EdgeInsets.only(left:10),
-                                              child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
-                                          ],
-                                        ),
-                                        onPressed: (){},
-                                      ),),
-
-                                    Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
-                                      child: OutlinedButton(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Tempat Praktik", style: GoogleFonts.varelaRound(fontSize: 13,color: Colors.black),),
-                                            Padding(padding: const EdgeInsets.only(left:10),
-                                              child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
-                                          ],
-                                        ),
-                                        onPressed: (){},
-                                      ),)
-
-
-                                  ],
-                                ),
-                              ),
-                            )
-                          ),
-
-
-
-
-                          Padding(padding: const EdgeInsets.only(left: 15,
+                          Padding(padding: const EdgeInsets.only(left: 15,top: 10,
                               right: 15),
                               child: Container(
                                 height: 42,
@@ -403,10 +365,10 @@ class _ListDokterState extends State<ListDokter> {
                     CircleAvatar(
                           backgroundImage:
                           snapshot.data[i]["e"] == '' ? AssetImage("assets/mira-ico.png") :
-                          CachedNetworkImageProvider(AppHelper().applinksource+"media/photo/"+snapshot.data[i]["e"],
+                          CachedNetworkImageProvider("https://duakata-dev.com/miracle/media/photo/"+snapshot.data[i]["e"],
                           ),
                       backgroundColor: Colors.white,
-                      radius: 30,
+                      radius: 28,
                     ),
                         title:  Align(
                               alignment: Alignment.centerLeft,

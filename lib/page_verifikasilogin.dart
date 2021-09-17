@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/based_color.dart';
 import 'package:mico/page_home.dart';
+import 'package:mico/page_homenew.dart';
 import 'package:mico/page_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,7 +66,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       String getAccnumber = getPhone;
       if (getValue == 1) {
         savePref(getValue, getPhone, getEmail, getIDcust, getAccnumber);
-        Navigator.pushReplacement(context, ExitPage(page: Home()));
+        Navigator.pushReplacement(context, ExitPage(page: PageHomeNew()));
         _isvisible = false;
         return;
       } else {

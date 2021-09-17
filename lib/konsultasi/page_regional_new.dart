@@ -76,7 +76,7 @@ class _RegionalNew extends State<RegionalNew> {
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Surabaya",widget.getPhone)));
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Surabaya",widget.getPhone)));
                                     },
                                     child : Container(
                                       child: CircleAvatar(
@@ -103,7 +103,7 @@ class _RegionalNew extends State<RegionalNew> {
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Malang",widget.getPhone)));
+                                     // Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Malang",widget.getPhone)));
                                     },
                                     child : Container(
                                       child: CircleAvatar(
@@ -128,7 +128,7 @@ class _RegionalNew extends State<RegionalNew> {
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Balikpapan",widget.getPhone)));
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Balikpapan",widget.getPhone)));
                                     },
                                     child : Container(
                                       child: CircleAvatar(
@@ -155,7 +155,7 @@ class _RegionalNew extends State<RegionalNew> {
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Denpasar",widget.getPhone)));
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context) => ListDokter("Denpasar",widget.getPhone)));
                                     },
                                     child : Container(
                                       child: CircleAvatar(

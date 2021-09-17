@@ -28,6 +28,17 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
 
  */
 
+  String main_color = '#602d98';
+  String second_color = "#4e2986";
+  String third_color = "#594d75";
+  String fourth_color = "#dad0e9";
+  String color_5 = "#f8f8f8";
+  String color_6 = "#eff0f4";
+  String color_7 = "#72bd00";
+  String color_8 = "#07b2ba";
+  String color_9 = "#6d767d";
+
+
   String applink = "https://duakata-dev.com/miracle/api_script.php?";
   String applinksource = "https://duakata-dev.com/miracle/";
   Future<String> getConnect() async {
@@ -66,6 +77,22 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
           }
 
 
+  Future<dynamic> getUserDetail(String getPhone, String getEmail) async {
+    http.Response response = await http.Client().get(
+        Uri.parse(applink+"do=act_getdetailcust&phone="+getPhone.toString()+"&email="+getEmail.toString()+""),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"}).timeout(
+        Duration(seconds: 10),onTimeout: (){
+      http.Client().close();
+      return http.Response('Error',500);});
+    var data = jsonDecode(response.body);
+    return [
+      data["b"].toString()];
+  }
+
+
+
           Future<dynamic> getAppDetailWithInvoiced(String getValue) async {
             http.Response response = await http.Client().get(
                 Uri.parse(applink+"do=getdata_appdetail_withinvoiced&id="+getValue.toString()+""),
@@ -85,20 +112,7 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
 
 
 
-          Future<dynamic> getUserDetail(String getPhone, String getEmail) async {
-            http.Response response = await http.Client().post(
-                Uri.parse(applink+"do=act_getdetailcust"),
-                    body: {"phone": getPhone.toString(), "email":  getEmail.toString()},
-                headers: {
-                  "Content-Type": "application/json",
-                  "Accept": "application/json"}).timeout(
-                Duration(seconds: 10),onTimeout: (){
-                http.Client().close();
-                return http.Response('Error',500);});
-                      var data = jsonDecode(response.body);
-                      return [
-                        data["b"].toString()];
-          }
+
 
 
 }
