@@ -24,7 +24,8 @@ import 'package:toast/toast.dart';
 
 class ListDokter extends StatefulWidget {
   final String getPhone;
-  const ListDokter(this.getPhone);
+  final String valSpesialis;
+  const ListDokter(this.getPhone, this.valSpesialis);
   @override
   _ListDokterState createState() => _ListDokterState();
 }
@@ -34,7 +35,10 @@ class _ListDokterState extends State<ListDokter> {
   List data;
   Icon custIcon = Icon(Icons.search);
   String valq = "0";
-  String getFilter = '';
+  String getGender  = 'Gender';
+  String getTempatPraktik  = 'Tempat Praktik';
+  String urutHarga = "Harga Konsultasi";
+  String getFilter = "";
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
@@ -62,16 +66,26 @@ class _ListDokterState extends State<ListDokter> {
 
   Future<List> getData() async {
      http.Response response = await http.get(
-         Uri.encodeFull(AppHelper().applink+"do=getdata_dokter2&filter="+getFilter),
+         Uri.encodeFull(AppHelper().applink+"do=getdata_dokter2&filter="+getFilter+"&gender="+getGender.toString()+""
+             "&praktik="+getTempatPraktik.toString()+"&urutharga="+urutHarga.toString()+"&spesialis="+widget.valSpesialis),
          headers: {"Accept":"application/json"}
      );
      return json.decode(response.body);
   }
 
 
+  Future<List> getDataTempatPraktik() async {
+    http.Response response = await http.get(
+        Uri.encodeFull(AppHelper().applink+"do=getdata_tempatpraktik"),
+        headers: {"Accept":"application/json"}
+    );
+    return json.decode(response.body);
+  }
+
+
+
   Future<void> _getData() async {
     setState(() {
-      getFilter = '';
       getData();
     });
   }
@@ -106,7 +120,7 @@ class _ListDokterState extends State<ListDokter> {
     _scaffoldKey.currentState.showSnackBar(snackBar); }
 
 
-  void _filterMe() {
+  void _Gender() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -122,13 +136,13 @@ class _ListDokterState extends State<ListDokter> {
                         InkWell(
                           onTap: (){
                             setState(() {
-                              //filter = 'Semua';
+                              getGender = 'Gender';
                               Navigator.pop(context);
                             });
                           },
                           child: Align(alignment: Alignment.centerLeft,
                             child:    Text(
-                              "Favorite",
+                              "Semua",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
@@ -141,13 +155,13 @@ class _ListDokterState extends State<ListDokter> {
                         InkWell(
                           onTap: (){
                             setState(() {
-                              //filter = 'Semua';
+                              getGender = 'Pria';
                               Navigator.pop(context);
                             });
                           },
                           child: Align(alignment: Alignment.centerLeft,
                             child:    Text(
-                              "Abjad",
+                              "Pria",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
@@ -160,13 +174,13 @@ class _ListDokterState extends State<ListDokter> {
                         InkWell(
                           onTap: (){
                             setState(() {
-                              //filter = 'Semua';
+                              getGender = 'Wanita';
                               Navigator.pop(context);
                             });
                           },
                           child: Align(alignment: Alignment.centerLeft,
                             child:    Text(
-                              "Diskon",
+                              "Wanita",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontFamily: 'VarelaRound',
@@ -175,10 +189,144 @@ class _ListDokterState extends State<ListDokter> {
                         ),
                         Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
                           child: Divider(height: 5,),),
-
                       ],
                     ),
                   ))
+          );
+        });
+  }
+
+
+
+
+  void _urutHarga() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content:
+              Container(
+                  height: 125,
+                  child:
+                  SingleChildScrollView(
+                    child :
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              urutHarga = 'Harga Konsultasi';
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Align(alignment: Alignment.centerLeft,
+                            child:    Text(
+                              "Semua",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontSize: 15),
+                            ),),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                          child: Divider(height: 5,),),
+
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              urutHarga = 'Termurah';
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Align(alignment: Alignment.centerLeft,
+                            child:    Text(
+                              "Urutkan Harga Termurah",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontSize: 15),
+                            ),),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                          child: Divider(height: 5,),),
+
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              urutHarga = 'Termahal';
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Align(alignment: Alignment.centerLeft,
+                            child:    Text(
+                              "Urutkan Harga Termahal",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'VarelaRound',
+                                  fontSize: 15),
+                            ),),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                          child: Divider(height: 5,),),
+                      ],
+                    ),
+                  ))
+          );
+        });
+  }
+
+
+
+
+  void _filterPraktik() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content:
+              Container(
+                  height: 150,
+                  width: 150,
+                  child:
+                  FutureBuilder<List>(
+                            future: getDataTempatPraktik(),
+                            builder: (context, snapshot) {
+                                return Scrollbar(
+                                    isAlwaysShown: true,
+                                    child: ListView.builder(
+                                  itemCount: snapshot.data == null ? 0 : snapshot.data.length,
+                                  itemBuilder: (context,i) {
+                                    return Column(
+                                        children: [
+                                       InkWell(
+                                        onTap: (){
+                                          setState(() {
+                                            if (snapshot.data[i]["a"] == 'Semua') {
+                                              getTempatPraktik = "Tempat Praktik";
+                                            } else {
+                                              getTempatPraktik = snapshot.data[i]["a"];
+                                            }
+                                            Navigator.pop(context);
+                                          });
+                                        },
+                                        child: Align(alignment: Alignment.centerLeft,
+                                          child:    Text(
+                                            snapshot.data[i]["a"],
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                fontFamily: 'VarelaRound',
+                                                fontSize: 15),
+                                          ),),
+                                      ),
+                                    Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                                    child: Divider(height: 5,),),
+                                        ],
+                                    );
+                                  },
+                                ));
+                            },
+                          )
+                  )
           );
         });
   }
@@ -241,46 +389,67 @@ class _ListDokterState extends State<ListDokter> {
                                   children: [
                                     Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
                                       child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          side:  getGender != "Gender" ? BorderSide(color: HexColor("#602c98"), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                        ),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("Gender", style: GoogleFonts.varelaRound(fontSize: 13,color: Colors.black),),
+                                            Text(getGender.toString(), style: GoogleFonts.varelaRound(fontSize: 13,
+                                                color: getGender != "Gender" ? HexColor("#602c98") : Colors.black
+
+                                            ),),
                                             Padding(padding: const EdgeInsets.only(left:10),
                                               child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
                                           ],
                                         ),
-                                        onPressed: (){},
+                                        onPressed: (){
+                                          _Gender();
+                                        },
                                       ),),
 
                                     Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
                                       child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          side:  urutHarga != "Harga Konsultasi" ? BorderSide(color: HexColor("#602c98"), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                        ),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("Harga Konsultasi", style: GoogleFonts.varelaRound(fontSize: 13,color: Colors.black),),
-                                            Padding(padding: const EdgeInsets.only(left:10),
+                                            Text(urutHarga.toString(), style: GoogleFonts.varelaRound(fontSize: 13,
+                                                color: urutHarga != "Harga Konsultasi" ? HexColor("#602c98") : Colors.black
+
+                                            ),),Padding(padding: const EdgeInsets.only(left:10),
                                               child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
                                           ],
                                         ),
-                                        onPressed: (){},
+                                        onPressed: (){
+                                          _urutHarga();
+                                        },
                                       ),),
 
-                                    Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
+                                    Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10, right: 10),
                                       child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          side:  getTempatPraktik != "Tempat Praktik" ? BorderSide(color: HexColor("#602c98"), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                        ),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("Tempat Praktik", style: GoogleFonts.varelaRound(fontSize: 13,color: Colors.black),),
+                                            Text(getTempatPraktik.toString(), style: GoogleFonts.varelaRound(fontSize: 13,
+                                                color: getTempatPraktik != "Tempat Praktik" ? HexColor("#602c98") : Colors.black
+                                            ),),
                                             Padding(padding: const EdgeInsets.only(left:10),
                                               child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
                                           ],
                                         ),
-                                        onPressed: (){},
+                                        onPressed: (){
+                                          _filterPraktik();
+                                        },
                                       ),)
-
 
                                   ],
                                 ),

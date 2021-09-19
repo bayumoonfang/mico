@@ -328,7 +328,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               onTap: () {
                                                 //Navigator.push(context, ExitPage(page: Regional()));
                                                 Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => ListDokter(getPhone.toString())));
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "")));
                                               },
                                               child : Container(
                                                 child: CircleAvatar(
@@ -567,7 +567,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               onTap: () {
                                                 //Navigator.push(context, ExitPage(page: Regional()));
                                                 Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => RegionalNew(getPhone.toString())));
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "Aesthetic")));
                                               },
                                               child : Container(
                                                 child: CircleAvatar(
@@ -599,7 +599,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               onTap: () {
                                                 //Navigator.push(context, ExitPage(page: Regional()));
                                                 Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => RegionalNew(getPhone.toString())));
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "MBAC")));
                                               },
                                               child : Container(
                                                 child: CircleAvatar(
@@ -631,7 +631,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               onTap: () {
                                                 //Navigator.push(context, ExitPage(page: Regional()));
                                                 Navigator.of(context).push(new MaterialPageRoute(
-                                                    builder: (BuildContext context) => RegionalNew(getPhone.toString())));
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "Surgery")));
                                               },
                                               child : Container(
                                                 child: CircleAvatar(
