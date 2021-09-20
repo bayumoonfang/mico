@@ -319,7 +319,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                           width: 150,
                           child: RaisedButton(
                             elevation: 0,
-                            color:  HexColor("#00aa5b"),
+                            color:  HexColor(AppHelper().app_color4),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                               //side: BorderSide(color: Colors.red, width: 2.0)

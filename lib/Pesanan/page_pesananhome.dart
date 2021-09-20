@@ -164,13 +164,13 @@ class _PesananHome extends State<PesananHome> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: <Widget>[
                                             new Text(
-                                              "Mohon maaf",
+                                              "Tagihan Kosong",
                                               style: new TextStyle(
                                                   fontFamily: 'VarelaRound', fontSize: 22,fontWeight: FontWeight.bold),
                                             ),
                                             Padding(padding: const EdgeInsets.only(left: 25,right:25,top: 10),
                                               child: new Text(
-                                                "Saat ini tidak ada dokter yang sedang online, mohon mencoba beberapa saat lagi",
+                                                "Anda tidak mempunyai tagihan yang belum dibayar",
                                                 style: new TextStyle(
                                                     fontFamily: 'VarelaRound', fontSize: 12,height: 1.5),textAlign: TextAlign.center,
                                               ),)

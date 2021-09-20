@@ -12,6 +12,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:mico/page_homenew.dart';
 import 'package:mico/services/page_chatroom_detailtagihan.dart';
 import 'package:mico/services/page_detailimagechat.dart';
 import 'package:mico/user/mico_detailtagihan.dart';
@@ -131,6 +132,23 @@ String _isLoading = '0';
         });
     FocusScope.of(context).requestFocus(FocusNode());
   }
+
+
+  void doAkhiri() {
+    var url = AppHelper().applink+"do=action_akhirichat";
+    http.post(url,
+        body: {
+          "idAppointment": widget.idApp
+        });
+    FocusScope.of(context).requestFocus(FocusNode());
+    setState(() {
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (BuildContext context) =>
+              PageHomeNew()));
+    });
+  }
+
+
   //=================================================================================================
 
   _doDeleteMessage(String IDMessage) {
@@ -201,7 +219,44 @@ String _isLoading = '0';
   }
 
 
-
+  akhiriChat() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //title: Text(),
+            content: Container(
+                width: double.infinity,
+                height: 185,
+                child: Column(
+                  children: [
+                    Align(alignment: Alignment.center, child:
+                    Text("Konfirmasi", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 20,
+                        fontWeight: FontWeight.bold)),),
+                    Padding(padding: const EdgeInsets.only(top: 15), child:
+                    Align(alignment: Alignment.center, child: FaIcon(FontAwesomeIcons.envelope,
+                      color: Colors.redAccent,size: 35,)),),
+                    Padding(padding: const EdgeInsets.only(top: 15), child:
+                    Align(alignment: Alignment.center, child:
+                    Text("Apakah anda yakin mengakhiri konsultasi ini ? ",
+                        style: TextStyle(fontFamily: 'VarelaRound', fontSize: 12)),)),
+                    Padding(padding: const EdgeInsets.only(top: 25), child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Expanded(child: OutlineButton(
+                          onPressed: () {Navigator.pop(context);}, child: Text("Tidak"),)),
+                        Expanded(child: OutlineButton(
+                          borderSide: BorderSide(width: 1.0, color: Colors.redAccent),
+                          onPressed: () {
+                            doAkhiri();
+                          }, child: Text("Iya", style: TextStyle(color :Colors.redAccent),),)),
+                      ],),)
+                  ],
+                )
+            ),
+          );
+        });
+  }
 
   void _removeread() async {
   var url = AppHelper().applink+"do=action_removeread";
@@ -271,15 +326,21 @@ _scrollListener() {
                 icon: new Icon(Icons.arrow_back),
                 color: Colors.black,
                 onPressed: () {
-                  widget.idApp == '1' ?
-                  Navigator.of(context).pushReplacement(
-                      new MaterialPageRoute(
-                          builder: (BuildContext context) => Home()))
-                      :
                   Navigator.pop(context);
                 },
               ),
             ),
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: new Icon(Icons.check),
+                  color: Colors.black,
+                  onPressed: () {
+                    akhiriChat();
+                  },
+                ),
+              ),
+            ],
           ),
 
           body: new Container(
@@ -322,7 +383,7 @@ _scrollListener() {
                                     ),
                                     onTap: (){
                                      Navigator.of(context).push(new MaterialPageRoute(
-                                         builder: (BuildContext context) => ChatRoomDetailTagihan(widget.idApp)));
+                                         builder: (BuildContext context) => ChatRoomDetailTagihan(getInvNumber)));
                                           FocusScope.of(context).requestFocus(FocusNode());
                                     },)
 

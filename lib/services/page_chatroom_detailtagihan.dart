@@ -1,11 +1,14 @@
 
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
+import 'package:mico/Pesanan/page_installroom.dart';
 import 'package:mico/helper/app_helper.dart';
+import 'package:mico/page_homenew.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +30,7 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
   }
   Future<List> getDetailInvoiced() async {
     final response = await http.get(
-        AppHelper().applink+"do=getdata_invoiced&id=" +
+        AppHelper().applink+"do=getdata_invoiced2&id=" +
             widget.idAppointment);
     return json.decode(response.body);
   }
@@ -43,6 +46,7 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
       getStatus = data["a"].toString();
     });
   }
+
 
   @override
   void initState() {
@@ -73,71 +77,13 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                   }),
             ),
           ),
-          body: ResponsiveContainer(
-            heightPercent: 100,
-            widthPercent: 100,
+          body: Container(
+            height: double.infinity,
+            width: double.infinity,
             child: _datafield(),
           ),
-          bottomSheet: new
-
-          Container (
-              color: Colors.white,
-              child :
-              Row(
-                children: [
-                  Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.only(right: 15.0, left: 20.0, bottom:10),
-                          child:
-
-                          getStatus == 'OPEN' ?
-                          RaisedButton(
-                            color: HexColor("#075e55"),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              //side: BorderSide(color: Colors.red)
-                            ),
-                            child: Text(
-                              "Bayar",
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontSize: 14,
-                                  color: Colors.white
-                              ),
-                            ),
-                            onPressed: (){
-
-                            },
-                          )
-
-                              :
-
-                          Opacity(
-                              opacity: 0.5,
-                              child :
-                              OutlineButton(
-                                color: Colors.red,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    side: BorderSide(color: Colors.red)
-                                ),
-                                child: Text(
-                                  "Bayar",
-                                  style: TextStyle(
-                                      fontFamily: 'VarelaRound',
-                                      fontSize: 14,
-                                      color: Colors.black
-                                  ),
-                                ),
-                              ))
 
 
-
-                      ))
-
-                ],
-              )
-          ),
         )
     );
   }
@@ -169,7 +115,7 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                       ],
                     )))
                 :
-             ListView.builder(
+            ListView.builder(
                 itemCount: snapshot.data == null ? 0 : snapshot.data.length,
                 itemBuilder: (context, i) {
                   return Column(
@@ -178,14 +124,17 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                         padding: const EdgeInsets.only(top: 15,left: 15),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("Appointment Kode", style: TextStyle(fontFamily: 'VarelaRound',fontSize: 11)),
+                          child: Text("Status Pesanan", style: TextStyle(fontFamily: 'VarelaRound',fontSize: 11)),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5,left: 15),
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(widget.idAppointment, style: TextStyle(fontFamily: 'VarelaRound',fontSize: 15,fontWeight: FontWeight.bold)),
+                          child: Text(
+                              snapshot.data[i]["d"] == 'OPEN' ? 'Belum Dibayar' : snapshot.data[i]["d"]
+
+                              , style: TextStyle(fontFamily: 'VarelaRound',fontSize: 15,fontWeight: FontWeight.bold)),
                         ),
                       ),
                       Padding(
@@ -193,28 +142,27 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                         child: Divider(height: 5,),
                       ),
 
+
                       Padding(
-                          padding: const EdgeInsets.only(left: 15,top:20,right: 25),
+                          padding: const EdgeInsets.only(left: 15,top:40,right: 25),
                           child: Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             //mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                "Kode Transaksi",
+                                "Detail Tagihan",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13),
                               ),
-                              Text(snapshot.data[i]["a"],
-                                  style: TextStyle(
-                                      fontFamily: 'VarelaRound',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+
                             ],
                           )
                       ),
+
 
                       Padding(
                           padding: const EdgeInsets.only(left: 15,top:10,right: 25),
@@ -224,21 +172,21 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                             //mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                "Biaya",
+                                "Nomor Tagihan",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
-                              Text("Rp "+
-                                  NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(int.parse(snapshot.data[i]["b"].toString())),
+                              Text(snapshot.data[i]["a"],
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+                                      fontSize: 13)),
                             ],
                           )
                       ),
+
 
                       Padding(
                           padding: const EdgeInsets.only(left: 15,top:10,right: 25),
@@ -252,13 +200,13 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
                               Text(snapshot.data[i]["c"],
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+                                      fontSize: 13)),
                             ],
                           )
                       ),
@@ -271,17 +219,17 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                             //mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                "Status",
+                                "Nama Tagihan",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
-                              Text(snapshot.data[i]["d"] == 'OPEN' ? 'Belum Dibayar' : 'Dibayar',
+                              Text("Pembayaran Konsultasi "+snapshot.data[i]["i"],
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+                                      fontSize: 13)),
                             ],
                           )
                       ),
@@ -301,7 +249,7 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
 
                             ],
@@ -320,13 +268,13 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
                               Text(snapshot.data[i]["e"],
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+                                      fontSize: 13)),
                             ],
                           )
                       ),
@@ -344,13 +292,13 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
-                              Text(snapshot.data[i]["f"],
+                              Text(snapshot.data[i]["f"]+" - "+snapshot.data[i]["g"],
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+                                      fontSize: 13)),
                             ],
                           )
                       ),
@@ -365,20 +313,232 @@ class _ChatRoomDetailTagihan extends State<ChatRoomDetailTagihan> {
                             //mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Text(
-                                "Regional",
+                                "Spesialis",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontFamily: 'VarelaRound',
-                                    fontSize: 14),
+                                    fontSize: 13),
                               ),
-                              Text(snapshot.data[i]["g"],
+                              Text(snapshot.data[i]["j"],
                                   style: TextStyle(
                                       fontFamily: 'VarelaRound',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14)),
+                                      fontSize: 13)),
                             ],
                           )
                       ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Divider(height: 5,),
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:40,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Detail Jumlah Tagihan",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13),
+                              ),
+                            ],
+                          )
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Harga Konsultasi",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    fontSize: 13),
+                              ),
+                              Text("Rp "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(
+                                  snapshot.data[i]["k"]),
+                                  style: TextStyle(
+                                      fontFamily: 'VarelaRound',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13)),
+                            ],
+                          )
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Biaya admin",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    fontSize: 13),
+                              ),
+                              Text("Rp "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(
+                                  snapshot.data[i]["l"]),
+                                  style: TextStyle(
+                                      fontFamily: 'VarelaRound',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13)),
+                            ],
+                          )
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "PPN",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    fontSize: 13),
+                              ),
+                              Text("Rp "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(
+                                  snapshot.data[i]["o"]),
+                                  style: TextStyle(
+                                      fontFamily: 'VarelaRound',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13)),
+                            ],
+                          )
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Diskon",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    color: Colors.red,
+                                    fontSize: 13),
+                              ),
+                              Text("- Rp "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(
+                                  snapshot.data[i]["n"]),
+                                  style: TextStyle(
+                                      fontFamily: 'VarelaRound',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                      fontSize: 13)),
+                            ],
+                          )
+                      ),
+
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Promo",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    color: Colors.red,
+                                    fontSize: 13),
+                              ),
+                              Text("- Rp "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(
+                                  snapshot.data[i]["m"]),
+                                  style: TextStyle(
+                                      fontFamily: 'VarelaRound',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                      fontSize: 13)),
+                            ],
+                          )
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Total ",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    fontSize: 15),
+                              ),
+                              Text("Rp "+ NumberFormat.currency(locale: 'id', decimalDigits: 0, symbol: '').format(
+                                  snapshot.data[i]["p"]),
+                                  style: TextStyle(
+                                      fontFamily: 'VarelaRound',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15)),
+                            ],
+                          )
+                      ),
+
+
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Divider(height: 5,),
+                      ),
+
+
+                      Padding(
+                          padding: const EdgeInsets.only(left: 15,top:10,right: 25),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            //mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Text(
+                                "Metode Pembayaran ",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'VarelaRound',
+                                    fontSize: 13),
+                              ),
+                              CachedNetworkImage(
+                                width: 40,
+                                imageUrl: AppHelper().applinksource+"media/pembayaran/"+snapshot.data[i]["q"].toString(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                              ),
+                            ],
+                          )
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Divider(height: 5,),
+                      ),
+
+                      Container(
+                        height: 200,
+                      )
+
 
                     ],
                   );

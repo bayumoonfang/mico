@@ -318,7 +318,8 @@ class _ListDokterState extends State<ListDokter> {
                                                 fontSize: 15),
                                           ),),
                                       ),
-                                    Padding(padding: const EdgeInsets.only(top:15,bottom: 15,left: 4,right: 4),
+                                    Padding(padding: const EdgeInsets.only(top:15,bottom: 15,
+                                        left: 4,right: 4),
                                     child: Divider(height: 5,),),
                                         ],
                                     );

@@ -124,7 +124,11 @@ class _PageHomeNew extends State<PageHomeNew> {
     }
   }
 
-
+  FutureOr onGoBack(dynamic value) {
+   setState(() {
+     _currentTabIndex = 0;
+   });
+  }
 
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
@@ -223,6 +227,7 @@ class _PageHomeNew extends State<PageHomeNew> {
       });
     });
     _startingVariable();
+    _currentTabIndex = 0;
   }
 
 
@@ -693,14 +698,19 @@ class _PageHomeNew extends State<PageHomeNew> {
 
   int _currentTabIndex = 0;
   Widget _bottomNavigationBar() {
-    return BottomNavigationBar(
+    return Theme(
+        data: ThemeData(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+    ), child : BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       onTap: _onTap,
       iconSize: 23,
       currentIndex: _currentTabIndex,
-      //selectedItemColor: HexColor("#628b2c"),
+      //selectedItemColor: HexColor("#737373"),
       items: [
         BottomNavigationBarItem(
+          //backgroundColor: HexColor("#2196f3"),
           icon: FaIcon(FontAwesomeIcons.home),
           label: 'Home',
         ),
@@ -725,14 +735,12 @@ class _PageHomeNew extends State<PageHomeNew> {
           label: 'Profile',
         ),
       ],
-    );
+    ));
   }
 
   _onTap(int tabIndex) {
     switch (tabIndex) {
       case 0:
-      // _navigatorKey.currentState.pushReplacementNamed("Home");
-        Navigator.pop(context);
         Navigator.of(context).push(
             new MaterialPageRoute(
                 builder: (BuildContext context) => PageHomeNew()));
@@ -741,7 +749,7 @@ class _PageHomeNew extends State<PageHomeNew> {
       case 1:
         Navigator.of(context).push(
             new MaterialPageRoute(
-                builder: (BuildContext context) => PesananHome(getPhone)));
+                builder: (BuildContext context) => PesananHome(getPhone))).then(onGoBack);
         break;
       case 2:
         Navigator.pop(context);
