@@ -3,12 +3,16 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -51,6 +55,7 @@ class _Checkout extends State<Checkout> {
   String getNamaPromo = "...";
   String getTypePromo = "...";
   String getQtyPromo = "0";
+  String getNoPromo = "...";
   int totalPromo = 0;
   var getTotalNett1 = 0;
   _getDetailDokter() async {
@@ -96,6 +101,7 @@ class _Checkout extends State<Checkout> {
             getTypePromo = data2["d"].toString();
             getQtyPromo = data2["e"].toString();
             getNamaPromo = data2["c"].toString();
+            getNoPromo = data2["g"].toString();
             if(getQtyPromo == "0") {
               getTotalNett1 = int.parse(getrossHitung.toString()) + int.parse(getBiayaLain.toString());
             } else {
@@ -129,14 +135,17 @@ class _Checkout extends State<Checkout> {
     await _getDetailDokter();
     await _getBiayaAdmin();
     await _getPromo();
+
   }
 
 
   @override
   void initState() {
     super.initState();
-    _preparedata();
     startSplashScreen();
+    resetPromo();
+    _preparedata();
+
   }
 
   int _isButtonDisabled = 0;
@@ -213,6 +222,7 @@ class _Checkout extends State<Checkout> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
+          elevation: 1,
           backgroundColor: Colors.white,
           title: Text(
             "Checkout",
@@ -240,19 +250,17 @@ class _Checkout extends State<Checkout> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 25),
-                  child: Text("Jenis Konsultasi", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 14)),
+                  child: Text("Jenis Konsultasi", style: GoogleFonts.varelaRound(fontSize: 13,fontWeight: FontWeight.bold)),
                 ),
                 Padding (
                   padding: const EdgeInsets.only(left: 25),
                   child :
                   DropdownButton(
-                    hint: Text("Pilih Jenis Konsultasi",style: TextStyle(fontSize: 15),),
+                    hint: Text("Pilih Jenis Konsultasi",style: GoogleFonts.nunitoSans(fontSize: 15),),
                     value: _valGender,
                     items: _myFriends.map((value) {
                       return DropdownMenuItem(
-                        child: Text(value,   style: TextStyle(
-                            fontFamily: 'VarelaRound'
-                        )),
+                        child: Text(value,   style: GoogleFonts.nunitoSans(fontSize: 15)),
                         value: value,
                       );
                     }).toList(),
@@ -285,12 +293,9 @@ class _Checkout extends State<Checkout> {
                       radius: 29,
                       backgroundColor: Colors.transparent,
                     ),
-                    title: Padding(padding: const EdgeInsets.only(top: 18),
-                    child: Text(getNamaDokter.toString(),   style: TextStyle(
-                        fontFamily: 'VarelaRound',
-                        fontSize: 17,
-                        color: Colors.black
-                    )),),
+                    title: Padding(padding: const EdgeInsets.only(top: 10),
+                    child: Text(getNamaDokter.toString(),   style: GoogleFonts.varelaRound(fontSize: 19,fontWeight: FontWeight.bold,
+                    color: Colors.black)),),
                     subtitle: Column(
                       children: [
                     Padding (
@@ -301,15 +306,11 @@ class _Checkout extends State<Checkout> {
                         Opacity(
                           opacity : 0.5,
                         child :
-                        Text(getCabang.toString(),   style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14,
-                                color: Colors.black
-                            )
+                        Text(getCabang.toString(),   style: GoogleFonts.varelaRound(fontSize: 14,color: Colors.black)
                           )
                         ),
                         alignment: Alignment.centerLeft,)),
-                        Padding (
+                       /* Padding (
                             padding : const EdgeInsets.only(top: 5),
                             child :
                             Align(
@@ -319,7 +320,7 @@ class _Checkout extends State<Checkout> {
                                   color: Colors.black
                               ) ),
                               alignment: Alignment.centerLeft,)
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
@@ -445,18 +446,15 @@ class _Checkout extends State<Checkout> {
                             child: Padding(
                               padding: const EdgeInsets.only(left:5,top: 15),
                               child: Container(
-                                height: 25,
+                                height: 28,
                                 child: RaisedButton(
+                                  //color: HexColor(AppHelper().app_color3),
                                   onPressed: (){
                                     alertReset();
                                   },
-                                  elevation: 0,
+                                  elevation: 1,
                                   child: Text("Reset Promo",
-                                      style: TextStyle(
-                                          fontFamily: 'VarelaRound',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12
-                                      )),
+                                      style: GoogleFonts.nunitoSans(fontSize: 13,color: Colors.black)),
                                 ),
                               )
                             )),
@@ -643,7 +641,7 @@ class _Checkout extends State<Checkout> {
                           :
 
                       RaisedButton(
-                        color:  HexColor("#00aa5b"),
+                        color:  HexColor(AppHelper().app_color1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           //side: BorderSide(color: Colors.red, width: 2.0)
@@ -652,8 +650,7 @@ class _Checkout extends State<Checkout> {
                           "Lanjutkan",
                           style: TextStyle(
                               fontFamily: 'VarelaRound',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                               color: Colors.white
                           ),
                         ),
@@ -668,7 +665,7 @@ class _Checkout extends State<Checkout> {
                                 getTotalNett1.toString(),
                                 widget.accnumDokter,
                                 valLayanan,
-                                getHarga.toString()
+                                getHarga.toString(), getNoPromo.toString()
                               )));
                          /* getDiskonPersen == '100' ?
 

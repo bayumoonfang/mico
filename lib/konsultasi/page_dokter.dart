@@ -390,14 +390,14 @@ class _ListDokterState extends State<ListDokter> {
                                     Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
                                       child: OutlinedButton(
                                         style: OutlinedButton.styleFrom(
-                                          side:  getGender != "Gender" ? BorderSide(color: HexColor("#602c98"), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                          side:  getGender != "Gender" ? BorderSide(color: HexColor(AppHelper().app_color1), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(getGender.toString(), style: GoogleFonts.varelaRound(fontSize: 13,
-                                                color: getGender != "Gender" ? HexColor("#602c98") : Colors.black
+                                                color: getGender != "Gender" ? HexColor(AppHelper().app_color1) : Colors.black
 
                                             ),),
                                             Padding(padding: const EdgeInsets.only(left:10),
@@ -412,14 +412,14 @@ class _ListDokterState extends State<ListDokter> {
                                     Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
                                       child: OutlinedButton(
                                         style: OutlinedButton.styleFrom(
-                                          side:  urutHarga != "Harga Konsultasi" ? BorderSide(color: HexColor("#602c98"), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                          side:  urutHarga != "Harga Konsultasi" ? BorderSide(color: HexColor(AppHelper().app_color1), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(urutHarga.toString(), style: GoogleFonts.varelaRound(fontSize: 13,
-                                                color: urutHarga != "Harga Konsultasi" ? HexColor("#602c98") : Colors.black
+                                                color: urutHarga != "Harga Konsultasi" ? HexColor(AppHelper().app_color1) : Colors.black
 
                                             ),),Padding(padding: const EdgeInsets.only(left:10),
                                               child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)
@@ -433,14 +433,14 @@ class _ListDokterState extends State<ListDokter> {
                                     Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10, right: 10),
                                       child: OutlinedButton(
                                         style: OutlinedButton.styleFrom(
-                                          side:  getTempatPraktik != "Tempat Praktik" ? BorderSide(color: HexColor("#602c98"), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                          side:  getTempatPraktik != "Tempat Praktik" ? BorderSide(color: HexColor(AppHelper().app_color1), width: 1) : BorderSide(color: HexColor("#DDDDDD"), width: 1),
                                         ),
                                         child: Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(getTempatPraktik.toString(), style: GoogleFonts.varelaRound(fontSize: 13,
-                                                color: getTempatPraktik != "Tempat Praktik" ? HexColor("#602c98") : Colors.black
+                                                color: getTempatPraktik != "Tempat Praktik" ? HexColor(AppHelper().app_color1) : Colors.black
                                             ),),
                                             Padding(padding: const EdgeInsets.only(left:10),
                                               child: FaIcon(FontAwesomeIcons.angleDown,size: 12,color: Colors.black,),)

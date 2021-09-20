@@ -19,9 +19,9 @@ import 'package:responsive_container/responsive_container.dart';
 
 
 class CekPembayaran2 extends StatefulWidget{
-  final String getPhone, amountPromo, amountDiskon, amountAdmin, grossOrder, totalOrder, accDokter, namaLayanan, amountHarga  ;
+  final String getPhone, amountPromo, amountDiskon, amountAdmin, grossOrder, totalOrder, accDokter, namaLayanan, amountHarga,noPromo  ;
   const CekPembayaran2(this.getPhone, this.amountPromo, this.amountDiskon, this.amountAdmin, this.grossOrder, this.totalOrder,
-      this.accDokter, this.namaLayanan, this.amountHarga);
+      this.accDokter, this.namaLayanan, this.amountHarga, this.noPromo);
   @override
   _cekPembayaran2State createState() => _cekPembayaran2State();
 }
@@ -35,6 +35,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
   bool _isVisible = false;
   bool _isVisibleBayar = false;
   startSplashScreen() async {
+    _isVisible = false;
     var duration = const Duration(seconds: 2);
     return Timer(duration, () {
       setState(() {
@@ -42,6 +43,8 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
       });
     });
   }
+
+
   String getPPN = "0";
   var getTotalSemua = 0;
   _getPPN() async {
@@ -69,15 +72,16 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
           "ppn": getPPN,
           "gettotalsemua": getTotalSemua.toString(),
           "namaLayanan": widget.namaLayanan,
-          "amountHarga": widget.amountHarga
+          "amountHarga": widget.amountHarga,
+          "kodePromo" : widget.noPromo
         },
         headers: {"Accept":"application/json"});
         Map data2 = jsonDecode(response.body);
         setState(() {
-          if(data2["message"].toString() == "1") {
-            Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => ShowTagihan(widget.totalOrder)));
-          }
+          _isVisibleBayar = false;
+          btn_bayar = "1";
+          Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (BuildContext context) => ShowTagihan(widget.totalOrder, data2["message"].toString())));
         });
   }
 
@@ -87,11 +91,12 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
   }
 
   prosesbayar() async {
-    await addInvoiced();
     setState(() {
       _isVisibleBayar = true;
       btn_bayar = "0";
     });
+    await addInvoiced();
+
 
   }
 
@@ -132,9 +137,9 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
         ),
         body:
         _isVisible == false ?
-        Center(
-            child: CircularProgressIndicator()
-        )
+              Center(
+                  child: CircularProgressIndicator()
+              )
 
             :
          Container(
@@ -336,9 +341,7 @@ class _cekPembayaran2State extends State<CekPembayaran2> {
                               ),
 
                             onPressed: (){
-                              //prosesbayar();
-                              Navigator.of(context).push(new MaterialPageRoute(
-                                  builder: (BuildContext context) => ShowTagihan(widget.totalOrder)));
+                              prosesbayar();
                             },
                           ),
                         ),)

@@ -38,6 +38,10 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
   String color_8 = "#07b2ba";
   String color_9 = "#6d767d";
 
+  String app_color1 =  "#602c98";
+  String app_color2 =  "#c9b2e2";
+  String app_color3 = "#c57084";
+  String app_color4 = "#00aa5b";
 
   String applink = "https://duakata-dev.com/miracle/api_script.php?";
   String applinksource = "https://duakata-dev.com/miracle/";

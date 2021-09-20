@@ -2,16 +2,24 @@
 
 
 
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:mico/helper/app_helper.dart';
 import 'package:mico/page_home.dart';
+import 'package:http/http.dart' as http;
+import 'package:mico/page_homenew.dart';
+
 
 class ShowTagihan extends StatefulWidget{
-  final String getTotal;
-  const ShowTagihan(this.getTotal);
+  final String getTotal, getInvNumber;
+  const ShowTagihan(this.getTotal, this.getInvNumber);
   @override
   _ShowTagihan createState() => _ShowTagihan();
 }
@@ -24,10 +32,49 @@ class _ShowTagihan extends State<ShowTagihan> {
     final snackBar = SnackBar(content: Text(stringme));
     _scaffoldKey.currentState.showSnackBar(snackBar); }
 
-  String nomorRekening = "081938548797";
+
+  String getInvoiceNumber, getPembayaran, getNoPembayaran, getPembayaranImg = "...";
+  _getInvoiceDetail() async {
+    final response = await http.get(
+        AppHelper().applink+"do=getdata_invoicedetail&id="+widget.getInvNumber,
+        headers: {"Accept":"application/json"});
+    Map data = jsonDecode(response.body);
+    setState(() {
+      getInvoiceNumber = data["d"].toString();
+      getPembayaran = data["a"].toString();
+      getNoPembayaran = data["b"].toString();
+      getPembayaranImg = data["c"].toString();
+    });
+  }
+
+  bool _isVisible = false;
+  startSplashScreen() async {
+    _isVisible = false;
+    var duration = const Duration(seconds: 2);
+    return Timer(duration, () {
+      setState(() {
+        _isVisible = true;
+      });
+    });
+  }
+
+  Future<bool> _onWillPop() async {
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startSplashScreen();
+     _getInvoiceDetail();
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
         return WillPopScope(
+          onWillPop: _onWillPop,
             child: Scaffold(
               key: _scaffoldKey,
               appBar: new AppBar(
@@ -37,7 +84,7 @@ class _ShowTagihan extends State<ShowTagihan> {
                   InkWell(
                     onTap: (){
                       Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                          builder: (BuildContext context) => Home()));
+                          builder: (BuildContext context) => PageHomeNew()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20,top: 15),
@@ -47,12 +94,20 @@ class _ShowTagihan extends State<ShowTagihan> {
                   )
                 ],
               ),
-              body: Center(
+              body:
+
+              _isVisible == false ?
+              Center(
+                  child: CircularProgressIndicator()
+              )
+
+                  :
+              Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Tagihan Anda",
+                    Text("Tagihan anda",
                         style: TextStyle(
                           fontFamily: 'VarelaRound',)),
                     Padding(padding: const EdgeInsets.only(top: 10),
@@ -107,11 +162,15 @@ class _ShowTagihan extends State<ShowTagihan> {
 
 
                     Padding(padding: const EdgeInsets.only(top: 10),
-                      child: Image.asset("assets/ovo.png",width: 70,)
+                      child: CachedNetworkImage(
+                        width: 70,
+                        imageUrl: AppHelper().applinksource+"media/pembayaran/"+getPembayaranImg.toString(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
 
                     Padding(padding: const EdgeInsets.only(top: 10),
-                      child: Text(nomorRekening,
+                      child: Text(getNoPembayaran.toString(),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

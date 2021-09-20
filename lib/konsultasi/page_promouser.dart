@@ -78,6 +78,7 @@ class _PromoUser extends State<PromoUser> {
             onWillPop: _onWillPop,
               child: Scaffold(
                 appBar: new AppBar(
+                  elevation: 1,
                   backgroundColor: Colors.white,
                   leading: Builder(
                     builder: (context) => IconButton(
@@ -131,6 +132,7 @@ class _PromoUser extends State<PromoUser> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
+                                              color: Colors.white,
                                                 borderRadius: BorderRadius.circular(15),
                                                 border: Border.all(
                                                     color: HexColor("#d6d7d9"),
@@ -148,6 +150,8 @@ class _PromoUser extends State<PromoUser> {
                                                       snapshot.data[i]["i"].toString());
                                               },
                                               child: ListTile(
+                                                leading : Image.asset("assets/discme2.png",
+                                                  height: 35,width: 35,),
                                                 title: Text(snapshot.data[i]["c"],
                                                   style: new TextStyle(
                                                       fontFamily: 'VarelaRound', fontSize: 15,

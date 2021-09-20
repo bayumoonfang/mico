@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
@@ -32,6 +33,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
+
+import 'Pesanan/page_pesananhome.dart';
 
 final List<String> imgList = [
   'https://duakata-dev.com/miracle/media/promo/b.jpg',
@@ -150,7 +153,7 @@ class _PageHomeNew extends State<PageHomeNew> {
     await _getCountMessageChat();
     await _getCountMessageNotif();
     await _getCountChatRead();
-
+    await _getCountTagihan();
   }
 
 
@@ -166,6 +169,18 @@ class _PageHomeNew extends State<PageHomeNew> {
       countmessageq = data5["a"].toString();
     });
   }
+
+  String counttagihanq = "0";
+  _getCountTagihan() async {
+    final response = await http.get(
+        AppHelper().applink+"do=getdata_counttagihan&id="+getPhone);
+    Map data6 = jsonDecode(response.body);
+    setState(() {
+      counttagihanq = data6["a"].toString();
+    });
+  }
+
+
 
   _getCountMessageNotif() async {
     final response = await http.get(
@@ -223,7 +238,7 @@ class _PageHomeNew extends State<PageHomeNew> {
             Container(
               padding: const EdgeInsets.all(15),
               width: double.infinity,
-              color: HexColor("#602c98"),
+              color: HexColor(AppHelper().app_color1),
               height: 150,
               child: Column(
                 children: [
@@ -303,7 +318,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                              child:  InkWell(
                                child: Text(
                                    "Lihat Semua",
-                                 style: GoogleFonts.varelaRound(color: HexColor(("#c57084")),fontSize: 14),
+                                 style: GoogleFonts.varelaRound(color: HexColor((AppHelper().app_color3)),fontSize: 14),
                                ),
                              ),)
                             ],
@@ -333,7 +348,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               child : Container(
                                                 child: CircleAvatar(
                                                   radius: 26,
-                                                  backgroundColor: HexColor("#c9b2e2"),
+                                                  backgroundColor: HexColor(AppHelper().app_color2),
                                                   child: CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage("assets/konsul.png"),
@@ -365,7 +380,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               child : Container(
                                                 child: CircleAvatar(
                                                   radius: 26,
-                                                  backgroundColor: HexColor("#c9b2e2"),
+                                                  backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage("assets/resep.png"),
@@ -397,7 +412,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               child : Container(
                                                 child: CircleAvatar(
                                                   radius: 26,
-                                                  backgroundColor: HexColor("#c9b2e2"),
+                                                  backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage("assets/mira-ico.png"),
@@ -541,7 +556,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                 child:  InkWell(
                                   child: Text(
                                     "Lihat Semua",
-                                    style: GoogleFonts.varelaRound(color: HexColor(("#c57084")),fontSize: 14),
+                                    style: GoogleFonts.varelaRound(color: HexColor((AppHelper().app_color3)),fontSize: 14),
                                   ),
                                 ),)
                             ],
@@ -572,7 +587,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               child : Container(
                                                 child: CircleAvatar(
                                                   radius: 26,
-                                                  backgroundColor: HexColor("#c9b2e2"),
+                                                  backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage("assets/kecantikan.png"),
@@ -604,7 +619,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               child : Container(
                                                 child: CircleAvatar(
                                                   radius: 26,
-                                                  backgroundColor: HexColor("#c9b2e2"),
+                                                  backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage("assets/mbac.jpg"),
@@ -636,7 +651,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                               child : Container(
                                                 child: CircleAvatar(
                                                   radius: 26,
-                                                  backgroundColor: HexColor("#c9b2e2"),
+                                                  backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage("assets/surgery2.jpg"),
@@ -684,13 +699,20 @@ class _PageHomeNew extends State<PageHomeNew> {
       iconSize: 23,
       currentIndex: _currentTabIndex,
       //selectedItemColor: HexColor("#628b2c"),
-      items: const <BottomNavigationBarItem>[
+      items: [
         BottomNavigationBarItem(
           icon: FaIcon(FontAwesomeIcons.home),
           label: 'Home',
         ),
+
         BottomNavigationBarItem(
-          icon: FaIcon(FontAwesomeIcons.fileInvoice),
+          icon:
+          counttagihanq == "0" ? FaIcon(FontAwesomeIcons.fileInvoice) :
+          Badge(
+            toAnimate: true,
+            position: BadgePosition.topEnd(top: -1, end: -4),
+            child: FaIcon(FontAwesomeIcons.fileInvoice),
+          ),
           label: 'Pesanan',
         ),
         BottomNavigationBarItem(
@@ -717,10 +739,9 @@ class _PageHomeNew extends State<PageHomeNew> {
 
         break;
       case 1:
-        Navigator.pop(context);
         Navigator.of(context).push(
             new MaterialPageRoute(
-                builder: (BuildContext context) => AppointmentList(getPhone)));
+                builder: (BuildContext context) => PesananHome(getPhone)));
         break;
       case 2:
         Navigator.pop(context);

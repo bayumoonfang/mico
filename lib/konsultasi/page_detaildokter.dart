@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:mico/helper/app_helper.dart';
@@ -35,7 +36,7 @@ class _DetailDokter extends State<DetailDokter> {
 
 
 
-  String getPhoto, getNama, getRegional, getLokasi, getSRT;
+  String getPhoto, getNama, getRegional, getLokasi, getSRT, getSpesialis;
   String getStatus = '';
   String getAccnum = "...";
   _getDetail() async {
@@ -51,6 +52,7 @@ class _DetailDokter extends State<DetailDokter> {
           getSRT = data2["i"].toString();
           getStatus = data2["j"].toString();
           getAccnum = data2["f"].toString();
+          getSpesialis = data2["o"].toString();
           _isvisible = false;
         });
   }
@@ -85,6 +87,9 @@ class _DetailDokter extends State<DetailDokter> {
         return;
       } else if (showdata["message"].toString() == '2') {
         showFlushBar(context, "Anda masih mempunyai konsultasi berjalan, mohon selesaikan dahulu konsultasi anda");
+        return;
+      } else if (showdata["message"].toString() == '3') {
+        showFlushBar(context, "Anda masih mempunyai tagihan yang belum dibayar, silahkan selesaikan tagihan anda atau batalkan tagihan anda");
         return;
       } else {
         Navigator.of(context)
@@ -135,6 +140,7 @@ class _DetailDokter extends State<DetailDokter> {
         child: new Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(
+            elevation: 1,
             backgroundColor: Colors.white,
             title: Text(
               "Detail Dokter",
@@ -180,7 +186,7 @@ class _DetailDokter extends State<DetailDokter> {
                       :
                   CachedNetworkImage(
                     fit: BoxFit.cover,
-                    imageUrl: "https://duakata-dev.com/miracle/media/photo/"+getPhoto,
+                    imageUrl: AppHelper().applinksource+"media/photo/"+getPhoto,
                     placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
@@ -221,77 +227,77 @@ class _DetailDokter extends State<DetailDokter> {
                     ),
                   ),
 
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10,top: 5),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("NO STR : "+getSRT.toString(),
+                        style: TextStyle(
+                            fontFamily: 'VarelaRound',
+                            fontSize: 14),),
+                    ),
+                  ),
+
 
                   Padding(padding: const EdgeInsets.only(top: 30)),
 
                   Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, top: 8, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Regional",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text(getRegional.toString(),
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
-                        ],
-                      )),
+                    padding: const EdgeInsets.only(
+                        left: 10, top: 8, right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            child : Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(
+                                      color: HexColor("#DDDDDD"),
+                                      width: 1,
+                                    ),)),
+                              child: Column(
+                                children: [
+                                  Text("Regional",style: GoogleFonts.varelaRound(fontSize: 12),),
+                                  Padding(padding: const EdgeInsets.only(top: 5),
+                                      child: Text(getRegional.toString(),style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold,fontSize: 16),))
+                                ],
+                              ),
+                            )),
+                        Expanded(
+                            child : Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(
+                                      color: HexColor("#DDDDDD"),
+                                      width: 1,
+                                    ),)),
+                              child: Column(
+                                children: [
+                                  Text("Status",style: GoogleFonts.varelaRound(fontSize: 12),),
+                                  Padding(padding: const EdgeInsets.only(top: 5),
+                                      child: Text(getStatus.toString(),style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold,fontSize: 16),))
+                                ],
+                              ),
+                            )),
 
-                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, top: 8, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Nomor STR",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text(getSRT.toString(),
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
-                        ],
-                      )),
+                        Expanded(
+                            child : Container(
+                              child: Column(
+                                children: [
+                                  Text("Spesialis",style: GoogleFonts.varelaRound(fontSize: 12),),
+                                  Padding(padding: const EdgeInsets.only(top: 5),
+                                    child: Text(getSpesialis.toString(),style: GoogleFonts.varelaRound(fontWeight: FontWeight.bold,fontSize: 16),))
+                                ],
+                              ),
+                            )),
 
-                  Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, top: 8, right: 15),
-                      child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(
-                            "Status",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontFamily: 'VarelaRound',
-                                fontSize: 14),
-                          ),
-                          Text(getStatus.toString(),
-                              style: TextStyle(
-                                  fontFamily: 'VarelaRound',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14)),
-                        ],
-                      )),
+                      ],
+                    ),
+                  ),
+
+
+
+
 
 
                   Padding(
@@ -456,7 +462,7 @@ class _DetailDokter extends State<DetailDokter> {
                   :
 
                     RaisedButton(
-                      color:  HexColor("#075e55"),
+                      color:  HexColor(AppHelper().app_color1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         //side: BorderSide(color: Colors.red, width: 2.0)
