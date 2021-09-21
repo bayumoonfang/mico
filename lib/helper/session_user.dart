@@ -35,5 +35,10 @@ class Session {
     return preferences.getString("role");
   }
 
+  static Future<String> getNamaUser() async {
+    final SharedPreferences preferences = await _prefs;
+    return preferences.getString("namauser");
+  }
+
 
 }

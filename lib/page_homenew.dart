@@ -19,6 +19,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/PageRoute.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/based_color.dart';
+import 'package:mico/helper/cached_manager.dart';
 import 'package:mico/konsultasi/page_dokter.dart';
 import 'package:mico/konsultasi/page_regional_new.dart';
 import 'package:mico/mico_introduction.dart';
@@ -28,6 +29,7 @@ import 'package:mico/page_home.dart';
 import 'package:mico/page_loginstart.dart';
 import 'package:mico/services/page_chatroom.dart';
 import 'package:mico/services/page_chatroomdoctor.dart';
+import 'package:mico/services/page_videoroom.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_notifnew.dart';
 import 'package:mico/user/mico_userprofile.dart';
@@ -40,13 +42,13 @@ import 'package:http/http.dart' as http;
 import 'Pesanan/page_pesananhome.dart';
 
 final List<String> imgList = [
-  'https://duakata-dev.com/miracle/media/promo/b.jpg',
-  'https://duakata-dev.com/miracle/media/promo/a.jpg',
-  'https://duakata-dev.com/miracle/media/promo/c.jpg',
-  'https://duakata-dev.com/miracle/media/promo/d.jpg',
-  'https://duakata-dev.com/miracle/media/promo/promo_new1.jpg',
-  'https://duakata-dev.com/miracle/media/promo/promo_new2.jpg',
-  'https://duakata-dev.com/miracle/media/promo/promo_new3.jpg',
+  AppHelper().applinksource+"media/promo/b.jpg",
+  AppHelper().applinksource+"media/promo/a.jpg",
+  AppHelper().applinksource+"media/promo/c.jpg",
+  AppHelper().applinksource+"media/promo/d.jpg",
+  AppHelper().applinksource+"media/promo/promo_new1.jpg",
+  AppHelper().applinksource+"media/promo/promo_new2.jpg",
+  AppHelper().applinksource+"media/promo/promo_new3.jpg",
 ];
 
 
@@ -107,8 +109,8 @@ class _PageHomeNew extends State<PageHomeNew> {
     geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) {
       setState(() {
         _currentPostiion = position;
+        _getAddress();
       });
-      _getAddress();
     }).catchError((e) {
       print(e);
     });
@@ -139,31 +141,35 @@ class _PageHomeNew extends State<PageHomeNew> {
   String getEmail = "...";
   String getPhone = "...";
   String getRole = "...";
-  String appKode,namaDokters,jenisKonsuls, roomKonsul, getName, namaPasien = '...';
+  String getNamaUser = "...";
+  String appKode = "...";
+  String namaDokters = "...";
+  String jenisKonsuls = "...";
+  String roomKonsul = "...";
+  String namaPasien = '...';
   _startingVariable() async {
     await AppHelper().getConnect().then((value){if(value == 'ConnInterupted'){
       showToast("Koneksi Terputus..", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);}});
     await AppHelper().getSession().then((value){if(value[0] != 1) {
       Navigator.pushReplacement(context, ExitPage(page: IntroductionPage()));} else{setState(() {
-      getEmail = value[1]; getPhone = value[2]; getRole = value[3];});}});
-    await AppHelper().cekAppointment(getPhone.toString(), getRole.toString()).then((value){
-      setState(() {
-        appKode = value[0];
-        namaDokters = value[1];
-        jenisKonsuls = value[2];
-        roomKonsul = value[3];
-        namaPasien = value[4];
-      });});
-    await AppHelper().getUserDetail(getPhone.toString(), getEmail.toString(), getRole.toString()).then((value){
-      setState(() {
-        getName = value[0];});});
+      getEmail = value[1]; getPhone = value[2]; getRole = value[3]; getNamaUser = value[4];});}});
     await _getCurrentLocation();
-    await  _getAddress();
     await _getCountApp2();
-    await _getCountMessageChat();
-    await _getCountMessageNotif();
-    await _getCountChatRead();
-    await _getCountTagihan();
+    if(countapp2 != "0") {
+      await AppHelper().cekAppointment(getPhone.toString(), getRole.toString()).then((value){
+        setState(() {
+          appKode = value[0];
+          namaDokters = value[1];
+          jenisKonsuls = value[2];
+          roomKonsul = value[3];
+          namaPasien = value[4];
+        });});
+      if(jenisKonsuls == "CHAT") {
+        await _getCountChatRead();
+      }
+    } else {
+      await _getCountTagihan();
+    }
   }
 
 
@@ -171,14 +177,7 @@ class _PageHomeNew extends State<PageHomeNew> {
   String countapp2 = '0';
   String countmessageq = '0';
   String countchatread = "0";
-  _getCountMessageChat() async {
-    final response = await http.get(
-        AppHelper().applink+"do=getdata_countchat&id="+getPhone);
-    Map data5 = jsonDecode(response.body);
-    setState(() {
-      countmessageq = data5["a"].toString();
-    });
-  }
+
 
   String counttagihanq = "0";
   _getCountTagihan() async {
@@ -191,15 +190,6 @@ class _PageHomeNew extends State<PageHomeNew> {
   }
 
 
-
-  _getCountMessageNotif() async {
-    final response = await http.get(
-        AppHelper().applink+"do=getdata_countnotif&id="+getPhone);
-    Map data6 = jsonDecode(response.body);
-    setState(() {
-      countmessagenotif = data6["a"].toString();
-    });
-  }
 
 
   _getCountApp2() async {
@@ -220,7 +210,24 @@ class _PageHomeNew extends State<PageHomeNew> {
     });
   }
 
-
+   reloadVariable() async {
+     await _getCountApp2();
+     if(countapp2 != "0") {
+       await AppHelper().cekAppointment(getPhone.toString(), getRole.toString()).then((value){
+         setState(() {
+           appKode = value[0];
+           namaDokters = value[1];
+           jenisKonsuls = value[2];
+           roomKonsul = value[3];
+           namaPasien = value[4];
+         });});
+       if(jenisKonsuls == "CHAT") {
+         await _getCountChatRead();
+       }
+     } else {
+       await _getCountTagihan();
+     }
+   }
 
 
   Timer mytimer;
@@ -229,7 +236,7 @@ class _PageHomeNew extends State<PageHomeNew> {
     super.initState();
     Timer.periodic(Duration(seconds: 5), (timer) {
       setState(() {
-        _startingVariable();
+        reloadVariable();
       });
     });
     _startingVariable();
@@ -247,6 +254,7 @@ class _PageHomeNew extends State<PageHomeNew> {
       preferences.setString("accnumber", null);
       preferences.setString("role", null);
       preferences.setString("basedlogin", null);
+      preferences.setString("namauser", null);
       preferences.commit();
       Navigator.pushReplacement(context, ExitPage(page: LoginStart()));
     });
@@ -297,9 +305,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                   Align(alignment: Alignment.centerLeft,child: Padding(padding: const EdgeInsets.only(top: 5),child:
                   Text(getRole == "null" ? "..." :
                   getRole == null ? "..." :
-                  getName.toString() == null ? "..." :
-                  getName.toString() == "null" ? "..." :
-                  getRole == "Doctor" ? getName.toString() : "Hai, "+getName.toString(), style: GoogleFonts.nunitoSans(fontSize: 16,color: Colors.white),),),),
+                  getNamaUser.toString() == null ? "..." :
+                  getNamaUser.toString() == "null" ? "..." :
+                  getRole == "Doctor" ? getNamaUser.toString() : "Hai, "+getNamaUser.toString(), style: GoogleFonts.nunitoSans(fontSize: 16,color: Colors.white),),),),
                   Align(alignment: Alignment.centerLeft,
                       child: Container(
                         width: 250,
@@ -391,7 +399,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   backgroundColor: HexColor(AppHelper().app_color2),
                                                   child: CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  backgroundImage: AssetImage("assets/konsul.png"),
+                                                  backgroundImage:  CachedNetworkImageProvider(
+                                                    AppHelper().applinksource+"media/photo/konsul.png",
+                                                  ),
                                                   radius: 25,
                                                 ),
                                               )),
@@ -423,7 +433,10 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  backgroundImage: AssetImage("assets/resep.png"),
+                                                  backgroundImage:
+                                                  CachedNetworkImageProvider(
+                                                    AppHelper().applinksource+"media/photo/resep.png",
+                                                  ),
                                                   radius: 25,
                                                 )),
                                               ),
@@ -455,7 +468,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  backgroundImage: AssetImage("assets/mira-ico.png"),
+                                                  backgroundImage: CachedNetworkImageProvider(
+                                                    AppHelper().applinksource+"media/photo/mira-ico.png",
+                                                  ),
                                                   radius: 25,
                                                 )),
                                               ),
@@ -586,7 +601,6 @@ class _PageHomeNew extends State<PageHomeNew> {
 
 
                         countapp2 != '0' ?
-
                         Padding(
                             padding: const EdgeInsets.only(left: 15,bottom: 30,right: 15),
                             child:
@@ -594,6 +608,8 @@ class _PageHomeNew extends State<PageHomeNew> {
                                 child :
                                 GestureDetector(
                                   child :
+
+                                  jenisKonsuls.toString == "CHAT" ?
                                   Badge(
                                       position: BadgePosition.topStart(top: 0,start: 2),
                                       animationDuration: Duration(milliseconds: 300),
@@ -612,7 +628,14 @@ class _PageHomeNew extends State<PageHomeNew> {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           child : ListTile(
-                                            title: Text(getRole.toString() == "Customer" ? namaDokters.toString() : namaPasien.toString() ,
+                                            title: Text(
+                                                namaDokters.toString() == null ? "..."
+                                                : namaDokters.toString() == "null" ? "..." :
+                                                namaPasien.toString() == null ? "..." :
+                                                namaPasien.toString() == "null" ? "..." :
+                                                getRole.toString() == "Customer" ?
+                                                namaDokters.toString() :
+                                                namaPasien.toString() ,
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'VarelaRound',
@@ -630,14 +653,50 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   fontFamily: 'VarelaRound',
                                                 )),
                                           )
-                                      )),
+                                      )
+                                  )
+                                  :
+                                  Card(
+                                      elevation: 0,
+                                      color: HexColor("#ebf5fe"),
+                                      //f2eff6 ebf5fe f9f8fa
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(color: HexColor("#DDDDDD"), width: 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child : ListTile(
+                                        title: Text(getRole.toString() == "Customer" ? namaDokters.toString() : namaPasien.toString() ,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'VarelaRound',
+                                                fontWeight: FontWeight.bold
+                                            )),
+                                        subtitle: Text("Konsultasi "+jenisKonsuls.toString(),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'VarelaRound',
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                        trailing: Text("On Going",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'VarelaRound',
+                                            )),
+                                      )
+                                  ),
                                   onTap: (){
-                                    getRole == "Doctor" ?
+                                    getRole == "Doctor" && jenisKonsuls.toString() == "CHAT" ?
                                     Navigator.of(context).push(new MaterialPageRoute(
                                         builder: (BuildContext context) => ChatroomDoctor(appKode.toString(), getPhone.toString(), getRole.toString())))
-                                    :
+                                    : getRole == "Customer" && jenisKonsuls.toString() == "CHAT" ?
                                     Navigator.of(context).push(new MaterialPageRoute(
-                                        builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString(), getRole.toString())));
+                                        builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString(), getRole.toString())))
+                                        : getRole == "Customer" && jenisKonsuls.toString() == "VIDEO" ?
+                                    Navigator.of(context).push(new MaterialPageRoute(
+                                        builder: (BuildContext context) => VideoRoom(appKode.toString(), getPhone.toString(), getRole.toString(), roomKonsul.toString())))
+                                        :
+                                    Navigator.of(context).push(new MaterialPageRoute(
+                                    builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString(), getRole.toString())));
                                   },
                                 )
 
@@ -747,7 +806,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  backgroundImage: AssetImage("assets/kecantikan.png"),
+                                                  backgroundImage:  CachedNetworkImageProvider(
+                                                    AppHelper().applinksource+"media/photo/kecantikan.png",
+                                                  ),
                                                   radius: 25,
                                                 )),
                                               ),
@@ -779,7 +840,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  backgroundImage: AssetImage("assets/mbac.jpg"),
+                                                  backgroundImage:  CachedNetworkImageProvider(
+                                                    AppHelper().applinksource+"media/photo/mbac.jpg",
+                                                  ),
                                                   radius: 25,
                                                 )),
                                               ),
@@ -811,7 +874,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                                                   backgroundColor: HexColor(AppHelper().app_color2),
                                                   child:CircleAvatar(
                                                   backgroundColor: Colors.white,
-                                                  backgroundImage: AssetImage("assets/surgery2.jpg"),
+                                                  backgroundImage:  CachedNetworkImageProvider(
+                                                    AppHelper().applinksource+"media/photo/surgery2.jpg",
+                                                  ),
                                                   radius: 25,
                                                 )),
                                               ),

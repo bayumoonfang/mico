@@ -67,20 +67,21 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       String getIDcust = data["idcust"].toString();
       String getAccnumber = data["accnum"].toString();
       String getRole = data["role"].toString();
+      String getNamaUser = data["namauser"].toString();
       if (getValue == 1) {
-        savePref(getValue, getPhone, getEmail, getIDcust, getAccnumber, getRole);
+        savePref(getValue, getPhone, getEmail, getIDcust, getAccnumber, getRole, getNamaUser);
         Navigator.pushReplacement(context, ExitPage(page: PageHomeNew()));
         _isvisible = false;
         return;
       } else {
-        showFlushBar(context, data["role"].toString());
+        showFlushBar(context, "Token tidak sesuai");
         _isvisible = false;
         return;
       }
     });
   }
 
-  savePref(int value, String phone, String email, String idcustomer, String getAccnumber, String getRole) async {
+  savePref(int value, String phone, String email, String idcustomer, String getAccnumber, String getRole, String getNamaUser) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
@@ -89,6 +90,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       preferences.setString("idcustomer", idcustomer);
       preferences.setString("accnumber", getAccnumber);
       preferences.setString("role", getRole);
+      preferences.setString("namauser", getNamaUser);
       preferences.commit();
     });
   }

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/services/page_chatroom.dart';
-import 'package:mico/services/mico_videoroomhome.dart';
+import 'package:mico/services/page_videoroom.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 
@@ -113,10 +113,7 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
              if(typekonsul == 'CHAT') {
 
              } else {
-               Navigator.of(context)
-                   .pushReplacement(new MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                       VideoChatHome(widget.appKode, widget.appID)));
+
              }
           });
        // }

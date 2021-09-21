@@ -20,8 +20,6 @@ import 'package:time/time.dart';
 class VideoChatHome extends StatefulWidget {
   final String getApp, getID;
   final ClientRole role = ClientRole.Broadcaster;
-
-
   const VideoChatHome(this.getApp, this.getID);
 
   @override

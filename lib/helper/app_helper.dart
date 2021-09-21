@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import 'cached_manager.dart';
+
 
 class AppHelper{
 
@@ -60,7 +62,8 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
     String getEmail = await Session.getEmail();
     String getPhone = await Session.getPhone();
     String getRole = await Session.getRole();
-    return [value,getEmail,getPhone,getRole];
+    String getNamaUser = await Session.getNamaUser();
+    return [value,getEmail,getPhone,getRole,getNamaUser];
   }
 
 
