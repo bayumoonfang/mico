@@ -59,14 +59,14 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
     int value = await Session.getValue();
     String getEmail = await Session.getEmail();
     String getPhone = await Session.getPhone();
-    String getBasedLogin = await Session.getBasedLogin();
-    return [value,getEmail,getPhone,getBasedLogin];
+    String getRole = await Session.getRole();
+    return [value,getEmail,getPhone,getRole];
   }
 
 
-    Future<dynamic> cekAppointment(String getValue) async {
+    Future<dynamic> cekAppointment(String getValue, String getRole) async {
     http.Response response = await http.Client().get(
-        Uri.parse(applink+"do=cekappointment&id="+getValue.toString()+""),
+        Uri.parse(applink+"do=cekappointment&id="+getValue.toString()+"&role="+getRole.toString()+""),
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"}).timeout(
@@ -79,13 +79,14 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
               data["a"].toString(),
               data["b"].toString(),
               data["c"].toString(),
-              data["d"].toString()];
+              data["d"].toString(),
+              data["e"].toString()];
           }
 
 
-  Future<dynamic> getUserDetail(String getPhone, String getEmail) async {
+  Future<dynamic> getUserDetail(String getPhone, String getEmail, String getRole) async {
     http.Response response = await http.Client().get(
-        Uri.parse(applink+"do=act_getdetailcust&phone="+getPhone.toString()+"&email="+getEmail.toString()+""),
+        Uri.parse(applink+"do=act_getdetailcust&phone="+getPhone.toString()+"&email="+getEmail.toString()+"&role="+getRole.toString()+""),
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"}).timeout(
@@ -113,7 +114,8 @@ _displaySnackBar(context, "Form Tidak Boleh Kosong");
             return [
               data["a"].toString(),
               data["b"].toString(),
-              data["c"].toString()];
+              data["c"].toString(),
+              data["d"].toString()];
           }
 
 

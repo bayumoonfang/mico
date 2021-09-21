@@ -70,12 +70,12 @@ class _VideoRoomDokterHomeState extends State<VideoRoomDokterHome> {
     }
   }
 
-  Future<void> _handleCameraAndMic() async {
+  /*Future<void> _handleCameraAndMic() async {
     await PermissionHandler().requestPermissions(
       [PermissionGroup.camera, PermissionGroup.microphone],
     );
 
-  }
+  }*/
 
   @override
   void dispose() {
@@ -93,7 +93,7 @@ class _VideoRoomDokterHomeState extends State<VideoRoomDokterHome> {
     super.initState();
     _connect();
     _session();
-    _handleCameraAndMic();
+    //_handleCameraAndMic();
     _getVideoDetail();
     // initialize agora sdk
     initialize();

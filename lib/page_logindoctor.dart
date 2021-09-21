@@ -14,14 +14,14 @@ import 'package:toast/toast.dart';
 
 import 'helper/app_helper.dart';
 
-class Login extends StatefulWidget {
+class LoginDoctor extends StatefulWidget {
   @override
-  _LoginState createState() => new _LoginState();
+  _LoginDoctor createState() => new _LoginDoctor();
 
 }
 
 
-class _LoginState extends State<Login> {
+class _LoginDoctor extends State<LoginDoctor> {
   //LoginStatus _loginStatus = LoginStatus.notSignIn;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String email, phone;
@@ -33,13 +33,13 @@ class _LoginState extends State<Login> {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 
-   showFlushBar(BuildContext context, String stringme) => Flushbar(
-   // title:  "Hey Ninja",
+  showFlushBar(BuildContext context, String stringme) => Flushbar(
+    // title:  "Hey Ninja",
     message:  stringme,
     shouldIconPulse: false,
     duration:  Duration(seconds: 3),
-     flushbarPosition: FlushbarPosition.TOP ,
-     )..show(context);
+    flushbarPosition: FlushbarPosition.TOP ,
+  )..show(context);
 
 
   void verifikasi() async {
@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
     }
 
     if (_phonecontrol.text.isEmpty) {
-      showFlushBar(context, "Nomor Handphone Tidak Boleh Kosong");
+      showFlushBar(context, "ID Doctor Tidak Boleh Kosong");
       return;
     }
 
@@ -62,20 +62,20 @@ class _LoginState extends State<Login> {
       _isvisible = true;
     });
     final response = await http.post(
-        AppHelper().applink+"do=act_gettoken",
-        body: {"phone": _phonecontrol.text.toString(), "email": _emailcontroller.text.toString()});
-        Map showdata = jsonDecode(response.body);
-        setState(() {
-          getMessage = showdata["message"].toString();
-          if (getMessage == '1') {
-            showToast("Data anda tidak ditemukan", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
-            _isvisible  = false;
-            return;
-          } else{
-            Navigator.push(context, ExitPage(page: VerifikasiLogin(_phonecontrol.text.toString(), _emailcontroller.text.toString())));
-            _isvisible  = false;
-            return;
-          }
+        AppHelper().applink+"do=act_gettokendoctor",
+        body: {"iddoctor": _phonecontrol.text.toString(), "email": _emailcontroller.text.toString()});
+    Map showdata = jsonDecode(response.body);
+    setState(() {
+      getMessage = showdata["message"].toString();
+      if (getMessage == '1') {
+        showToast("Data anda tidak ditemukan", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);
+        _isvisible  = false;
+        return;
+      } else{
+        Navigator.push(context, ExitPage(page: VerifikasiLogin(_phonecontrol.text.toString(), _emailcontroller.text.toString())));
+        _isvisible  = false;
+        return;
+      }
     });
     //myFocusNode.requestFocus()}
   }
@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                   Align(
                       alignment: Alignment.centerLeft,
                       child :
-                      Text("Masukkan nomor telpon dan email untuk memulai",textAlign: TextAlign.left,
+                      Text("Masukkan ID Doctor dan email untuk memulai",textAlign: TextAlign.left,
                           style: TextStyle(
                               fontFamily: 'VarelaRound',fontSize: 14))),
 
@@ -115,7 +115,7 @@ class _LoginState extends State<Login> {
 
                   Align(alignment: Alignment.centerLeft,child: Padding(
                     padding: const EdgeInsets.only(left: 0,top: 25),
-                    child: Text("Nomor Handphone",style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "VarelaRound",
+                    child: Text("ID Doctor",style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "VarelaRound",
                         fontSize: 12,color: HexColor("#0074D9")),),
                   ),),
                   Align(alignment: Alignment.centerLeft,child: Padding(
@@ -123,16 +123,15 @@ class _LoginState extends State<Login> {
                     child: TextFormField(
                       validator: (e) {
                         if (e.isEmpty) {
-                          return "Please insert phone number";
+                          return "Please insert ID Doctor";
                         }
                       },
                       controller: _phonecontrol,
-                      maxLength: 13,
-                      keyboardType: TextInputType.number,
-                      textCapitalization: TextCapitalization.sentences,
+                      maxLength: 20,
+                      textCapitalization: TextCapitalization.characters,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(top:2),
-                        hintText: 'Nomor Handphone...',
+                        hintText: 'ID Doctor...',
                         labelText: '',
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintStyle: TextStyle(fontFamily: "VarelaRound", color: HexColor("#c4c4c4")),
@@ -185,11 +184,11 @@ class _LoginState extends State<Login> {
                     ),
                   ),),
                   Visibility(
-                    visible: _isvisible,
+                      visible: _isvisible,
                       child: Center(
-                    child: Padding(padding: const EdgeInsets.only(top: 100),child:
-                    CircularProgressIndicator()),
-                  )),
+                        child: Padding(padding: const EdgeInsets.only(top: 100),child:
+                        CircularProgressIndicator()),
+                      )),
 
                   Expanded(
                     child: Align(
@@ -203,25 +202,25 @@ class _LoginState extends State<Login> {
                           Padding (
                               padding: const EdgeInsets.only(top:15.0,bottom: 15.0),
                               child :
-                           Builder(
-                             builder: (context) => RaisedButton(
-                                 shape: RoundedRectangleBorder(
-                                   borderRadius: BorderRadius.circular(5.0),
-                                 ),
-                                 color: HexColor(second_color),
-                                 child: Text(
-                                   "Selanjutnya",
-                                   style: TextStyle(
-                                       fontFamily: 'VarelaRound',
-                                       fontSize: 14.5,
-                                       color: Colors.white
-                                   ),
-                                 ),
-                                 onPressed: () {
-                                   verifikasi();
-                                 }
-                             ),
-                           )
+                              Builder(
+                                builder: (context) => RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    color: HexColor(AppHelper().main_color),
+                                    child: Text(
+                                      "Selanjutnya",
+                                      style: TextStyle(
+                                          fontFamily: 'VarelaRound',
+                                          fontSize: 14.5,
+                                          color: Colors.white
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      verifikasi();
+                                    }
+                                ),
+                              )
                           ),
                         )
                     ),

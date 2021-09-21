@@ -55,6 +55,7 @@ final List<String> ListKota = [
   'Balikpapan',
 ];
 
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => new _HomeState();
@@ -84,13 +85,13 @@ class _HomeState extends State<Home> {
     await AppHelper().getSession().then((value){if(value[0] != 1) {
       Navigator.pushReplacement(context, ExitPage(page: IntroductionPage()));} else{setState(() {
         getEmail = value[1]; getPhone = value[2];});}});
-    await AppHelper().cekAppointment(getPhone.toString()).then((value){
+    await AppHelper().cekAppointment(getPhone.toString(), "").then((value){
       setState(() {
         appKode = value[0];
         namaDokters = value[1];
         jenisKonsuls = value[2];
         roomKonsul = value[3];});});
-    await AppHelper().getUserDetail(getPhone.toString(), getEmail.toString()).then((value){
+    await AppHelper().getUserDetail(getPhone.toString(), getEmail.toString(), "Doctor").then((value){
       setState(() {
         getName = value[0];});});
 
@@ -410,8 +411,7 @@ class _HomeState extends State<Home> {
                                         )
                                     )),
                                 onTap: (){
-                                  Navigator.of(context).push(new MaterialPageRoute(
-                                      builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString())));
+
                                 },
                               )
 

@@ -9,6 +9,9 @@ import 'package:mico/helper/based_color.dart';
 import 'package:mico/helper/session_user.dart';
 import 'package:mico/mico_introduction.dart';
 import 'package:mico/page_login.dart';
+import 'package:mico/page_logindoctor.dart';
+
+import 'helper/app_helper.dart';
 
 
 class LoginStart extends StatefulWidget {
@@ -62,7 +65,7 @@ class _LoginStartState extends State<LoginStart> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
-                          color: HexColor(second_color),
+                          color: HexColor(AppHelper().third_color),
                           elevation: 0,
                           child: Text(
                             "Login As Customer",
@@ -76,6 +79,30 @@ class _LoginStartState extends State<LoginStart> {
                           onPressed: () =>  Navigator.of(context).push(
                               new MaterialPageRoute(
                                   builder: (BuildContext context) => Login())),
+                        )
+                    ),
+
+
+                    Padding(
+                        padding: const EdgeInsets.only(right: 15.0, left: 15.0, bottom: 15.0, top: 10),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          color: HexColor(AppHelper().main_color),
+                          elevation: 0,
+                          child: Text(
+                            "Login As Doctor",
+                            style: TextStyle(
+                              fontFamily: 'VarelaRound',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: HexColor(five_color),
+                            ),
+                          ),
+                          onPressed: () =>  Navigator.of(context).push(
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) => LoginDoctor())),
                         )
                     )
 

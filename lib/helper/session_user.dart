@@ -29,9 +29,10 @@ class Session {
     return preferences.getInt("value");
   }
 
-  static Future<String> getBasedLogin() async {
+
+  static Future<String> getRole() async {
     final SharedPreferences preferences = await _prefs;
-    return preferences.getString("basedlogin");
+    return preferences.getString("role");
   }
 
 

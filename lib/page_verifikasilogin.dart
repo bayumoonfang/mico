@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
+import 'helper/app_helper.dart';
+
 class VerifikasiLogin extends StatefulWidget{
       final String phone, email;
   const VerifikasiLogin(this.phone, this.email);
@@ -57,27 +59,28 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
     });
 
 
-    final response = await http.post("https://duakata-dev.com/miracle/api_script.php?do=act_ceklogin",
+    final response = await http.post(AppHelper().applink+"do=act_ceklogin",
         body: {"phone": getPhone, "email": getEmail, "token": _tokenVal.text});
       Map data = jsonDecode(response.body);
       setState(() {
       int getValue = data["value"];
       String getIDcust = data["idcust"].toString();
-      String getAccnumber = getPhone;
+      String getAccnumber = data["accnum"].toString();
+      String getRole = data["role"].toString();
       if (getValue == 1) {
-        savePref(getValue, getPhone, getEmail, getIDcust, getAccnumber);
+        savePref(getValue, getPhone, getEmail, getIDcust, getAccnumber, getRole);
         Navigator.pushReplacement(context, ExitPage(page: PageHomeNew()));
         _isvisible = false;
         return;
       } else {
-        showFlushBar(context, "Token anda tidak sesuai");
+        showFlushBar(context, data["role"].toString());
         _isvisible = false;
         return;
       }
     });
   }
 
-  savePref(int value, String phone, String email, String idcustomer, String getAccnumber) async {
+  savePref(int value, String phone, String email, String idcustomer, String getAccnumber, String getRole) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
@@ -85,7 +88,7 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
       preferences.setString("email", getEmail);
       preferences.setString("idcustomer", idcustomer);
       preferences.setString("accnumber", getAccnumber);
-      preferences.setString("basedlogin", "user");
+      preferences.setString("role", getRole);
       preferences.commit();
     });
   }
@@ -156,20 +159,18 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
                                   Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget> [
-                                          Text("Salah nomor telpon ?",
+                                          Text("ID/ Nomor telpon anda salah ?",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: 'VarelaRound', fontSize: 14)),
 
                                           FlatButton(
-                                            child: Text("ganti nomor telpon",
+                                            child: Text("ganti data",
                                             style: TextStyle(
                                                 fontFamily: 'VarelaRound',color: Colors.red, fontSize: 14)
                                             ),
                                             onPressed: () =>
-                                                Navigator.of(context).push(
-                                                    new MaterialPageRoute(
-                                                        builder: (BuildContext context) => Login())),
+                                                Navigator.pop(context)
                                           )
 
                                       ]),
@@ -179,11 +180,10 @@ class _VerifikasiLoginState extends State<VerifikasiLogin> {
                                       padding: const EdgeInsets.only(bottom: 15.0),
                                       child :
                                       RaisedButton(
-                                        color: HexColor(second_color),
+                                        color: HexColor(AppHelper().main_color),
                                         child: Text(
                                           "Verifikasi",
                                           style: TextStyle(
-
                                             fontFamily: 'VarelaRound',
                                             fontSize: 14,
                                             color: Colors.white

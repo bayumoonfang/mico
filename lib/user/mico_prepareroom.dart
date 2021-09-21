@@ -54,8 +54,7 @@ class _PrepareRoomCreateState extends State<PrepareRoomCreate> {
           setMessage = 1;
         });
       } else {
-        Navigator.of(context)
-            .pushReplacement(new MaterialPageRoute(builder: (BuildContext context) => Chatroom(widget.idAppointment,'1')));
+
       }
     });
   }

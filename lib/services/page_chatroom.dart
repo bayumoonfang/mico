@@ -19,8 +19,8 @@ import 'package:mico/user/mico_detailtagihan.dart';
 
 
 class Chatroom extends StatefulWidget {
-  final String idApp, getPhone;
-  const Chatroom(this.idApp,this.getPhone);
+  final String idApp, getPhone, getRole;
+  const Chatroom(this.idApp,this.getPhone,this.getRole);
 
   @override
   _ChatroomState createState() => new _ChatroomState();
@@ -65,7 +65,7 @@ String _isLoading = '0';
           Future<List> getDataChat3() async {
             final response = await http.get(
                 AppHelper().applink+"do=getdata_countchatfixed&"
-                    "id="+widget.idApp);
+                    "id="+widget.idApp+"&role="+widget.getRole);
             return json.decode(response.body);
           }
 
@@ -84,7 +84,9 @@ String _isLoading = '0';
       final response = await http.post(
           AppHelper().applink+"do=addata_chat2",
           body: { "messagetext": _textController.text,
-            "id": widget.idApp});
+            "id": widget.idApp,
+            "role" : widget.getRole
+          });
       setState(() {
         _textController.clear();
         myFocusNode.requestFocus();
@@ -100,10 +102,11 @@ String _isLoading = '0';
     );
     String fileName = galleryFile.path.split('/').last;
     Base64 = base64Encode((galleryFile.readAsBytesSync()));
-    http.post("https://duakata-dev.com/miracle/api_script.php?do=addata_chatimage2", body: {
+    http.post(AppHelper().applink+"do=addata_chatimage2", body: {
       "image": Base64,
       "name": fileName,
-      "id": widget.idApp
+      "id": widget.idApp,
+      "role": widget.getRole
     });
     print("You selected gallery image : " + Base64);
     setState(() {

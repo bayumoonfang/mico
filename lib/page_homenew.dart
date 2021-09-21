@@ -25,12 +25,15 @@ import 'package:mico/mico_introduction.dart';
 import 'package:mico/mico_transaksihistorynew.dart';
 import 'package:mico/page_detailimagehome.dart';
 import 'package:mico/page_home.dart';
+import 'package:mico/page_loginstart.dart';
 import 'package:mico/services/page_chatroom.dart';
+import 'package:mico/services/page_chatroomdoctor.dart';
 import 'package:mico/user/mico_appointment.dart';
 import 'package:mico/user/mico_notifnew.dart';
 import 'package:mico/user/mico_userprofile.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_container/responsive_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 
@@ -58,7 +61,6 @@ class _PageHomeNew extends State<PageHomeNew> {
 
   int _current = 0;
   int _selectedIndex = 0;
-
 
 
   final CarouselController _controller = CarouselController();
@@ -134,21 +136,25 @@ class _PageHomeNew extends State<PageHomeNew> {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 
-  String getEmail, getPhone;
-  String appKode,namaDokters,jenisKonsuls, roomKonsul, getName = '...';
+  String getEmail = "...";
+  String getPhone = "...";
+  String getRole = "...";
+  String appKode,namaDokters,jenisKonsuls, roomKonsul, getName, namaPasien = '...';
   _startingVariable() async {
     await AppHelper().getConnect().then((value){if(value == 'ConnInterupted'){
       showToast("Koneksi Terputus..", gravity: Toast.CENTER, duration: Toast.LENGTH_LONG);}});
     await AppHelper().getSession().then((value){if(value[0] != 1) {
       Navigator.pushReplacement(context, ExitPage(page: IntroductionPage()));} else{setState(() {
-      getEmail = value[1]; getPhone = value[2];});}});
-    await AppHelper().cekAppointment(getPhone.toString()).then((value){
+      getEmail = value[1]; getPhone = value[2]; getRole = value[3];});}});
+    await AppHelper().cekAppointment(getPhone.toString(), getRole.toString()).then((value){
       setState(() {
         appKode = value[0];
         namaDokters = value[1];
         jenisKonsuls = value[2];
-        roomKonsul = value[3];});});
-    await AppHelper().getUserDetail(getPhone.toString(), getEmail.toString()).then((value){
+        roomKonsul = value[3];
+        namaPasien = value[4];
+      });});
+    await AppHelper().getUserDetail(getPhone.toString(), getEmail.toString(), getRole.toString()).then((value){
       setState(() {
         getName = value[0];});});
     await _getCurrentLocation();
@@ -198,7 +204,7 @@ class _PageHomeNew extends State<PageHomeNew> {
 
   _getCountApp2() async {
     final response = await http.get(
-        AppHelper().applink+"do=getdata_countapp2&id="+getPhone);
+        AppHelper().applink+"do=getdata_countapp2&id="+getPhone+"&role="+getRole.toString());
     Map data2 = jsonDecode(response.body);
     setState(() {
       countapp2 = data2["a"].toString();
@@ -207,7 +213,7 @@ class _PageHomeNew extends State<PageHomeNew> {
 
   _getCountChatRead() async {
     final response = await http.get(
-        AppHelper().applink+"do=getdata_countchatread&id="+getPhone);
+        AppHelper().applink+"do=getdata_countchatread&id="+getPhone+"&role="+getRole.toString());
     Map data3 = jsonDecode(response.body);
     setState(() {
       countchatread = data3["a"].toString();
@@ -228,6 +234,22 @@ class _PageHomeNew extends State<PageHomeNew> {
     });
     _startingVariable();
     _currentTabIndex = 0;
+  }
+
+
+  signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", null);
+      preferences.setString("phone", null);
+      preferences.setString("email", null);
+      preferences.setString("idcustomer", null);
+      preferences.setString("accnumber", null);
+      preferences.setString("role", null);
+      preferences.setString("basedlogin", null);
+      preferences.commit();
+      Navigator.pushReplacement(context, ExitPage(page: LoginStart()));
+    });
   }
 
 
@@ -253,11 +275,17 @@ class _PageHomeNew extends State<PageHomeNew> {
                     mainAxisAlignment:
                     MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Mico",style: GoogleFonts.fredokaOne(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white)),
+                      Text(getRole == "Doctor" ? "Mico Doctor" : "Mico",style: GoogleFonts.fredokaOne(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white)),
                       Row(
                         children: [
                           Padding(padding: const EdgeInsets.only(right: 30),child: FaIcon(FontAwesomeIcons.star,size: 20,color: Colors.white),),
-                          Padding(padding: const EdgeInsets.only(right: 10),child: FaIcon(FontAwesomeIcons.cog,size: 20,color: Colors.white),),
+                          Padding(padding: const EdgeInsets.only(right: 10),child:
+                                InkWell(
+                                  onTap: (){signOut();},
+                                  child: FaIcon(FontAwesomeIcons.cog,size: 20,color: Colors.white),
+                                )
+
+                            ,),
 
                         ],
                       )
@@ -267,7 +295,11 @@ class _PageHomeNew extends State<PageHomeNew> {
 
                     ,),),
                   Align(alignment: Alignment.centerLeft,child: Padding(padding: const EdgeInsets.only(top: 5),child:
-                  Text("Hai, "+getName.toString(),style: GoogleFonts.nunitoSans(fontSize: 16,color: Colors.white),),),),
+                  Text(getRole == "null" ? "..." :
+                  getRole == null ? "..." :
+                  getName.toString() == null ? "..." :
+                  getName.toString() == "null" ? "..." :
+                  getRole == "Doctor" ? getName.toString() : "Hai, "+getName.toString(), style: GoogleFonts.nunitoSans(fontSize: 16,color: Colors.white),),),),
                   Align(alignment: Alignment.centerLeft,
                       child: Container(
                         width: 250,
@@ -335,7 +367,10 @@ class _PageHomeNew extends State<PageHomeNew> {
                               height: 135,
                               padding: const EdgeInsets.only(left: 20),
                               child: Expanded(
-                                child: ListView(
+                                child:
+
+                                getRole.toString() == "Customer" ?
+                                ListView(
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
                                   children: [
@@ -434,7 +469,117 @@ class _PageHomeNew extends State<PageHomeNew> {
                                         )
                                     ),
                                   ],
-                                ),
+                                )
+
+                                    :
+
+                                ListView(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    Padding(
+                                        padding : const EdgeInsets.only(top:20,right: 40 ),
+                                        child :
+                                        Column(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                //Navigator.push(context, ExitPage(page: Regional()));
+                                                Navigator.of(context).push(new MaterialPageRoute(
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "")));
+                                              },
+                                              child : Container(
+                                                  child: CircleAvatar(
+                                                    radius: 26,
+                                                    backgroundColor: HexColor(AppHelper().app_color2),
+                                                    child: CircleAvatar(
+                                                      backgroundColor: Colors.white,
+                                                      backgroundImage: AssetImage("assets/appsaya.jpg"),
+                                                      radius: 25,
+                                                    ),
+                                                  )),
+                                            ),
+                                            Padding(
+                                                padding: const EdgeInsets.only(top : 10),
+                                                child : Text("App. Saya", style: TextStyle(fontFamily: 'VarelaRound',
+                                                    fontSize: 13),)
+                                            )
+                                          ],
+                                        )
+                                    ),
+
+
+                                    Padding(
+                                        padding : const EdgeInsets.only(top:20,right: 40 ),
+                                        child :
+                                        Column(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                //Navigator.push(context, ExitPage(page: Regional()));
+                                                Navigator.of(context).push(new MaterialPageRoute(
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "")));
+                                              },
+                                              child : Container(
+                                                  child: CircleAvatar(
+                                                    radius: 26,
+                                                    backgroundColor: HexColor(AppHelper().app_color2),
+                                                    child: CircleAvatar(
+                                                      backgroundColor: Colors.white,
+                                                      backgroundImage: AssetImage("assets/resepdok.jpg"),
+                                                      radius: 25,
+                                                    ),
+                                                  )),
+                                            ),
+                                            Padding(
+                                                padding: const EdgeInsets.only(top : 10),
+                                                child : Text("Resep Saya", style: TextStyle(fontFamily: 'VarelaRound',
+                                                    fontSize: 13),)
+                                            )
+                                          ],
+                                        )
+                                    ),
+
+
+                                    Padding(
+                                        padding : const EdgeInsets.only(top:20,right: 40 ),
+                                        child :
+                                        Column(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                //Navigator.push(context, ExitPage(page: Regional()));
+                                                Navigator.of(context).push(new MaterialPageRoute(
+                                                    builder: (BuildContext context) => ListDokter(getPhone.toString(), "")));
+                                              },
+                                              child : Container(
+                                                  child: CircleAvatar(
+                                                    radius: 26,
+                                                    backgroundColor: HexColor(AppHelper().app_color2),
+                                                    child: CircleAvatar(
+                                                      backgroundColor: Colors.white,
+                                                      backgroundImage: AssetImage("assets/pasien.jpg"),
+                                                      radius: 25,
+                                                    ),
+                                                  )),
+                                            ),
+                                            Padding(
+                                                padding: const EdgeInsets.only(top : 10),
+                                                child : Text("Pasien Saya", style: TextStyle(fontFamily: 'VarelaRound',
+                                                    fontSize: 13),)
+                                            )
+                                          ],
+                                        )
+                                    ),
+
+
+
+
+
+                                  ],
+                                )
+
+
                               ),
                             )
                         ),
@@ -467,7 +612,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           child : ListTile(
-                                            title: Text(namaDokters == null ? '...' : namaDokters.toString(),
+                                            title: Text(getRole.toString() == "Customer" ? namaDokters.toString() : namaPasien.toString() ,
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'VarelaRound',
@@ -487,8 +632,12 @@ class _PageHomeNew extends State<PageHomeNew> {
                                           )
                                       )),
                                   onTap: (){
+                                    getRole == "Doctor" ?
                                     Navigator.of(context).push(new MaterialPageRoute(
-                                        builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString())));
+                                        builder: (BuildContext context) => ChatroomDoctor(appKode.toString(), getPhone.toString(), getRole.toString())))
+                                    :
+                                    Navigator.of(context).push(new MaterialPageRoute(
+                                        builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString(), getRole.toString())));
                                   },
                                 )
 
@@ -497,6 +646,8 @@ class _PageHomeNew extends State<PageHomeNew> {
                             :
                         Text(""),
 
+
+                        getRole.toString() == "Customer" ?
                         Container(
                           width: double.infinity,
                           child: Column(
@@ -543,10 +694,11 @@ class _PageHomeNew extends State<PageHomeNew> {
                               ),
                             ],
                           ),
-                        ),
+                        )
+                        : Container(),
 
 
-
+                        getRole.toString() == "Customer" ?
                         Padding(
                           padding: const EdgeInsets.only(top: 40,left: 25),
                           child: Row(
@@ -566,9 +718,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                                 ),)
                             ],
                           ),
-                        ),
+                        ): Container(),
 
-
+                        getRole.toString() == "Customer" ?
                         Padding(padding: const EdgeInsets.only(top: 10),
                             child: Container(
                               height: 135,
@@ -676,7 +828,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                 ),
                               ),
                             )
-                        ),
+                        ) : Container()
 
 
 
@@ -702,7 +854,45 @@ class _PageHomeNew extends State<PageHomeNew> {
         data: ThemeData(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-    ), child : BottomNavigationBar(
+    ), child :
+
+    getRole == "Customer" ?
+    BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      onTap: _onTap,
+      iconSize: 23,
+      currentIndex: _currentTabIndex,
+      //selectedItemColor: HexColor("#737373"),
+      items: [
+        BottomNavigationBarItem(
+          //backgroundColor: HexColor("#2196f3"),
+          icon: FaIcon(FontAwesomeIcons.home),
+          label: 'Home',
+        ),
+
+          BottomNavigationBarItem(
+            icon:
+            counttagihanq == "0" ? FaIcon(FontAwesomeIcons.fileInvoice) :
+            Badge(
+              toAnimate: true,
+              position: BadgePosition.topEnd(top: -1, end: -4),
+              child: FaIcon(FontAwesomeIcons.fileInvoice),
+            ),
+            label: 'Pesanan',
+          ),
+        BottomNavigationBarItem(
+          icon: FaIcon(FontAwesomeIcons.mailBulk),
+          label: 'Kotak Masuk',
+        ),
+
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.user),
+            label: 'Profile',
+          ),
+        ],
+      )
+        :
+    BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       onTap: _onTap,
       iconSize: 23,
@@ -716,16 +906,6 @@ class _PageHomeNew extends State<PageHomeNew> {
         ),
 
         BottomNavigationBarItem(
-          icon:
-          counttagihanq == "0" ? FaIcon(FontAwesomeIcons.fileInvoice) :
-          Badge(
-            toAnimate: true,
-            position: BadgePosition.topEnd(top: -1, end: -4),
-            child: FaIcon(FontAwesomeIcons.fileInvoice),
-          ),
-          label: 'Pesanan',
-        ),
-        BottomNavigationBarItem(
           icon: FaIcon(FontAwesomeIcons.mailBulk),
           label: 'Kotak Masuk',
         ),
@@ -735,7 +915,10 @@ class _PageHomeNew extends State<PageHomeNew> {
           label: 'Profile',
         ),
       ],
-    ));
+    )
+
+
+    );
   }
 
   _onTap(int tabIndex) {

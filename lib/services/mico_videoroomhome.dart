@@ -99,11 +99,11 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     }
   }
 
-  Future<void> _handleCameraAndMic() async {
+  /*Future<void> _handleCameraAndMic() async {
     await PermissionHandler().requestPermissions(
       [PermissionGroup.camera, PermissionGroup.microphone],
     );
-  }
+  }*/
 
   int _detik2 = 60;
   void startTimerDetik() {
@@ -152,7 +152,7 @@ class _VideoChatHomeState extends State<VideoChatHome> {
     super.initState();
     _connect();
     _session();
-    _handleCameraAndMic();
+    //_handleCameraAndMic();
     _getVideoDetail();
     initialize();
     startTimerDetik();

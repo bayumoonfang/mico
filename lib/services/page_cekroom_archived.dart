@@ -111,10 +111,7 @@ class _CekRoomKonsultasiState extends State<CekRoomKonsultasi> {
         //} else {
           setState(() {
              if(typekonsul == 'CHAT') {
-               Navigator.of(context)
-                   .pushReplacement(new MaterialPageRoute(
-                   builder: (BuildContext context) =>
-                       Chatroom(widget.appKode, widget.appID)));
+
              } else {
                Navigator.of(context)
                    .pushReplacement(new MaterialPageRoute(

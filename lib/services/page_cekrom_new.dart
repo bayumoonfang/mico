@@ -51,10 +51,7 @@ class _CekRoomNew extends State<CekRoomNew> {
     return Timer(duration, () {
         if(roomstatus.toString() == 'OPEN') {
           if(typekonsul == 'CHAT') {
-            Navigator.of(context)
-                .pushReplacement(new MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    Chatroom(widget.idApp, widget.getPhone)));
+
           } else {
 
           }

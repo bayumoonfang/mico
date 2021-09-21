@@ -67,16 +67,16 @@ class _VideoConfPrepareState extends State<VideoConfPrepare> {
 
 
 
-  Future<void> _handleCameraAndMic() async {
+  /*Future<void> _handleCameraAndMic() async {
     await PermissionHandler().requestPermissions(
       [PermissionGroup.camera, PermissionGroup.microphone],
     );
-  }
+  }*/
 
   Future<void> onJoin() async {
     await _session();
     await _getVideoDetail();
-    await _handleCameraAndMic();
+    //await _handleCameraAndMic();
     /*await Navigator.push(
       context,
       MaterialPageRoute(

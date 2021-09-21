@@ -57,14 +57,14 @@ _getAddress() async {
   String a,b,c,d,e,f,g,h,i,j = "...";
   String aa = "...";
 
-  Future<void> _handleCameraAndMic() async {
+  /*Future<void> _handleCameraAndMic() async {
     await PermissionHandler().requestPermissions(
       [PermissionGroup.location],
     );
-  }
+  }*/
 
   _getCurrentLocation() async {
-    await _handleCameraAndMic();
+    //await _handleCameraAndMic();
     geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) {
       setState(() {
         _currentPostiion = position;
