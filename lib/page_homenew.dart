@@ -62,8 +62,6 @@ class PageHomeNew extends StatefulWidget {
 class _PageHomeNew extends State<PageHomeNew> {
 
   int _current = 0;
-  int _selectedIndex = 0;
-
 
   final CarouselController _controller = CarouselController();
   final List<Widget> imageSliders = imgList.map((item) => Builder(
@@ -356,14 +354,14 @@ class _PageHomeNew extends State<PageHomeNew> {
                             MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Apa yang kamu butuhkan ?",style: GoogleFonts.varelaRound(
-                                  fontWeight: FontWeight.bold,fontSize: 18
+                                  fontWeight: FontWeight.bold,fontSize: 16
                               ),),
 
                              Padding(padding: const EdgeInsets.only(right: 20),
                              child:  InkWell(
                                child: Text(
                                    "Lihat Semua",
-                                 style: GoogleFonts.varelaRound(color: HexColor((AppHelper().app_color3)),fontSize: 14),
+                                 style: GoogleFonts.varelaRound(color: HexColor((AppHelper().app_color3)),fontSize: 12),
                                ),
                              ),)
                             ],
@@ -696,7 +694,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                         builder: (BuildContext context) => VideoRoom(appKode.toString(), getPhone.toString(), getRole.toString(), roomKonsul.toString())))
                                         :
                                     Navigator.of(context).push(new MaterialPageRoute(
-                                    builder: (BuildContext context) => Chatroom(appKode.toString(), getPhone.toString(), getRole.toString())));
+                                        builder: (BuildContext context) => VideoRoom(appKode.toString(), getPhone.toString(), getRole.toString(), roomKonsul.toString())));
                                   },
                                 )
 

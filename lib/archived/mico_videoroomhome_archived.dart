@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:mico/helper/check_connection.dart';
@@ -16,7 +16,7 @@ import 'package:responsive_container/responsive_container.dart';
 import 'package:toast/toast.dart';
 import 'package:time/time.dart';
 
-
+/*
 class VideoChatHome extends StatefulWidget {
   final String getApp, getID;
   final ClientRole role = ClientRole.Broadcaster;
@@ -494,4 +494,4 @@ class _VideoChatHomeState extends State<VideoChatHome> {
           ),
         ));
   }
-}
+}*/

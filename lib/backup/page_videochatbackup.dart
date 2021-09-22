@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:mico/helper/check_connection.dart';
@@ -14,7 +14,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 
-
+/*
 class VideoChatBackupUser extends StatefulWidget {
   final String myphone;
   final ClientRole role;
@@ -459,4 +459,4 @@ class _VideoChatBackupUserState extends State<VideoChatBackupUser> {
           ),
         ));
   }
-}
+}*/

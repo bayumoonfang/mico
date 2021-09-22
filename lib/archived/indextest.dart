@@ -1,29 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:mico/konsultasi/page_detaildokter.dart';
-import 'package:mico/konsultasi/page_dokter.dart';
-
-import 'package:toast/toast.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:mico/helper/session_user.dart';
-import 'package:mico/page_login.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'package:flutter/services.dart';
+
+import 'indexcall.dart';
 
 
-
-
-class VideoRoomPrepare extends StatefulWidget {
+class IndexPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => VideoRoomPrepareState();
+  State<StatefulWidget> createState() => IndexState();
 }
 
-class VideoRoomPrepareState extends State<VideoRoomPrepare> {
+class IndexState extends State<IndexPage> {
   /// create a channelController to retrieve text value
   final _channelController = TextEditingController();
 
@@ -31,6 +20,13 @@ class VideoRoomPrepareState extends State<VideoRoomPrepare> {
   bool _validateError = false;
 
   ClientRole _role = ClientRole.Broadcaster;
+
+  Future<void> _handleCameraAndMic() async {
+    await PermissionHandler().requestPermissions(
+      [PermissionGroup.camera, PermissionGroup.microphone]
+    );
+  }
+
 
   @override
   void dispose() {
@@ -126,9 +122,9 @@ class VideoRoomPrepareState extends State<VideoRoomPrepare> {
     });
     if (_channelController.text.isNotEmpty) {
       // await for camera and mic permissions before pushing video page
-      //await _handleCameraAndMic();
+      await _handleCameraAndMic;
       // push video page with given channel name
-   /*   await Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => CallPage(
@@ -136,13 +132,8 @@ class VideoRoomPrepareState extends State<VideoRoomPrepare> {
             role: _role,
           ),
         ),
-      );*/
+      );
     }
   }
 
-  /*Future<void> _handleCameraAndMic() async {
-    await PermissionHandler().requestPermissions(
-      [PermissionGroup.camera, PermissionGroup.microphone],
-    );
-  }*/
 }
