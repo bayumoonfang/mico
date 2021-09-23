@@ -34,18 +34,71 @@ class _VideoRoom extends State<VideoRoom> {
   final _infoStrings = <String>[];
   bool muted = false;
   RtcEngine _engine;
+  Timer _timer;
+  DateTime _currentTime;
+  DateTime _afterTime, _timeIntv;
+  int _remainingdetik,
+      _remainingmenit,
+      _detik,
+      _menit;
+
 
   int uidq = 0;
   String token;
+  String getUID;
   Future<void> getToken() async {
     final response = await http.get(
-        AppHelper().applink+"do=get_agoratoken");
+        AppHelper().applink + "do=get_agoratoken");
     Map data = jsonDecode(response.body);
     setState(() {
       token = data["a"].toString();
+      uidq = data["b"];
     });
   }
 
+  int _detik2 = 60;
+  int menitq = 5;
+  void startTimerDetik() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) => setState(
+            () {
+          if (_detik2 == 0) {
+            _detik2 = 60;
+            menitq = menitq - 1;
+          } else {
+            _detik2 = _detik2 - 1;
+          }
+        },
+      ),
+    );
+  }
+
+  void startTimerMenit() {
+    const oneMin = const Duration(minutes: 1);
+    _timer = new Timer.periodic(
+      oneMin,
+          (Timer timer) => setState(
+            () {
+          menitq = menitq + 1;
+          if (_menit == -5) {
+            Toast.show("Waktu konsultasi tinggal 5 menit", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+          } else if (_menit == -2) {
+            Toast.show("Waktu konsultasi tinggal 2 menit", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+          } else if (_menit == 0) {
+            //_endKonsultasi();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _countdown() {
+    return Text(menitq.toString() + " : " +_detik2.toString(),
+      style: TextStyle(color: Colors.black,fontSize: 27,
+        fontFamily: 'VarelaRound',),);
+  }
 
   @override
   void dispose() {
@@ -64,6 +117,7 @@ class _VideoRoom extends State<VideoRoom> {
     super.initState();
     // initialize agora sdk
     initialize();
+    startTimerDetik();
 
   }
 
@@ -84,7 +138,7 @@ class _VideoRoom extends State<VideoRoom> {
     VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
     //configuration.dimensions = VideoDimensions(800, 600);
     await _engine.setVideoEncoderConfiguration(configuration);
-    await _engine.joinChannel(token, "7d72365eb983485397e3e3f9d460bdda", null, 0);
+    await _engine.joinChannel(token, "miracle", null, uidq);
   }
 
   /// Create agora sdk instance and initialize
@@ -223,6 +277,7 @@ class _VideoRoom extends State<VideoRoom> {
             fillColor: muted ? Colors.blueAccent : Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
+
           RawMaterialButton(
             onPressed: () => _onCallEnd(context),
             child: Icon(
@@ -253,7 +308,7 @@ class _VideoRoom extends State<VideoRoom> {
   }
 
   /// Info panel to show logs
-  Widget _panel() {
+  /*Widget _panel() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 48),
       alignment: Alignment.bottomCenter,
@@ -300,10 +355,32 @@ class _VideoRoom extends State<VideoRoom> {
         ),
       ),
     );
+  }*/
+
+  Widget _panel() {
+    return
+      Align(
+          alignment: Alignment.topRight,
+          child :      Padding(
+            padding: const EdgeInsets.only(top: 20,right: 20),
+            child:  Container(
+                padding: const EdgeInsets.only(top: 30,right: 10),
+                alignment: Alignment.topRight,
+                child:
+                Column(
+                  children: [
+                    _countdown(),
+                    Text("Waktu konsultasi tersisa", style: new TextStyle(color: Colors.black,fontSize: 13,
+                      fontFamily: 'VarelaRound',),)
+                  ],
+                )
+            ),
+          )
+
+      );
   }
 
   void _onCallEnd(BuildContext context) {
-
     _engine.leaveChannel();
     //_engine.destroy();
     Navigator.pop(context);
@@ -320,22 +397,59 @@ class _VideoRoom extends State<VideoRoom> {
     _engine.switchCamera();
   }
 
+  void showAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //title: Text(),
+            content: Text(
+                "Apakah anda yakin untuk keluar dari video konsultasi ini ?",
+                style: TextStyle(fontFamily: 'VarelaRound')),
+            actions: [
+              new FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _engine.leaveChannel();
+                    Navigator.pop(context);
+                  },
+                  child:
+                  Text("Iya", style: TextStyle(fontFamily: 'VarelaRound')))
+            ],
+          );
+        });
+  }
+
+
+  Future<bool> _onWillPop() async {
+    //Toast.show("Toast plugin app", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+    showAlert();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Agora Flutter QuickStart'),
-      ),
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _viewRows(),
-            _panel(),
-            _toolbar(),
-          ],
-        ),
-      ),
-    );
+    return new WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Stack(
+              children: <Widget>[
+                /* Container(
+                   alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: const EdgeInsets.all(60.0),
+                        child: Text("$_start" + " left",
+                            style: TextStyle(
+                                fontFamily: 'VarelaRound',
+                                fontSize: 23,
+                                color: Colors.blueAccent)))),*/
+                _viewRows(),
+                _panel(),
+                _toolbar(),
+              ],
+            ),
+          ),
+        ));
   }
 }
