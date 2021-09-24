@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:mico/helper/app_helper.dart';
 import 'package:mico/helper/check_connection.dart';
 import 'package:mico/helper/session_user.dart';
@@ -37,10 +40,7 @@ class _VideoRoom extends State<VideoRoom> {
   Timer _timer;
   DateTime _currentTime;
   DateTime _afterTime, _timeIntv;
-  int _remainingdetik,
-      _remainingmenit,
-      _detik,
-      _menit;
+  int _menit;
 
 
   int uidq = 0;
@@ -55,6 +55,17 @@ class _VideoRoom extends State<VideoRoom> {
       uidq = data["b"];
     });
   }
+
+
+  _doAkhiri() async {
+    final response = await http.get(
+        AppHelper().applink + "do=act_endvideochat&id="+widget.getApp);
+    setState(() {
+          _onCallEnd(context);
+    });
+  }
+
+
 
   int _detik2 = 60;
   int menitq = 5;
@@ -208,6 +219,99 @@ class _VideoRoom extends State<VideoRoom> {
     return Expanded(child: Container(child: view));
   }
 
+
+
+
+  alertKeluar() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //title: Text(),
+            content: Container(
+                width: double.infinity,
+                height: 210,
+                child: Column(
+                  children: [
+                    Align(alignment: Alignment.center, child:
+                    Text("Keluar dari konsultasi", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 20,
+                        fontWeight: FontWeight.bold)),),
+                    Padding(padding: const EdgeInsets.only(top: 15), child:
+                    Align(alignment: Alignment.center, child: FaIcon(FontAwesomeIcons.signOutAlt,
+                      color: HexColor
+                        (AppHelper().app_color1),size: 35,)),),
+                    Padding(padding: const EdgeInsets.only(top: 15), child:
+                    Align(alignment: Alignment.center, child:
+                    Text("Anda masih bisa bergabung kembali, selama dokter belum menyelesaikan konsultasi ini. ",
+                        style: TextStyle(fontFamily: 'VarelaRound', fontSize: 12),textAlign: TextAlign.center,),)),
+                    Padding(padding: const EdgeInsets.only(top: 25), child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Expanded(child: OutlineButton(
+                          onPressed: () {Navigator.pop(context);}, child: Text("Tidak"),)),
+                        Expanded(child: OutlineButton(
+                          borderSide: BorderSide(width: 1.0, color: HexColor
+                            (AppHelper().app_color1)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _engine.leaveChannel();
+                            _engine.destroy();
+                            Navigator.pop(context);
+                          }, child: Text("Iya", style: TextStyle(color : HexColor
+                          (AppHelper().app_color1)),),)),
+                      ],),)
+                  ],
+                )
+            ),
+          );
+        });
+  }
+
+
+  alertAkhiri() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //title: Text(),
+            content: Container(
+                width: double.infinity,
+                height: 210,
+                child: Column(
+                  children: [
+                    Align(alignment: Alignment.center, child:
+                    Text("Apakah anda yakin ?", style: TextStyle(fontFamily: 'VarelaRound', fontSize: 20,
+                        fontWeight: FontWeight.bold)),),
+                    Padding(padding: const EdgeInsets.only(top: 15), child:
+                    Align(alignment: Alignment.center, child: FaIcon(FontAwesomeIcons.signOutAlt,
+                      color: HexColor
+                        (AppHelper().app_color1),size: 35,)),),
+                    Padding(padding: const EdgeInsets.only(top: 15), child:
+                    Align(alignment: Alignment.center, child:
+                    Text("Mengakhiri konsultasi ini ? ",
+                      style: TextStyle(fontFamily: 'VarelaRound', fontSize: 12),textAlign: TextAlign.center,),)),
+                    Padding(padding: const EdgeInsets.only(top: 25), child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Expanded(child: OutlineButton(
+                          onPressed: () {Navigator.pop(context);}, child: Text("Tidak"),)),
+                        Expanded(child: OutlineButton(
+                          borderSide: BorderSide(width: 1.0, color: HexColor
+                            (AppHelper().app_color1)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _doAkhiri();
+                          }, child: Text("Iya", style: TextStyle(color : HexColor
+                          (AppHelper().app_color1)),),)),
+                      ],),)
+                  ],
+                )
+            ),
+          );
+        });
+  }
+
+
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
     final wrappedViews = views.map<Widget>(_videoView).toList();
@@ -229,13 +333,21 @@ class _VideoRoom extends State<VideoRoom> {
             ));
       case 2:
         return Container(
-            child: Column(
+            child:
+            widget.getRole == "Customer" ?
+            Column(
               children: <Widget>[
-                _expandedVideoRow([views[0]]),
-                _expandedVideoRow([views[1]])
-              ],
-            ));
-      case 3:
+                _expandedVideoRow([views[1]]),
+                _expandedVideoRow([views[0]])
+              ])
+              :
+            Column(
+              children: <Widget>[
+                _expandedVideoRow([views[1]]),
+                _expandedVideoRow([views[0]])
+              ]),
+            );
+    /*  case 3:
         return Container(
             child: Column(
               children: <Widget>[
@@ -250,7 +362,7 @@ class _VideoRoom extends State<VideoRoom> {
                 _expandedVideoRow(views.sublist(0, 2)),
                 _expandedVideoRow(views.sublist(2, 4))
               ],
-            ));
+            ));*/
       default:
     }
     return Container();
@@ -258,53 +370,97 @@ class _VideoRoom extends State<VideoRoom> {
 
   /// Toolbar layout
   Widget _toolbar() {
-    if (widget.role == ClientRole.Audience) return Container();
-    return Container(
-      alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          RawMaterialButton(
-            onPressed: _onToggleMute,
-            child: Icon(
-              muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
-              size: 20.0,
+    final viewnya = _getRenderViews();
+    if (viewnya.length == 1) {
+      return Container(
+        alignment: Alignment.bottomCenter,
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 48),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                    width: 60, height: 60, child: CircularProgressIndicator()),
+                Padding(padding: const EdgeInsets.all(25.0)),
+                Text(
+                  "Mohon Menunggu",
+                  style: TextStyle(
+                      fontFamily: 'VarelaRound',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                Padding(padding: const EdgeInsets.only(top: 5),
+                child:         Text(
+                  "Pasien/Dokter belum bergabung pada konsultasi ini",
+                  style: TextStyle(
+                      fontFamily: 'VarelaRound',
+                      fontSize: 12,
+                      color: Colors.black),
+                ),)
+              ],
+            )
+          ],
+        ),
+      );
+    } else {
+      if (widget.role == ClientRole.Audience) return Container();
+      return Container(
+        alignment: Alignment.bottomCenter,
+        padding: const EdgeInsets.symmetric(vertical: 48),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, //Center Column contents vertically,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            RawMaterialButton(
+              onPressed: _onToggleMute,
+              child: Icon(
+                muted ? Icons.mic_off : Icons.mic,
+                color: muted ? Colors.white : Colors.blueAccent,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: muted ? Colors.blueAccent : Colors.white,
+              padding: const EdgeInsets.all(12.0),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
-            padding: const EdgeInsets.all(12.0),
-          ),
-
-          RawMaterialButton(
-            onPressed: () => _onCallEnd(context),
-            child: Icon(
-              Icons.call_end,
-              color: Colors.white,
-              size: 35.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.redAccent,
-            padding: const EdgeInsets.all(15.0),
-          ),
-          RawMaterialButton(
-            onPressed: _onSwitchCamera,
-            child: Icon(
-              Icons.switch_camera,
-              color: Colors.blueAccent,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
-          )
-        ],
-      ),
-    );
+            widget.getRole == "Doctor" ?
+            RawMaterialButton(
+              onPressed: () {
+                alertAkhiri();
+              },
+              child: Icon(
+                Icons.call_end,
+                color: Colors.white,
+                size: 35.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: Colors.redAccent,
+              padding: const EdgeInsets.all(15.0),
+            )
+            :
+            Text(""),
+            RawMaterialButton(
+              onPressed: _onSwitchCamera,
+              child: Icon(
+                Icons.switch_camera,
+                color: Colors.blueAccent,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: Colors.white,
+              padding: const EdgeInsets.all(12.0),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   /// Info panel to show logs
@@ -381,8 +537,8 @@ class _VideoRoom extends State<VideoRoom> {
   }
 
   void _onCallEnd(BuildContext context) {
+    _engine.destroy();
     _engine.leaveChannel();
-    //_engine.destroy();
     Navigator.pop(context);
   }
 
@@ -397,33 +553,13 @@ class _VideoRoom extends State<VideoRoom> {
     _engine.switchCamera();
   }
 
-  void showAlert() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            //title: Text(),
-            content: Text(
-                "Apakah anda yakin untuk keluar dari video konsultasi ini ?",
-                style: TextStyle(fontFamily: 'VarelaRound')),
-            actions: [
-              new FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _engine.leaveChannel();
-                    Navigator.pop(context);
-                  },
-                  child:
-                  Text("Iya", style: TextStyle(fontFamily: 'VarelaRound')))
-            ],
-          );
-        });
-  }
+
 
 
   Future<bool> _onWillPop() async {
     //Toast.show("Toast plugin app", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-    showAlert();
+    //showAlert();
+    alertKeluar();
   }
 
   @override
