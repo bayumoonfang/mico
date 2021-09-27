@@ -49,7 +49,7 @@ class _IntroductionPage extends State<IntroductionPage> {
                       "assets/intro-1.jpg",
                     ),
                   ),
-                  title: "Hi, Miracolous",
+                  title: "Hi, Miraculous People",
                   body: "Selamat Datang di aplikasi telemedicine miracle",
                   footer: Text("@miracle_clinic", style: GoogleFonts.varelaRound(),),
                 decoration: pageDecoration

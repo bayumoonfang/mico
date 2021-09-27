@@ -16,7 +16,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:miracle/splashscreen.dart';
 
 void main() {
-  SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 
