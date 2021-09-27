@@ -385,8 +385,7 @@ class _ListDokterState extends State<ListDokter> {
                             width: double.infinity,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Expanded(
-                                child: Row(
+                              child: Row(
                                   children: [
                                     Padding(padding: const EdgeInsets.only(top:10,bottom: 10,left: 10),
                                       child: OutlinedButton(
@@ -454,7 +453,6 @@ class _ListDokterState extends State<ListDokter> {
 
                                   ],
                                 ),
-                              ),
                             )
                           ),
 

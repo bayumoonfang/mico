@@ -8,6 +8,7 @@ import 'package:mico/page_loginstart.dart';
 import 'package:mico/page_login.dart';
 import 'package:mico/page_verifikasilogin.dart';
 import 'package:mico/utils/page_tespertama.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //import 'package:miracle/chatroom.dart';
 //import 'package:miracle/services/chatroom_fix.dart';
@@ -15,6 +16,7 @@ import 'package:mico/utils/page_tespertama.dart';
 //import 'package:miracle/splashscreen.dart';
 
 void main() {
+  SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 

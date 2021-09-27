@@ -371,10 +371,9 @@ class _PageHomeNew extends State<PageHomeNew> {
                         Padding(padding: const EdgeInsets.only(top: 10),
                             child: Container(
                               height: 135,
+                              width: double.infinity,
                               padding: const EdgeInsets.only(left: 20),
-                              child: Expanded(
-                                child:
-
+                              child:
                                 getRole.toString() == "Customer" ?
                                 ListView(
                                   shrinkWrap: true,
@@ -591,9 +590,6 @@ class _PageHomeNew extends State<PageHomeNew> {
 
                                   ],
                                 )
-
-
-                              ),
                             )
                         ),
 
@@ -763,14 +759,14 @@ class _PageHomeNew extends State<PageHomeNew> {
                             MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Tentukan Konsultasi ?",style: GoogleFonts.varelaRound(
-                                  fontWeight: FontWeight.bold,fontSize: 18
+                                  fontWeight: FontWeight.bold,fontSize: 16
                               ),),
 
                               Padding(padding: const EdgeInsets.only(right: 20),
                                 child:  InkWell(
                                   child: Text(
                                     "Lihat Semua",
-                                    style: GoogleFonts.varelaRound(color: HexColor((AppHelper().app_color3)),fontSize: 14),
+                                    style: GoogleFonts.varelaRound(color: HexColor((AppHelper().app_color3)),fontSize: 12),
                                   ),
                                 ),)
                             ],
@@ -782,8 +778,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                             child: Container(
                               height: 135,
                               padding: const EdgeInsets.only(left: 20),
-                              child: Expanded(
-                                child: ListView(
+                              child:  ListView(
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
                                   children: [
@@ -813,7 +808,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                             ),
                                             Padding(
                                                 padding: const EdgeInsets.only(top : 10),
-                                                child : Text("Kencantikan", style: TextStyle(fontFamily: 'VarelaRound',
+                                                child : Text("Aesthetics", style: TextStyle(fontFamily: 'VarelaRound',
                                                     fontSize: 13),)
                                             )
                                           ],
@@ -847,7 +842,7 @@ class _PageHomeNew extends State<PageHomeNew> {
                                             ),
                                             Padding(
                                                 padding: const EdgeInsets.only(top : 10),
-                                                child : Text("Body Builder", style: TextStyle(fontFamily: 'VarelaRound',
+                                                child : Text("MBAC", style: TextStyle(fontFamily: 'VarelaRound',
                                                     fontSize: 13),)
                                             )
                                           ],
@@ -889,7 +884,6 @@ class _PageHomeNew extends State<PageHomeNew> {
                                     ),
                                   ],
                                 ),
-                              ),
                             )
                         ) : Container()
 
